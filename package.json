@@ -1,0 +1,42 @@
+{
+	"name": "tsdoc-test-reporter",
+	"version": "0.0.1",
+	"license": "MIT",
+	"scripts": {
+		"format": "prettier . --write",
+		"publish:core": "node ./tools/scripts/publish.mjs core latest",
+		"publish:jest": "node ./tools/scripts/publish.mjs jest latest"
+	},
+	"private": false,
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^17.1.2",
+		"@commitlint/config-conventional": "^17.1.0",
+		"@commitlint/config-nx-scopes": "^17.0.0",
+		"@nrwl/cli": "14.7.13",
+		"@nrwl/devkit": "^15.0.4",
+		"@nrwl/eslint-plugin-nx": "14.7.13",
+		"@nrwl/jest": "14.7.13",
+		"@nrwl/js": "14.7.13",
+		"@nrwl/linter": "14.7.13",
+		"@nrwl/workspace": "14.7.13",
+		"@types/jest": "28.1.1",
+		"@types/node": "18.7.1",
+		"@typescript-eslint/eslint-plugin": "^5.36.1",
+		"@typescript-eslint/parser": "^5.36.1",
+		"chalk": "^5.1.2",
+		"eslint": "~8.15.0",
+		"eslint-config-prettier": "8.1.0",
+		"eslint-plugin-import": "^2.26.0",
+		"husky": "^8.0.1",
+		"jest": "28.1.1",
+		"jest-environment-jsdom": "28.1.1",
+		"nx": "14.7.13",
+		"prettier": "^2.6.2",
+		"ts-jest": "28.0.5",
+		"ts-node": "10.9.1",
+		"typescript": "~4.8.2"
+	}
+}

@@ -1,0 +1,73 @@
+import type { Config, TestContext } from '@jest/reporters';
+import type { TestDataFactory } from '@tsdoc-test-reporter/core';
+
+export const projectConfigFactory: TestDataFactory<Config.ProjectConfig> = (
+	overrides = {}
+) => ({
+	automock: false,
+	cache: false,
+	cacheDirectory: '',
+	clearMocks: false,
+	coveragePathIgnorePatterns: [],
+	cwd: '',
+	detectLeaks: false,
+	detectOpenHandles: false,
+	errorOnDeprecated: false,
+	extensionsToTreatAsEsm: [],
+	fakeTimers: {},
+	forceCoverageMatch: [],
+	globals: {},
+	haste: {
+		computeSha1: undefined,
+		defaultPlatform: undefined,
+		forceNodeFilesystemAPI: undefined,
+		enableSymlinks: undefined,
+		hasteImplModulePath: undefined,
+		platforms: undefined,
+		throwOnModuleCollision: undefined,
+		hasteMapModulePath: undefined,
+		retainAllFiles: undefined,
+	},
+	id: '',
+	injectGlobals: false,
+	moduleDirectories: [],
+	moduleFileExtensions: [],
+	moduleNameMapper: [],
+	modulePathIgnorePatterns: [],
+	prettierPath: '',
+	resetMocks: false,
+	resetModules: false,
+	restoreMocks: false,
+	rootDir: '',
+	roots: [],
+	runner: '',
+	sandboxInjectedGlobals: [],
+	setupFiles: [],
+	setupFilesAfterEnv: [],
+	skipFilter: false,
+	slowTestThreshold: 0,
+	snapshotSerializers: [],
+	snapshotFormat: {},
+	testEnvironment: '',
+	testEnvironmentOptions: {},
+	testMatch: [],
+	testLocationInResults: false,
+	testPathIgnorePatterns: [],
+	testRegex: [],
+	testRunner: '',
+	transform: [],
+	transformIgnorePatterns: [],
+	watchPathIgnorePatterns: [],
+	openHandlesTimeout: 0,
+	...overrides,
+});
+
+export const testContextFactory: TestDataFactory<TestContext> = (
+	overrides = {}
+) => ({
+	config: projectConfigFactory(overrides.config),
+	hasteFS: undefined as any,
+	moduleMap: undefined as any,
+	resolver: undefined as any,
+	...overrides,
+});

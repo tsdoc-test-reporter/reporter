@@ -1,0 +1,14 @@
+{
+	"name": "@tsdoc-test-reporter/jest",
+	"version": "0.0.1",
+	"peerDependencies": {
+		"typescript": "^4.5.0"
+	},
+	"dependencies": {
+		"@jest/reporters": "^29.0.3",
+		"@jest/test-result": "^29.0.3",
+		"@microsoft/tsdoc": "^0.14.2",
+		"@tsdoc-test-reporter/core": "workspace:^0.0.1",
+		"handlebars": "^4.7.7"
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"name": "@tsdoc-test-reporter/core",
+	"version": "0.0.1",
+	"scripts": {
+		"lint": "eslint 'src/**/*.{ts,tsx}' --fix"
+	},
+	"peerDependencies": {
+		"typescript": "^4.5.0"
+	},
+	"dependencies": {
+		"@microsoft/tsdoc": "^0.14.2"
+	}
+}

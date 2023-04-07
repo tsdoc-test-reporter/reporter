@@ -1,0 +1,119 @@
+{
+  "Unit tests": {
+    "groupTitle": "Unit tests",
+    "groupTagName": "@remarks",
+    "numFailingTests": 1,
+    "numPassingTests": 1,
+    "numPendingTests": 0,
+    "numTodoTests": 0,
+    "numSkippedTests": 0,
+    "testResults": [
+      {
+        "ancestorTitles": [
+          "form validation",
+          "error handling"
+        ],
+        "duration": null,
+        "failureDetails": [
+          {
+            "matcherResult": {
+              "actual": "true",
+              "expected": "false",
+              "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality",
+              "name": "toEqual",
+              "pass": false
+            }
+          }
+        ],
+        "failureMessages": [],
+        "fullName": "should show invalid email error",
+        "numPassingAsserts": 0,
+        "status": "failed",
+        "title": "should show invalid email error",
+        "testBlockComments": [
+          {
+            "testFilePath": "reporter-html.source-file.ts",
+            "title": "should show invalid email error",
+            "testBlockType": "it",
+            "testBlockTags": {
+              "@remarks": {
+                "type": "standard",
+                "tags": [
+                  "WCAG criteria"
+                ],
+                "tagName": "@remarks",
+                "testBlockType": "it",
+                "testTitle": "should show invalid email error"
+              },
+              "@privateRemarks": {
+                "type": "standard",
+                "tags": [
+                  "WCAG 2.1",
+                  "WCAG 2.2"
+                ],
+                "tagName": "@privateRemarks",
+                "testBlockType": "it",
+                "testTitle": "should show invalid email error"
+              }
+            },
+            "commentStartPosition": 178,
+            "commentEndPosition": 261
+          }
+        ],
+        "ancestorTestBlockComments": [
+          {
+            "testFilePath": "reporter-html.source-file.ts",
+            "title": "form validation",
+            "testBlockType": "describe",
+            "testBlockTags": {
+              "@remarks": {
+                "type": "standard",
+                "tags": [
+                  "Unit tests"
+                ],
+                "tagName": "@remarks",
+                "testBlockType": "describe",
+                "testTitle": "form validation"
+              }
+            },
+            "commentStartPosition": 1,
+            "commentEndPosition": 31
+          }
+        ]
+      },
+      {
+        "ancestorTitles": [
+          "form validation"
+        ],
+        "duration": null,
+        "failureDetails": [],
+        "failureMessages": [],
+        "fullName": "should validate email",
+        "numPassingAsserts": 1,
+        "status": "passed",
+        "title": "should validate email",
+        "testBlockComments": [],
+        "ancestorTestBlockComments": [
+          {
+            "testFilePath": "reporter-html.source-file.ts",
+            "title": "form validation",
+            "testBlockType": "describe",
+            "testBlockTags": {
+              "@remarks": {
+                "type": "standard",
+                "tags": [
+                  "Unit tests"
+                ],
+                "tagName": "@remarks",
+                "testBlockType": "describe",
+                "testTitle": "form validation"
+              }
+            },
+            "commentStartPosition": 1,
+            "commentEndPosition": 31
+          }
+        ]
+      }
+    ]
+  }
+}

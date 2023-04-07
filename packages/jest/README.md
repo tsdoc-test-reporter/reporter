@@ -1,0 +1,1 @@
+# @tsdoc-test-reporter/jest

@@ -7,7 +7,7 @@ export const statusToIconMap: StatusToIconMap = {
 	pending: '⌛',
 	todo: '🔖',
 	disabled: '⛔',
-	focused: ''
+	focused: '',
 };
 
 export const customColorMap: Record<number, string> = {

@@ -50,7 +50,9 @@ process.chdir(outputPath);
 
 // Updating the version in "package.json" before publishing
 try {
-	const jsonRaw = readFileSync(`package.json`).toString().replace("workspace:", "");
+	const jsonRaw = readFileSync(`package.json`)
+		.toString()
+		.replace('workspace:', '');
 	const json = JSON.parse(jsonRaw);
 	json.version = version;
 	writeFileSync(`package.json`, JSON.stringify(json, null, 2));

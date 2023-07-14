@@ -9,7 +9,10 @@ import {
 
 import { BlockTagNames } from '../types';
 
-type DocCommentSections = Pick<DocComment, 'remarksBlock' | 'privateRemarks'>;
+type DocCommentSections = Pick<
+	DocComment,
+	'remarksBlock' | 'privateRemarks' | 'modifierTagSet'
+>;
 
 export const tagNameToTSDocBlock: Record<
 	BlockTagNames,
@@ -17,6 +20,18 @@ export const tagNameToTSDocBlock: Record<
 > = {
 	'@privateRemarks': 'privateRemarks',
 	'@remarks': 'remarksBlock',
+	'@alpha': 'modifierTagSet',
+	'@beta': 'modifierTagSet',
+	'@eventProperty': 'modifierTagSet',
+	'@experimental': 'modifierTagSet',
+	'@internal': 'modifierTagSet',
+	'@override': 'modifierTagSet',
+	'@packageDocumentation': 'modifierTagSet',
+	'@public': 'modifierTagSet',
+	'@readonly': 'modifierTagSet',
+	'@sealed': 'modifierTagSet',
+	'@virtual': 'modifierTagSet',
+	'@deprecated': 'modifierTagSet',
 };
 
 export const isPlainText = (docNode: DocNode): docNode is DocPlainText => {

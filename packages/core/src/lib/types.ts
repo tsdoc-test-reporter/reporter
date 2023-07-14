@@ -17,8 +17,6 @@ export type TestBlockNames =
 	| `${TestBlockNamesBase}.${TestBlockNamesExtended}`
 	| `${TestBlockNamesBase}.${TestBlockNamesExtended}.${TestBlockNamesExtended}`;
 
-export type BlockTagNames = '@privateRemarks' | '@remarks';
-
 export type ModifierTagNames =
 	| '@alpha'
 	| '@beta'
@@ -30,12 +28,17 @@ export type ModifierTagNames =
 	| '@public'
 	| '@readonly'
 	| '@sealed'
-	| '@virtual';
+	| '@virtual'
+	| '@deprecated';
+
+export type BlockTagNames = '@privateRemarks' | '@remarks' | ModifierTagNames;
+export type TagKind = 'block' | 'modifier' | 'inline';
 
 export type TestBlockTag = {
 	type: TagType;
-	tags: string[];
-	tagName: string;
+	tags?: string[];
+	name: string;
+	kind: TagKind;
 	testBlockType: TestBlockNames;
 	testTitle: string;
 };
@@ -49,20 +52,28 @@ export type TestBlockDocComment<CustomTags extends string = string> = {
 	commentEndPosition: number;
 };
 
-export type ICommentTagParser<CustomTag extends string> = {
-	testBlockDocComments: TestBlockDocComment<CustomTag>[];
+export type WithTestDocBlockComments<
+	Type extends object,
+	CustomTags extends string = string
+> = Type & {
+	ancestorTestBlockComments?: TestBlockDocComment<CustomTags>[];
+	testBlockComments?: TestBlockDocComment<CustomTags>[];
 };
 
-export type CommentTagParserConfig<CustomTag extends string> = {
+export type ICommentTagParser<CustomTags extends string> = {
+	testBlockDocComments: TestBlockDocComment<CustomTags>[];
+};
+
+export type CommentTagParserConfig<CustomTags extends string> = {
 	sourceFile: SourceFile;
 	tsDocParser: TSDocParser;
-	applyTags?: (BlockTagNames | CustomTag)[];
+	applyTags?: (BlockTagNames | CustomTags)[];
 	testBlockTagNames?: string[];
 	tagSeparator?: string;
 };
 
-export type CoreDefaults<CustomTag extends string> = {
+export type CoreDefaults<CustomTags extends string> = {
 	testBlockTagNames: string[];
 	tagSeparator: string;
-	applyTags: (BlockTagNames | CustomTag)[];
+	applyTags: (BlockTagNames | CustomTags)[];
 };

@@ -5,6 +5,7 @@ export type {
 	CoreDefaults,
 	ICommentTagParser,
 	CommentTagParserConfig,
+	WithTestDocBlockComments,
 } from './lib/types';
 export { CommentTagParser } from './lib/comment-tag-parser';
 export { coreDefaults } from './lib/defaults';

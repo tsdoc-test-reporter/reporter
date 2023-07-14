@@ -214,7 +214,6 @@
 			color: var(--red);
 		}
 		.sr-only {
-			border: 0 !important;
 			clip: rect(1px, 1px, 1px, 1px) !important;
 			-webkit-clip-path: inset(50%) !important;
 				clip-path: inset(50%) !important;
@@ -237,7 +236,7 @@
 		</header>
 		<main>
 			{{#each result.testResults }}
-			<details open class="test-details">
+			<details class="test-details">
 				<summary class="test-summary status-{{status}}">
 					<div class="test-summary-inner">
 						<h2>{{ testFilePath }}</h2>
@@ -249,20 +248,20 @@
 								<span class="sr-only">Pending tests: {{ numPendingTests }}, </span>
 							{{/if}}
 							{{#if numSkippedTests }}
-								<span class="sr-only">Skipped tests: {{ numPendingTests }}, </span>
 								<span aria-hidden="true" class="test-summary-skipped-tests">
 									{{ numSkippedTests }}
 								</span>
+								<span class="sr-only">Skipped tests: {{ numPendingTests }}, </span>
 							{{/if}}
 							{{#if numTodoTests }}
-								<span class="sr-only">Todo tests: {{ numTodoTests }}, </span>
 								<span aria-hidden="true" class="test-summary-todo-tests"> {{ numTodoTests }} </span>
+								<span class="sr-only">Todo tests: {{ numTodoTests }}, </span>
 							{{/if}}
 							{{#if numFailingTests }}
-								<span class="sr-only">Failing tests: {{ numFailingTests }}, </span>
 								<span aria-hidden="true" class="test-summary-failing-tests">
 									{{ numFailingTests }}
 								</span>
+								<span class="sr-only">Failing tests: {{ numFailingTests }}, </span>
 							{{/if}}
 							<span class="sr-only">Passing tests: {{ numPassingTests }}</span>
 							<span aria-hidden="true" class="test-summary-passing-tests">

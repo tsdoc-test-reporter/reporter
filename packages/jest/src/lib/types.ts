@@ -3,11 +3,14 @@ import type {
 	AssertionResult,
 	TestResult,
 } from '@jest/test-result';
-import type { ITSDocTagDefinitionParameters, TSDocParser } from '@microsoft/tsdoc';
+import type {
+	ITSDocTagDefinitionParameters,
+	TSDocParser,
+} from '@microsoft/tsdoc';
 import type {
 	BlockTagNames,
 	CommentTagParserConfig,
-	TestBlockDocComment,
+	WithTestDocBlockComments,
 } from '@tsdoc-test-reporter/core';
 import type { SourceFile } from 'typescript';
 
@@ -46,36 +49,34 @@ export type TsDocTaggedTestReporterConfig<CustomTag extends string> = Pick<
 	tsConfigPath?: string;
 };
 
-export type TaggedAggregatedResult<CustomTag extends string = string> =
+export type TaggedTestResult<CustomTags extends string = string> =
+	TestResult & {
+		testResults: TaggedAssertionResult<CustomTags>[];
+	};
+
+export type TaggedAssertionResult<CustomTags extends string = string> =
+	WithTestDocBlockComments<AssertionResult, CustomTags>;
+
+export type TaggedAggregatedResult<CustomTags extends string = string> =
 	AggregatedResult & {
-		testResults: TaggedTestResult<CustomTag>[];
+		testResults: TaggedTestResult<CustomTags>[];
 	};
 
-export type TaggedTestResult<CustomTag extends string = string> = TestResult & {
-	testResults: TaggedAssertionResult<CustomTag>[];
-};
-
-export type TaggedAssertionResult<CustomTag extends string = string> =
-	AssertionResult & {
-		ancestorTestBlockComments?: TestBlockDocComment<CustomTag>[];
-		testBlockComments?: TestBlockDocComment<CustomTag>[];
-	};
-
-export type TestGroup<CustomTag extends string> = Pick<
+export type TestGroup<CustomTags extends string> = Pick<
 	TaggedTestResult,
 	'numFailingTests' | 'numPassingTests' | 'numPendingTests' | 'numTodoTests'
 > & {
-	groupTagName: BlockTagNames | CustomTag | 'fileName';
+	groupTagName: BlockTagNames | CustomTags | 'fileName';
 	groupTitle: string;
 	numSkippedTests: number;
-	testResults?: TaggedAssertionResult<CustomTag>[];
+	testResults?: TaggedAssertionResult<CustomTags>[];
 };
 
-export type TestGrouperSchema<CustomTag extends string> = {
-	tagName: BlockTagNames | CustomTag;
+export type TestGrouperSchema<CustomTags extends string> = {
+	tagName: BlockTagNames | CustomTags;
 };
 
-export type TestGrouperConfig<CustomTag extends string> = {
-	testResult: TaggedAggregatedResult<CustomTag>;
-	schema: TestGrouperSchema<BlockTagNames | CustomTag>;
+export type TestGrouperConfig<CustomTags extends string> = {
+	testResult: TaggedAggregatedResult<CustomTags>;
+	schema: TestGrouperSchema<BlockTagNames | CustomTags>;
 };

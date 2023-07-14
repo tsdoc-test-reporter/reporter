@@ -1,6 +1,20 @@
-import type { BlockTagNames, CoreDefaults, TestBlockNames } from './types';
+import type {
+	BlockTagNames,
+	CoreDefaults,
+	ModifierTagNames,
+	TestBlockNames,
+} from './types';
 
-const applyTags: BlockTagNames[] = ['@remarks', "@privateRemarks"];
+const applyTags: (BlockTagNames | ModifierTagNames)[] = [
+	'@remarks',
+	'@privateRemarks',
+	'@alpha',
+	'@beta',
+	'@internal',
+	'@experimental',
+	'@public',
+];
+
 const testBlockTagNames: TestBlockNames[] = [
 	'describe',
 	'describe.each',

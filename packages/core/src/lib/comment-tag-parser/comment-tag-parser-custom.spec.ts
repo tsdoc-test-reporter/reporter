@@ -11,7 +11,7 @@ import { TestBlockTag } from '../types';
 
 import { CommentTagParser } from '.';
 
-it('transforms custom tags', () => {
+it('transforms custom tags for block', () => {
 	const config = new TSDocConfiguration();
 	const customBlockDefinition = new TSDocTagDefinition({
 		tagName: '@custom',
@@ -29,11 +29,39 @@ it('transforms custom tags', () => {
 	expect(first.testBlockTags).toBeDefined();
 	const testBlockTags = first.testBlockTags ?? {};
 	expect(testBlockTags['@custom']).toMatchObject({
-		type: 'standard',
+		type: 'custom',
 		tags: ['acceptance criteria'],
-		tagName: '@custom',
+		name: '@custom',
 		testBlockType: 'describe',
 		testTitle: 'form validation',
+		kind: 'block',
+	} as TestBlockTag);
+	expect(testBlockTags['@remarks']).toBeUndefined();
+});
+
+it('transforms custom tags for modifier', () => {
+	const config = new TSDocConfiguration();
+	const customBlockDefinition = new TSDocTagDefinition({
+		tagName: '@customModifier',
+		syntaxKind: TSDocTagSyntaxKind.ModifierTag,
+	});
+	config.addTagDefinition(customBlockDefinition);
+	const { testBlockDocComments } = new CommentTagParser<'@customModifier'>({
+		sourceFile: commentTagParserCustomTagsSourceFile,
+		tsDocParser: new TSDocParser(config),
+		applyTags: ['@customModifier'],
+	});
+	const [first] = testBlockDocComments;
+	expect(first.title).toEqual('form validation');
+	expect(first.testBlockType).toEqual('describe');
+	expect(first.testBlockTags).toBeDefined();
+	const testBlockTags = first.testBlockTags ?? {};
+	expect(testBlockTags['@customModifier']).toMatchObject({
+		type: 'custom',
+		name: '@customModifier',
+		testBlockType: 'describe',
+		testTitle: 'form validation',
+		kind: "modifier",
 	} as TestBlockTag);
 	expect(testBlockTags['@remarks']).toBeUndefined();
 });

@@ -7,8 +7,9 @@ export const testBlockTagFactory: TestDataFactory<TestBlockTag> = (
 ) => ({
 	type: 'standard',
 	tags: [],
-	tagName: '@remarks',
+	name: '@remarks',
 	testBlockType: 'test',
 	testTitle: 'default test title',
+	kind: 'block',
 	...overrides,
 });

@@ -17,7 +17,7 @@ const testResults = [
 		fullName: 'should show invalid email error',
 		title: 'should show invalid email error',
 		numPassingAsserts: 0,
-		status: "failed",
+		status: 'failed',
 		failureDetails: [
 			{
 				matcherResult: {
@@ -35,10 +35,10 @@ const testResults = [
 
 const reporterHTMLTestResult = taggedTestResultFactory({
 	testFilePath: reporterHTMLSourceFileName,
-	numFailingTests: 2,
+	numFailingTests: 1,
 	numPassingTests: 1,
-	numPendingTests: 1,
-	numTodoTests: 1,
+	numPendingTests: 0,
+	numTodoTests: 0,
 	testResults,
 });
 

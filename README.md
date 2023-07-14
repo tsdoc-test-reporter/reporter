@@ -18,29 +18,29 @@ npm i @tsdoc-test-reporter/jest
 ## Example
 
 ### Input
+
 ```ts
 /**
  * @remarks unit tests
  */
 describe('form validation', () => {
-  /**
+	/**
 	 * @remarks WCAG criteria
 	 * @privateRemarks WCAG 2.1, WCAG 2.2
 	 */
 	test('validate email', () => {
 		expect(true).toBe(true);
-	})
-})
-
+	});
+});
 ```
+
 ### Output
 
 #### JSON
+
 ```json
 {
-	"ancestorTitles": [
-		"form validation",
-	],
+	"ancestorTitles": ["form validation"],
 	"fullName": "validate email",
 	"title": "validate email",
 	"status": "passed",
@@ -48,19 +48,14 @@ describe('form validation', () => {
 		{
 			"testBlockTags": {
 				"@remarks": {
-					"tags": [
-						"WCAG criteria"
-					],
-					"testBlockType": "it",
+					"tags": ["WCAG criteria"],
+					"testBlockType": "it"
 				},
 				"@privateRemarks": {
-					"tags": [
-						"WCAG 2.1",
-						"WCAG 2.2"
-					],
-					"testBlockType": "it",
+					"tags": ["WCAG 2.1", "WCAG 2.2"],
+					"testBlockType": "it"
 				}
-			},
+			}
 		}
 	],
 	"ancestorTestBlockComments": [
@@ -68,12 +63,10 @@ describe('form validation', () => {
 			"title": "form validation",
 			"testBlockTags": {
 				"@remarks": {
-					"tags": [
-						"Unit tests"
-					],
-					"testBlockType": "describe",
+					"tags": ["Unit tests"],
+					"testBlockType": "describe"
 				}
-			},
+			}
 		}
 	]
 }

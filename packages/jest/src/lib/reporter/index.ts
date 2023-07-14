@@ -4,7 +4,10 @@ import {
 	Reporter,
 	TestContext,
 } from '@jest/reporters';
-import { type ITSDocTagDefinitionParameters, TSDocParser } from '@microsoft/tsdoc';
+import {
+	type ITSDocTagDefinitionParameters,
+	TSDocParser,
+} from '@microsoft/tsdoc';
 import { BlockTagNames, coreDefaults } from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
 
@@ -25,11 +28,13 @@ import { getCompilerOptions, writeToFile } from '../utils/io.util';
 import { getSourceFileHelper } from '../utils/typescript.util';
 import { getTsDocParserConfig } from '../utils/tsdoc.util';
 
-const mapToObj = (map: Map<string, TestGroup<string>>): Record<string,TestGroup<string>> => {
-  return Array.from(map).reduce((aggregated, [key, value]) => {
-    aggregated[key] = value;
-    return aggregated;
-  }, {} as Record<string,TestGroup<string>>);
+const mapToObj = (
+	map: Map<string, TestGroup<string>>
+): Record<string, TestGroup<string>> => {
+	return Array.from(map).reduce((aggregated, [key, value]) => {
+		aggregated[key] = value;
+		return aggregated;
+	}, {} as Record<string, TestGroup<string>>);
 };
 
 export class TsDocTaggedTestReporter<CustomTag extends string>
@@ -75,7 +80,7 @@ export class TsDocTaggedTestReporter<CustomTag extends string>
 				getSourceFile(result.testFilePath),
 			])
 		);
-				
+
 		const taggedTestResults = parseTestFiles({
 			applyTags: this.applyTags,
 			tagSeparator: this.tagSeparator,
@@ -84,7 +89,7 @@ export class TsDocTaggedTestReporter<CustomTag extends string>
 			tsDocParser: new TSDocParser(getTsDocParserConfig(this.customTags)),
 			sourceFilesMap,
 		});
-		
+
 		const result: TaggedAggregatedResult = {
 			...results,
 			testResults: taggedTestResults,

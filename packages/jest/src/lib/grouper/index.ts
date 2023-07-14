@@ -24,7 +24,10 @@ export const groupTests = <CustomTag extends string>({
 			const groupTag = topLevelAncestorBlockTagComment?.testBlockTags
 				? topLevelAncestorBlockTagComment.testBlockTags[schema.tagName]
 				: undefined;
-			const groupKey = groupTag ? groupTag.tags[0] : result.testFilePath;
+			const groupKey =
+				groupTag && groupTag.tags?.length
+					? groupTag.tags[0]
+					: result.testFilePath;
 			const existingTestGroup = grouped.get(groupKey);
 			grouped.set(
 				groupKey,

@@ -1,4 +1,11 @@
-import { DocBlock, DocComment, TextRange, TSDocParser } from '@microsoft/tsdoc';
+import {
+	DocBlock,
+	DocBlockTag,
+	DocComment,
+	ModifierTagSet,
+	TextRange,
+	TSDocParser,
+} from '@microsoft/tsdoc';
 import type {
 	Node,
 	SourceFile,
@@ -67,34 +74,65 @@ export class CommentTagParser<CustomTag extends string>
 		).docComment;
 	}
 
-	private getGetBlockTags(
+	private getBlockTags(
 		docComment: DocComment,
 		testBlockType: TestBlockNames,
 		testTitle: string
 	): TestBlockDocComment<CustomTag>['testBlockTags'] {
 		const tags: TestBlockDocComment<CustomTag>['testBlockTags'] = {};
 		for (const tagName of this.applyTags) {
-			let docBlock: DocBlock | undefined = undefined;
+			let isCustom = false;
+			let docBlock: DocBlock | ModifierTagSet | undefined = undefined;
+			let customModifierTag: DocBlockTag | undefined = undefined;
 			if (tagName in tagNameToTSDocBlock) {
 				const blockName = tagNameToTSDocBlock[tagName as BlockTagNames];
 				docBlock = docComment[blockName];
 			} else {
+				const isCustomModifier = docComment.modifierTagSet.hasTagName(tagName);
+				customModifierTag = isCustomModifier
+					? docComment.modifierTagSet.nodes.find(node => node.tagName === tagName)
+					: undefined;
 				docBlock = docComment.customBlocks.find(
 					(customBlock) => customBlock.blockTag.tagName === tagName
 				);
+				isCustom = true;
 			}
-			if (docBlock) {
-				const docBlockTags = docBlockToDocBlockTags(
-					docBlock,
-					this.tagSeparator
-				);
-				tags[tagName] = {
-					type: 'standard',
-					tags: docBlockTags,
-					tagName,
+			if(customModifierTag) {
+				const tName = customModifierTag.tagName as CustomTag | BlockTagNames;
+				tags[tName] = {
+					type: "custom",
+					kind: 'modifier',
+					name: tName,
 					testBlockType,
 					testTitle,
 				};
+			}
+			if (docBlock) {
+				if ('nodes' in docBlock) {
+					for (const node of docBlock.nodes) {
+						const name = node.tagName as CustomTag | BlockTagNames;
+						tags[name] = {
+							type: isCustom ? 'custom' : 'standard',
+							kind: 'modifier',
+							name: name,
+							testBlockType,
+							testTitle,
+						};
+					}
+				} else {
+					const docBlockTags = docBlockToDocBlockTags(
+						docBlock,
+						this.tagSeparator
+					);
+					tags[tagName] = {
+						type: isCustom ? 'custom' : 'standard',
+						tags: docBlockTags,
+						kind: 'block',
+						name: tagName,
+						testBlockType,
+						testTitle,
+					};
+				}
 			}
 		}
 		return tags;
@@ -110,7 +148,7 @@ export class CommentTagParser<CustomTag extends string>
 				testFilePath: this.sourceFile.fileName,
 				title,
 				testBlockType: nodeName,
-				testBlockTags: this.getGetBlockTags(
+				testBlockTags: this.getBlockTags(
 					this.parseTsDocCommentRange(comment),
 					nodeName,
 					title

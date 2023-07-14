@@ -32,8 +32,8 @@ test('creates json report output from grouped result', () => {
 		outputFileType: 'json',
 		outputFileName: 'output',
 		groupBySchema: {
-			tagName: "@remarks",
-		}
+			tagName: '@remarks',
+		},
 	});
 	reporter.onRunComplete(testContext, reporterBasicAggregatedResult);
 	expect(fs.writeFileSync).toBeCalledTimes(1);

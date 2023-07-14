@@ -8,7 +8,10 @@ import { testFileParserBasicAggregatedResult } from './test-data/test-file-parse
 import { testFileParserCustomAggregatedResult } from './test-data/test-file-parser-custom.test-results';
 
 import { parseTestFiles } from '.';
-import { testFileParserCustomFileName, testFileParserCustomSourceFile } from './test-data/test-file-parser-custom.source-file';
+import {
+	testFileParserCustomFileName,
+	testFileParserCustomSourceFile,
+} from './test-data/test-file-parser-custom.source-file';
 import { getTsDocParserConfig } from '../utils/tsdoc.util';
 import { coreDefaults } from '@tsdoc-test-reporter/core';
 
@@ -42,16 +45,16 @@ test('parse and tag test for files', () => {
 test('parse and tag custom tags', () => {
 	const customTags: ITSDocTagDefinitionParameters[] = [
 		{
-			tagName: "@custom",
+			tagName: '@custom',
 			syntaxKind: 1,
 		},
 		{
-			tagName: "@custom2",
+			tagName: '@custom2',
 			syntaxKind: 1,
-		}
-	]
+		},
+	];
 	const taggedTestResults = parseTestFiles({
-		applyTags: [...coreDefaults.applyTags, "@custom", "@custom2"],
+		applyTags: [...coreDefaults.applyTags, '@custom', '@custom2'],
 		testResults: testFileParserCustomAggregatedResult.testResults,
 		tsDocParser: new TSDocParser(getTsDocParserConfig(customTags)),
 		sourceFilesMap: {

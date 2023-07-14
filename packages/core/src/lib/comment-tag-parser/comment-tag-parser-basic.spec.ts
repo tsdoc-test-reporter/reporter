@@ -19,11 +19,12 @@ it('transforms source file to test tags for default applied describe and test/it
 	expect(first.testBlockTags).toBeDefined();
 	const firstTestBlockTags = first.testBlockTags ?? {};
 	expect(firstTestBlockTags['@remarks']).toMatchObject({
-		tagName: '@remarks',
+		name: '@remarks',
 		tags: ['unit tests'],
 		testBlockType: 'describe',
 		testTitle: 'form validation',
 		type: 'standard',
+		kind: 'block',
 	} as TestBlockTag);
 
 	expect(second.title).toEqual('error handling');
@@ -31,11 +32,12 @@ it('transforms source file to test tags for default applied describe and test/it
 	expect(second.testBlockTags).toBeDefined();
 	const secondTestBlockTags = second.testBlockTags ?? {};
 	expect(secondTestBlockTags['@remarks']).toMatchObject({
-		tagName: '@remarks',
+		name: '@remarks',
 		tags: ['WCAG criteria'],
 		testBlockType: 'describe',
 		testTitle: 'error handling',
 		type: 'standard',
+		kind: 'block',
 	} as TestBlockTag);
 
 	expect(third.title).toEqual('form validation');
@@ -43,10 +45,11 @@ it('transforms source file to test tags for default applied describe and test/it
 	expect(third.testBlockTags).toBeDefined();
 	const thirdTestBlockTags = third.testBlockTags ?? {};
 	expect(thirdTestBlockTags['@remarks']).toMatchObject({
-		tagName: '@remarks',
+		name: '@remarks',
 		tags: ['feature/XXXX'],
 		testBlockType: 'describe',
 		testTitle: 'form validation',
+		kind: 'block',
 		type: 'standard',
 	} as TestBlockTag);
 
@@ -55,11 +58,12 @@ it('transforms source file to test tags for default applied describe and test/it
 	expect(fourth.testBlockTags).toBeDefined();
 	const fourthTestBlockTags = fourth.testBlockTags ?? {};
 	expect(fourthTestBlockTags['@remarks']).toMatchObject({
-		tagName: '@remarks',
+		name: '@remarks',
 		tags: ['acceptance criteria'],
 		testBlockType: 'it',
 		testTitle: 'should should invalid email error',
 		type: 'standard',
+		kind: 'block',
 	} as TestBlockTag);
 });
 
@@ -77,11 +81,12 @@ it('transforms source file to test tags for user defined applied describe and te
 	expect(first.testBlockTags).toBeDefined();
 	const firstTestBlockTags = first.testBlockTags ?? {};
 	expect(firstTestBlockTags['@remarks']).toMatchObject({
-		tagName: '@remarks',
+		name: '@remarks',
 		tags: ['unit tests'],
 		testBlockType: 'describe',
 		testTitle: 'form validation',
 		type: 'standard',
+		kind: 'block',
 	} as TestBlockTag);
 
 	expect(second.title).toEqual('error handling');
@@ -89,18 +94,20 @@ it('transforms source file to test tags for user defined applied describe and te
 	expect(second.testBlockTags).toBeDefined();
 	const secondTestBlockTags = second.testBlockTags ?? {};
 	expect(secondTestBlockTags['@remarks']).toMatchObject({
-		tagName: '@remarks',
+		name: '@remarks',
 		tags: ['WCAG criteria'],
 		testBlockType: 'describe',
 		testTitle: 'error handling',
 		type: 'standard',
+		kind: 'block',
 	} as TestBlockTag);
 	expect(secondTestBlockTags['@privateRemarks']).toMatchObject({
-		tagName: '@privateRemarks',
+		name: '@privateRemarks',
 		tags: ['WCAG 2.1', 'WCAG 2.2'],
 		testBlockType: 'describe',
 		testTitle: 'error handling',
 		type: 'standard',
+		kind: 'block',
 	} as TestBlockTag);
 
 	expect(third.title).toEqual('form validation');
@@ -108,11 +115,12 @@ it('transforms source file to test tags for user defined applied describe and te
 	expect(third.testBlockTags).toBeDefined();
 	const thirdTestBlockTags = third.testBlockTags ?? {};
 	expect(thirdTestBlockTags['@remarks']).toMatchObject({
-		tagName: '@remarks',
+		name: '@remarks',
 		tags: ['feature/XXXX'],
 		testBlockType: 'describe',
 		testTitle: 'form validation',
 		type: 'standard',
+		kind: 'block',
 	} as TestBlockTag);
 
 	expect(fourth.title).toEqual('should should invalid email error');
@@ -120,10 +128,11 @@ it('transforms source file to test tags for user defined applied describe and te
 	expect(fourth.testBlockTags).toBeDefined();
 	const fourthTestBlockTags = fourth.testBlockTags ?? {};
 	expect(fourthTestBlockTags['@remarks']).toMatchObject({
-		tagName: '@remarks',
+		name: '@remarks',
 		tags: ['acceptance criteria'],
 		testBlockType: 'it',
 		testTitle: 'should should invalid email error',
 		type: 'standard',
+		kind: 'block',
 	} as TestBlockTag);
 });

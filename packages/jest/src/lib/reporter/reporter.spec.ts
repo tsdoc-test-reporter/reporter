@@ -24,14 +24,14 @@ jest.mock('../utils/typescript.util', () => {
 	};
 });
 
-test.skip('creates html report output', () => {
+test('creates html report output', () => {
 	const reporter = new TsDocTaggedTestReporter(reporterGlobalConfig, {
 		outputFileType: 'html',
 		outputFileName: 'output',
 		uiOptions: {
 			hideAncestorTitles: true,
-			hideAncestorTags: false,
-		}
+			hideAncestorTags: true,
+		},
 	});
 	reporter.onRunComplete(testContext, reporterHTMLAggregatedResult);
 });

@@ -64,19 +64,21 @@ test('gets default compiler options', () => {
 
 test('gets compiler options from tsConfig.json but unable to parse config', () => {
 	jest.spyOn(fs, 'existsSync').mockReturnValue(true);
-	const consoleSpy = jest.spyOn(console, "log");
+	const consoleSpy = jest.spyOn(console, 'log');
 	const compilerOptions = getCompilerOptions();
 	expect(compilerOptions).toEqual({
 		target: 99,
 	});
 	expect(consoleSpy).toHaveBeenCalledTimes(1);
-	expect(consoleSpy).toHaveBeenCalledWith("\nUnable to parse TSConfig File. Using default values");
+	expect(consoleSpy).toHaveBeenCalledWith(
+		'\nUnable to parse TSConfig File. Using default values'
+	);
 });
 
 test('gets compiler options from tsConfig.json', () => {
 	jest.spyOn(fs, 'existsSync').mockReturnValue(true);
 	jest.spyOn(fs, 'readFileSync').mockReturnValueOnce(expectedTsConfig);
-	const consoleSpy = jest.spyOn(console, "log");
+	const consoleSpy = jest.spyOn(console, 'log');
 	const compilerOptions = getCompilerOptions();
 	expect(compilerOptions).toEqual(JSON.parse(expectedTsConfig).compilerOptions);
 	expect(consoleSpy).toHaveBeenCalledTimes(0);

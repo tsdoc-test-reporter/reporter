@@ -5,7 +5,8 @@
 	"scripts": {
 		"format": "prettier . --write",
 		"publish:core": "node ./tools/scripts/publish.mjs core latest",
-		"publish:jest": "node ./tools/scripts/publish.mjs jest latest"
+		"publish:jest": "node ./tools/scripts/publish.mjs jest latest",
+		"docs": "typedoc"
 	},
 	"private": false,
 	"dependencies": {
@@ -37,6 +38,7 @@
 		"prettier": "^2.6.2",
 		"ts-jest": "28.0.5",
 		"ts-node": "10.9.1",
+		"typedoc": "^0.24.8",
 		"typescript": "~4.8.2"
 	}
 }

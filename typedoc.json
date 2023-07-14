@@ -1,0 +1,5 @@
+{
+	"entryPoints": ["packages/core/src/index.ts", "packages/jest/src/index.ts"],
+	"out": "docs",
+	"tsconfig": "tsconfig.base.json"
+}

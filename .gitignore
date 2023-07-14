@@ -4,6 +4,9 @@
 /dist
 /tmp
 /out-tsc
+/docs
+output.html
+output.json
 
 # dependencies
 node_modules
@@ -37,4 +40,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-output.html

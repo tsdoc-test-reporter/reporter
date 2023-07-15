@@ -1,7 +1,7 @@
 export type {
-	BlockTagNames,
+	AllTagsName as BlockTagNames,
 	TestBlockDocComment,
-	TestBlockNames,
+	TestBlockName as TestBlockNames,
 	CoreDefaults,
 	ICommentTagParser,
 	CommentTagParserConfig,

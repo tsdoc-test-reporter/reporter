@@ -7,31 +7,19 @@ import {
 	DocBlock,
 } from '@microsoft/tsdoc';
 
-import { BlockTagNames } from '../types';
+import { BlockTagName } from '../types';
 
 type DocCommentSections = Pick<
 	DocComment,
-	'remarksBlock' | 'privateRemarks' | 'modifierTagSet'
+	'remarksBlock' | 'privateRemarks'
 >;
 
 export const tagNameToTSDocBlock: Record<
-	BlockTagNames,
+	BlockTagName,
 	keyof DocCommentSections
 > = {
 	'@privateRemarks': 'privateRemarks',
 	'@remarks': 'remarksBlock',
-	'@alpha': 'modifierTagSet',
-	'@beta': 'modifierTagSet',
-	'@eventProperty': 'modifierTagSet',
-	'@experimental': 'modifierTagSet',
-	'@internal': 'modifierTagSet',
-	'@override': 'modifierTagSet',
-	'@packageDocumentation': 'modifierTagSet',
-	'@public': 'modifierTagSet',
-	'@readonly': 'modifierTagSet',
-	'@sealed': 'modifierTagSet',
-	'@virtual': 'modifierTagSet',
-	'@deprecated': 'modifierTagSet',
 };
 
 export const isPlainText = (docNode: DocNode): docNode is DocPlainText => {

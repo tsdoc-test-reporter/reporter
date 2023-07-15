@@ -1,11 +1,11 @@
 import type {
-	BlockTagNames,
+	AllTagsName,
 	CoreDefaults,
-	ModifierTagNames,
-	TestBlockNames,
+	ModifierTagName,
+	TestBlockName,
 } from './types';
 
-const applyTags: (BlockTagNames | ModifierTagNames)[] = [
+const applyTags: (AllTagsName | ModifierTagName)[] = [
 	'@remarks',
 	'@privateRemarks',
 	'@alpha',
@@ -13,9 +13,25 @@ const applyTags: (BlockTagNames | ModifierTagNames)[] = [
 	'@internal',
 	'@experimental',
 	'@public',
+	"@deprecated",
 ];
 
-const testBlockTagNames: TestBlockNames[] = [
+export const allModifierTags: ModifierTagName[]  = [
+	'@alpha',
+	'@beta',
+	'@eventProperty',
+	'@experimental',
+	'@internal',
+	'@override',
+	'@packageDocumentation',
+	'@public',
+	'@readonly',
+	'@sealed',
+	'@virtual',
+	'@deprecated',
+]
+
+const testBlockTagNames: TestBlockName[] = [
 	'describe',
 	'describe.each',
 	'describe.only',

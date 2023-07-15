@@ -1,8 +1,5 @@
 import {
-	DocBlock,
-	DocBlockTag,
 	DocComment,
-	ModifierTagSet,
 	TextRange,
 	TSDocParser,
 } from '@microsoft/tsdoc';
@@ -13,13 +10,16 @@ import type {
 	CallExpression,
 } from 'typescript';
 
-import { coreDefaults } from '../defaults';
+import { allModifierTags, coreDefaults } from '../defaults';
 import type {
-	BlockTagNames,
+	AllTagsName,
 	CommentTagParserConfig,
 	ICommentTagParser,
+	ModifierTagName,
+	TagKind,
+	TagType,
 	TestBlockDocComment,
-	TestBlockNames,
+	TestBlockName,
 } from '../types';
 import { unquoteString } from '../utils/format.utils';
 import {
@@ -31,6 +31,7 @@ import {
 	docBlockToDocBlockTags,
 	tagNameToTSDocBlock,
 } from '../utils/tsdoc.utils';
+import { BlockTagName } from '../types';
 
 export class CommentTagParser<CustomTag extends string>
 	implements ICommentTagParser<CustomTag>
@@ -40,13 +41,13 @@ export class CommentTagParser<CustomTag extends string>
 	private tsDocParser: TSDocParser;
 	private testBlockTagNames: string[];
 	private tagSeparator: string;
-	private applyTags: (BlockTagNames | CustomTag)[];
+	private applyTags: (AllTagsName | CustomTag)[];
 	private _testBlockDocComments: TestBlockDocComment<CustomTag>[] = [];
 
 	constructor({
 		sourceFile,
 		tsDocParser,
-		applyTags = coreDefaults.applyTags as (BlockTagNames | CustomTag)[],
+		applyTags = coreDefaults.applyTags as (AllTagsName | CustomTag)[],
 		testBlockTagNames = coreDefaults.testBlockTagNames,
 		tagSeparator = coreDefaults.tagSeparator,
 	}: CommentTagParserConfig<CustomTag>) {
@@ -76,58 +77,36 @@ export class CommentTagParser<CustomTag extends string>
 
 	private getBlockTags(
 		docComment: DocComment,
-		testBlockType: TestBlockNames,
+		testBlockType: TestBlockName,
 		testTitle: string
 	): TestBlockDocComment<CustomTag>['testBlockTags'] {
 		const tags: TestBlockDocComment<CustomTag>['testBlockTags'] = {};
 		for (const tagName of this.applyTags) {
-			let isCustom = false;
-			let docBlock: DocBlock | ModifierTagSet | undefined = undefined;
-			let customModifierTag: DocBlockTag | undefined = undefined;
-			if (tagName in tagNameToTSDocBlock) {
-				const blockName = tagNameToTSDocBlock[tagName as BlockTagNames];
-				docBlock = docComment[blockName];
-			} else {
-				const isCustomModifier = docComment.modifierTagSet.hasTagName(tagName);
-				customModifierTag = isCustomModifier
-					? docComment.modifierTagSet.nodes.find(node => node.tagName === tagName)
-					: undefined;
-				docBlock = docComment.customBlocks.find(
-					(customBlock) => customBlock.blockTag.tagName === tagName
-				);
-				isCustom = true;
-			}
-			if(customModifierTag) {
-				const tName = customModifierTag.tagName as CustomTag | BlockTagNames;
-				tags[tName] = {
-					type: "custom",
-					kind: 'modifier',
-					name: tName,
-					testBlockType,
-					testTitle,
-				};
-			}
-			if (docBlock) {
-				if ('nodes' in docBlock) {
-					for (const node of docBlock.nodes) {
-						const name = node.tagName as CustomTag | BlockTagNames;
-						tags[name] = {
-							type: isCustom ? 'custom' : 'standard',
-							kind: 'modifier',
-							name: name,
-							testBlockType,
-							testTitle,
-						};
-					}
-				} else {
-					const docBlockTags = docBlockToDocBlockTags(
-						docBlock,
-						this.tagSeparator
-					);
+			const kind: TagKind = docComment.modifierTagSet.hasTagName(tagName) ? "modifier" : "block";
+			if (kind === "modifier") {
+				const modifierTag = docComment.modifierTagSet.nodes.find(node => node.tagName === tagName);
+				if (modifierTag) {
 					tags[tagName] = {
-						type: isCustom ? 'custom' : 'standard',
-						tags: docBlockTags,
-						kind: 'block',
+						type: allModifierTags.includes(tagName as ModifierTagName) ? "standard" : "custom",
+						kind,
+						name: tagName,
+						testBlockType,
+						testTitle,
+					}
+				}
+			} else {
+				const type: TagType = tagName in tagNameToTSDocBlock ? "standard" : "custom";
+				const docBlock = type === "standard"
+					? docComment[tagNameToTSDocBlock[tagName as BlockTagName]]
+					: docComment.customBlocks.find(block => block.blockTag.tagName === tagName);
+				if (docBlock) {
+					tags[tagName] = {
+						type,
+						tags: docBlockToDocBlockTags(
+							docBlock,
+							this.tagSeparator
+						),
+						kind,
 						name: tagName,
 						testBlockType,
 						testTitle,

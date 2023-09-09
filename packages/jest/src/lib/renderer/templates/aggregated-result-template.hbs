@@ -286,9 +286,11 @@
 										{{#if ancestorTestBlockComments }}
 											{{#each ancestorTestBlockComments }}
 												{{#each testBlockTags }}
-													{{#each tags }}
-														{{{ formatTag this }}}
-													{{/each}}
+													{{#if tags }}
+														{{{formatTags this }}}
+													{{else}}
+														{{{formatTag @key}}}
+													{{/if}}
 												{{/each}}
 											{{/each}}
 										{{/if}}
@@ -296,9 +298,11 @@
 									{{#if testBlockComments }}
 										{{#each testBlockComments }}
 											{{#each testBlockTags }}
-												{{#each tags }}
-													{{{ formatTag this }}}
-												{{/each}}
+												{{#if tags }}
+													{{{ formatTags this }}}
+												{{else}}
+													{{{formatTag @key}}}
+												{{/if}}
 											{{/each}}
 										{{/each}}
 									{{/if}}

@@ -11,7 +11,7 @@ import { BlockTagName } from '../types';
 
 type DocCommentSections = Pick<
 	DocComment,
-	'remarksBlock' | 'privateRemarks'
+	'remarksBlock' | 'privateRemarks' | 'deprecatedBlock'
 >;
 
 export const tagNameToTSDocBlock: Record<
@@ -20,6 +20,7 @@ export const tagNameToTSDocBlock: Record<
 > = {
 	'@privateRemarks': 'privateRemarks',
 	'@remarks': 'remarksBlock',
+	'@deprecated': 'deprecatedBlock',
 };
 
 export const isPlainText = (docNode: DocNode): docNode is DocPlainText => {

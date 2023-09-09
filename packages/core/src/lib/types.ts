@@ -29,10 +29,8 @@ export type ModifierTagName =
 	| '@readonly'
 	| '@sealed'
 	| '@virtual'
-	| '@deprecated';
 
-	
-export type BlockTagName = '@privateRemarks' | '@remarks';
+export type BlockTagName = '@privateRemarks' | '@remarks' | '@deprecated';
 export type AllTagsName = BlockTagName | ModifierTagName;
 export type TagKind = 'block' | 'modifier' | 'inline';
 

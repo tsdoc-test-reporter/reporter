@@ -26,6 +26,8 @@ export type UIOptions = {
 	tagTitleToIconMap?: Record<string, string>;
 	hideAncestorTitles?: boolean;
 	hideAncestorTags?: boolean;
+	showTagNameOnBlockTags?: boolean;
+	removeAtSignOnTags?: boolean;
 };
 
 export type FileParserConfig<CustomTag extends string> = Pick<

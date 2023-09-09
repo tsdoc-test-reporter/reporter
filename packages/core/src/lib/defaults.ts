@@ -28,7 +28,6 @@ export const allModifierTags: ModifierTagName[]  = [
 	'@readonly',
 	'@sealed',
 	'@virtual',
-	'@deprecated',
 ]
 
 const testBlockTagNames: TestBlockName[] = [

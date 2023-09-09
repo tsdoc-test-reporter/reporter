@@ -8,6 +8,19 @@ import { customColorMap, statusToIconMap } from './defaultValues';
 
 import { TaggedAggregatedResult, TestGroup, UIOptions } from '../types';
 import { AnsiToHtmlConverter } from '../utils/ansi-to-html';
+import type { TestBlockTag } from '@tsdoc-test-reporter/core';
+
+function formatTag (title: string, prefix?: string, options?: UIOptions) {
+	const tagPrefix = prefix && options?.showTagNameOnBlockTags ? `${prefix}:` : "";
+	const formattedTagPrefix  = options?.removeAtSignOnTags ? tagPrefix.replace("@", "") : tagPrefix;
+	const formattedTitle = options?.removeAtSignOnTags && title.includes("@") ? title.replace("@", "") : title;
+	if (!options?.tagTitleToIconMap) return `<span class="tag">${formattedTagPrefix} ${formattedTitle}</span>`;
+	const tagIcon = options?.tagTitleToIconMap[title];
+	if (tagIcon) {
+		return `<span class="tag" aria-hidden="true">${formattedTagPrefix}${tagIcon}</span><span class="sr-only">${formattedTagPrefix}${formattedTitle}</span>`;
+	}
+	return formattedTitle;
+}
 
 export const render = (
 	result: Map<string, TestGroup<string>> | TaggedAggregatedResult,
@@ -44,13 +57,12 @@ export const render = (
 		}
 	);
 
-	Handlebars.registerHelper('formatTag', function (title: string) {
-		if (!options?.tagTitleToIconMap) return `<span class="tag">${title}</span>`;
-		const tagIcon = options?.tagTitleToIconMap[title];
-		if (tagIcon) {
-			return `<span class="tag" aria-hidden="true">${tagIcon}</span><span class="sr-only">${title}</span>`;
-		}
-		return title;
+	Handlebars.registerHelper('formatTag', function(tag: string) {
+		return formatTag(tag, undefined, options);
+	});
+
+	Handlebars.registerHelper('formatTags', function (tag: TestBlockTag) {
+		return tag.tags?.map(t => formatTag(t, tag.name,  options)).join(""); 
 	});
 
 	const template = Handlebars.compile(templateFile);

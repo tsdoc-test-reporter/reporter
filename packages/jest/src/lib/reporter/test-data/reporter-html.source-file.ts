@@ -5,10 +5,12 @@ export const reporterHTMLSourceFileName = 'reporter-html.source-file.ts';
 export const reporterHTMLSourceFile: SourceFile = sourceFileFactory(
 	reporterHTMLSourceFileName
 )`
-/**
- * @remarks Unit tests
- */
 describe('form validation', () => {
+	/**
+	 * @public
+	 * @beta
+	 * @alpha
+	 */
 	test('should validate email', () => {
 		expect(true).toBe(true);
 	})
@@ -16,6 +18,7 @@ describe('form validation', () => {
     /**
      * @remarks WCAG criteria
      * @privateRemarks WCAG 2.1, WCAG 2.2
+		 * @deprecated old
      */
 		it('should show invalid email error', () => {
 			expect(true).toBe(false);

@@ -4,6 +4,10 @@ import { TestBlockDocComment } from '../../types';
 
 import { testBlockTagFactory } from './test-doc-block-tag';
 
+/**
+ * @internal
+ * @hidden
+ */
 export const testDocBlockCommentFactory: TestDataFactory<
 	TestBlockDocComment
 > = (overrides = {}) => ({

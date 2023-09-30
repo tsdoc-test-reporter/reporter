@@ -1,22 +1,8 @@
-import type {
-	AllTagsName,
-	CoreDefaults,
-	ModifierTagName,
-	TestBlockName,
-} from './types';
+import type { BlockTagName, CoreDefaults, ModifierTagName, TestBlockName } from './types';
 
-const applyTags: (AllTagsName | ModifierTagName)[] = [
-	'@remarks',
-	'@privateRemarks',
-	'@alpha',
-	'@beta',
-	'@internal',
-	'@experimental',
-	'@public',
-	"@deprecated",
-];
+const allBlockTags: BlockTagName[] = ['@deprecated', '@privateRemarks', '@deprecated'];
 
-export const allModifierTags: ModifierTagName[]  = [
+export const allModifierTags: ModifierTagName[] = [
 	'@alpha',
 	'@beta',
 	'@eventProperty',
@@ -28,7 +14,7 @@ export const allModifierTags: ModifierTagName[]  = [
 	'@readonly',
 	'@sealed',
 	'@virtual',
-]
+];
 
 const testBlockTagNames: TestBlockName[] = [
 	'describe',
@@ -63,10 +49,10 @@ const testBlockTagNames: TestBlockName[] = [
 	'it.todo',
 	'it.concurrent',
 	'it.concurrent.each',
-];
+]
 
 export const coreDefaults: CoreDefaults<string> = {
 	testBlockTagNames: testBlockTagNames,
 	tagSeparator: ',',
-	applyTags,
+	applyTags: [...allBlockTags, ...allModifierTags],
 };

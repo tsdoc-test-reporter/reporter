@@ -17,8 +17,9 @@ afterEach(jest.resetAllMocks);
 const testContext = new Set([reporterTestContext]);
 
 jest.mock('../utils/typescript.util', () => {
-	const { reporterBasicSourceFile, reporterBasicSourceFileName } =
-		jest.requireActual('./test-data/reporter.source-file');
+	const { reporterBasicSourceFile, reporterBasicSourceFileName } = jest.requireActual(
+		'./test-data/reporter.source-file'
+	);
 	const files: Record<string, SourceFile> = {
 		[reporterBasicSourceFileName]: reporterBasicSourceFile,
 	};
@@ -33,15 +34,8 @@ test('creates html report output', () => {
 	const reporter = new TsDocTaggedTestReporter(reporterGlobalConfig, {
 		outputFileType: 'html',
 		outputFileName: 'output',
-		groupBySchema: {
-			tagName: '@remarks',
-		},
 	});
 	reporter.onRunComplete(testContext, reporterBasicAggregatedResult);
 	expect(fs.writeFileSync).toBeCalledTimes(1);
-	expect(fs.writeFileSync).toBeCalledWith(
-		'output.html',
-		expect.anything(),
-		'utf-8'
-	);
+	expect(fs.writeFileSync).toBeCalledWith('output.html', expect.anything(), 'utf-8');
 });

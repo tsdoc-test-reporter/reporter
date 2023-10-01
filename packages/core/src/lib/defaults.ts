@@ -1,6 +1,6 @@
 import type { BlockTagName, CoreDefaults, ModifierTagName, TestBlockName } from './types';
 
-const allBlockTags: BlockTagName[] = ['@deprecated', '@privateRemarks', '@deprecated'];
+const allBlockTags: BlockTagName[] = ['@deprecated', '@privateRemarks', '@remarks'];
 
 export const allModifierTags: ModifierTagName[] = [
 	'@alpha',

@@ -8,6 +8,7 @@ import {
 } from '@microsoft/tsdoc';
 
 import { BlockTagName } from '../types';
+import { trim } from './format.utils';
 
 type DocCommentSections = Pick<
 	DocComment,
@@ -40,6 +41,6 @@ export const docBlockToDocBlockTags = (
 			.find(isDocParagraph)
 			?.nodes.find(isPlainText)
 			?.text.split(tagSeparator)
-			.map((s) => s.trim()) ?? []
+			.map(trim) ?? []
 	);
 };

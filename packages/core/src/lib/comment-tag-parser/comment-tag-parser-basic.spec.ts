@@ -80,7 +80,7 @@ it('transforms source file to test tags for user defined applied describe and te
 	expect(first.testBlockType).toEqual('describe');
 	expect(first.testBlockTags).toBeDefined();
 	const firstTestBlockTags = first.testBlockTags ?? {};
-	expect(firstTestBlockTags['@remarks']).toMatchObject({
+	expect(firstTestBlockTags['@remarks']).toMatchObject<TestBlockTag>({
 		name: '@remarks',
 		tags: ['unit tests'],
 		testBlockType: 'describe',
@@ -93,7 +93,7 @@ it('transforms source file to test tags for user defined applied describe and te
 	expect(second.testBlockType).toEqual('describe');
 	expect(second.testBlockTags).toBeDefined();
 	const secondTestBlockTags = second.testBlockTags ?? {};
-	expect(secondTestBlockTags['@remarks']).toMatchObject({
+	expect(secondTestBlockTags['@remarks']).toMatchObject<TestBlockTag>({
 		name: '@remarks',
 		tags: ['WCAG criteria'],
 		testBlockType: 'describe',
@@ -101,7 +101,7 @@ it('transforms source file to test tags for user defined applied describe and te
 		type: 'standard',
 		kind: 'block',
 	} as TestBlockTag);
-	expect(secondTestBlockTags['@privateRemarks']).toMatchObject({
+	expect(secondTestBlockTags['@privateRemarks']).toMatchObject<TestBlockTag>({
 		name: '@privateRemarks',
 		tags: ['WCAG 2.1', 'WCAG 2.2'],
 		testBlockType: 'describe',
@@ -114,25 +114,25 @@ it('transforms source file to test tags for user defined applied describe and te
 	expect(third.testBlockType).toEqual('describe');
 	expect(third.testBlockTags).toBeDefined();
 	const thirdTestBlockTags = third.testBlockTags ?? {};
-	expect(thirdTestBlockTags['@remarks']).toMatchObject({
+	expect(thirdTestBlockTags['@remarks']).toMatchObject<TestBlockTag>({
 		name: '@remarks',
 		tags: ['feature/XXXX'],
 		testBlockType: 'describe',
 		testTitle: 'form validation',
 		type: 'standard',
 		kind: 'block',
-	} as TestBlockTag);
+	});
 
 	expect(fourth.title).toEqual('should should invalid email error');
 	expect(fourth.testBlockType).toEqual('it');
 	expect(fourth.testBlockTags).toBeDefined();
 	const fourthTestBlockTags = fourth.testBlockTags ?? {};
-	expect(fourthTestBlockTags['@remarks']).toMatchObject({
+	expect(fourthTestBlockTags['@remarks']).toMatchObject<TestBlockTag>({
 		name: '@remarks',
 		tags: ['acceptance criteria'],
 		testBlockType: 'it',
 		testTitle: 'should should invalid email error',
 		type: 'standard',
 		kind: 'block',
-	} as TestBlockTag);
+	});
 });

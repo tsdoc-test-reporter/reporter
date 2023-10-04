@@ -6,6 +6,7 @@
 		"format": "prettier . --write",
 		"publish:core": "node ./tools/scripts/publish.mjs core latest",
 		"publish:jest": "node ./tools/scripts/publish.mjs jest latest",
+		"build:dev": "node ./tools/scripts/buildDev.mjs",
 		"docs": "typedoc"
 	},
 	"private": false,

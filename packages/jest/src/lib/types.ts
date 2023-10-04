@@ -83,7 +83,7 @@ export type TsDocTaggedTestReporterConfig<CustomTag extends string> = Pick<
 	 * "reports/output"
 	 * @default 'tsdoc-test-reporter-report'
 	 */
-	outputFileName: string;
+	outputFileName?: string;
 	/** Options to configure the output of `outputFileType: "html"` */
 	uiOptions?: UIOptions;
 	/**

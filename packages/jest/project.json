@@ -1,10 +1,11 @@
 {
+	"name": "jest",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
 	"sourceRoot": "packages/jest/src",
 	"projectType": "library",
 	"targets": {
 		"build": {
-			"executor": "@nrwl/js:tsc",
+			"executor": "@nx/js:tsc",
 			"outputs": ["{options.outputPath}"],
 			"options": {
 				"outputPath": "dist/packages/jest",
@@ -18,15 +19,15 @@
 			}
 		},
 		"lint": {
-			"executor": "@nrwl/linter:eslint",
+			"executor": "@nx/linter:eslint",
 			"outputs": ["{options.outputFile}"],
 			"options": {
 				"lintFilePatterns": ["packages/jest/**/*.ts"]
 			}
 		},
 		"test": {
-			"executor": "@nrwl/jest:jest",
-			"outputs": ["coverage/packages/jest"],
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/packages/jest"],
 			"options": {
 				"jestConfig": "packages/jest/jest.config.ts",
 				"passWithNoTests": true

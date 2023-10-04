@@ -2,7 +2,7 @@
 	"name": "@tsdoc-test-reporter/jest",
 	"version": "0.0.1",
 	"peerDependencies": {
-		"typescript": "^4.9.0"
+		"typescript": "~5.1.3"
 	},
 	"dependencies": {
 		"@jest/reporters": "^29.0.3",

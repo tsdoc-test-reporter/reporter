@@ -7,7 +7,7 @@
  * You might need to authenticate with NPM before running this script.
  */
 
-import { readCachedProjectGraph } from '@nrwl/devkit';
+import { readCachedProjectGraph } from '@nx/devkit';
 import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import chalk from 'chalk';
@@ -50,16 +50,12 @@ process.chdir(outputPath);
 
 // Updating the version in "package.json" before publishing
 try {
-	const jsonRaw = readFileSync(`package.json`)
-		.toString()
-		.replace('workspace:', '');
+	const jsonRaw = readFileSync(`package.json`).toString().replace('workspace:', '');
 	const json = JSON.parse(jsonRaw);
 	json.version = version;
 	writeFileSync(`package.json`, JSON.stringify(json, null, 2));
 } catch (e) {
-	console.error(
-		chalk.bold.red(`Error reading package.json file from library build output.`)
-	);
+	console.error(chalk.bold.red(`Error reading package.json file from library build output.`));
 }
 
 // Execute "npm publish" to publish

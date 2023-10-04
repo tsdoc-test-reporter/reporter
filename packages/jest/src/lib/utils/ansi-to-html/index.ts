@@ -434,12 +434,12 @@ export class AnsiToHtmlConverter {
 		this.stack = [];
 	}
 
-	public toHtml(input: string | string[]): string {
+	public toHtml(input?: string | string[]): string {
 		input = typeof input === 'string' ? [input] : input;
 		const { stack, options } = this;
 		const buf = [];
 
-		tokenize(input.join(''), options, (token, data) => {
+		tokenize(input?.join('') ?? "", options, (token, data) => {
 			const output = generateOutput(stack, token, data + '', options);
 
 			if (output) {

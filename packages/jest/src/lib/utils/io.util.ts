@@ -1,7 +1,8 @@
-import { CompilerOptions, ScriptTarget } from 'typescript';
+import { CompilerOptions } from 'typescript';
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { posix, resolve, sep } from 'node:path';
+import { defaultCompilerOptions, getCompilerOptionsThatFollowExtends } from './typescript.util';
 
 export type WriteToFileConfig = {
 	buffer: string;
@@ -25,9 +26,7 @@ export const writeToFile = ({
 				mkdirSync(filePath.join(sep), { recursive });
 			}
 			writeFileSync(
-				`${pathElements
-					.slice(0, -1)
-					.join(sep)}${sep}${fileName}.${outputFileType}`,
+				`${pathElements.slice(0, -1).join(sep)}${sep}${fileName}.${outputFileType}`,
 				buffer,
 				'utf-8'
 			);
@@ -40,18 +39,14 @@ export const writeToFile = ({
 };
 
 export const getCompilerOptions = (customPath?: string): CompilerOptions => {
-	const defaultOptions: CompilerOptions = {
-		target: ScriptTarget.Latest,
-	};
 	const tsConfigPath = resolve(process.cwd(), customPath ?? 'tsconfig.json');
 	if (!existsSync(tsConfigPath)) {
-		return defaultOptions;
+		return defaultCompilerOptions;
 	}
 	try {
-		const tsConfig = JSON.parse(readFileSync(tsConfigPath, 'utf-8'));
-		return tsConfig.compilerOptions;
+		return getCompilerOptionsThatFollowExtends(tsConfigPath);
 	} catch (error) {
-		console.log('\nUnable to parse TSConfig File. Using default values');
-		return defaultOptions;
+		console.warn('\nUnable to parse TSConfig File. Using default values');
+		return defaultCompilerOptions;
 	}
 };

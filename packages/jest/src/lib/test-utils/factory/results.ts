@@ -1,45 +1,33 @@
-import type {
-	AggregatedResult,
-	AssertionResult,
-	TestResult,
-} from '@jest/test-result';
-import { TestDataFactory } from '@tsdoc-test-reporter/core';
+import type { AggregatedResult, AssertionResult, TestResult } from '@jest/test-result';
+import type { TestDataFactory } from '@tsdoc-test-reporter/core';
 
-export const assertionResultFactory: TestDataFactory<AssertionResult> = (
-	overrides = {}
-) => ({
-	ancestorTitles: [],
+export const assertionResultFactory: TestDataFactory<AssertionResult> = (overrides = {}) => ({
 	duration: null,
 	failureDetails: [],
 	failureMessages: [],
-	fullName: 'test title',
+	fullName: 'test',
 	invocations: undefined,
-	location: undefined,
 	numPassingAsserts: 0,
-	retryReasons: undefined,
 	status: 'passed',
-	title: 'test title',
+	title: 'test',
 	testBlockComments: undefined,
 	ancestorTestBlockComments: undefined,
 	...overrides,
+	location: undefined,
+	ancestorTitles: overrides.ancestorTitles ?? [],
+	retryReasons: (overrides.retryReasons as string[]) ?? [],
 });
 
-export const testResultFactory: TestDataFactory<TestResult> = (
-	overrides = {}
-) => ({
-	leaks: false,
+export const testResultFactory: TestDataFactory<TestResult> = (overrides = {}) => ({
+	testFilePath: 'file-path.ts',
 	numFailingTests: 0,
 	numPassingTests: 0,
 	numPendingTests: 0,
 	numTodoTests: 0,
-	openHandles: [],
-	perfStats: {
-		end: 0,
-		runtime: 0,
-		slow: false,
-		start: 0,
-	},
 	skipped: false,
+	leaks: false,
+	...overrides,
+	openHandles: [],
 	snapshot: {
 		added: 0,
 		fileDeleted: false,
@@ -49,15 +37,24 @@ export const testResultFactory: TestDataFactory<TestResult> = (
 		unmatched: 0,
 		updated: 0,
 	},
-	testFilePath: 'default-file-path.ts',
-	...overrides,
-	testResults:
-		overrides.testResults?.map((t) => assertionResultFactory(t)) ?? [],
+	perfStats: {
+		end: 0,
+		runtime: 0,
+		slow: false,
+		start: 0,
+	},
+	console: [],
+	coverage: undefined,
+	displayName: {
+		name: 'name',
+		color: 'cyan',
+	},
+	testExecError: undefined,
+	v8Coverage: undefined,
+	testResults: overrides.testResults?.map(assertionResultFactory) ?? [],
 });
 
-export const aggregatedResultFactory: TestDataFactory<AggregatedResult> = (
-	overrides = {}
-) => ({
+export const aggregatedResultFactory: TestDataFactory<AggregatedResult> = (overrides = {}) => ({
 	numFailedTests: 0,
 	numFailedTestSuites: 0,
 	numPassedTests: 0,
@@ -68,6 +65,10 @@ export const aggregatedResultFactory: TestDataFactory<AggregatedResult> = (
 	numRuntimeErrorTestSuites: 0,
 	numTotalTests: 0,
 	numTotalTestSuites: 0,
+	startTime: 0,
+	success: true,
+	wasInterrupted: false,
+	...overrides,
 	openHandles: [],
 	snapshot: {
 		added: 0,
@@ -85,10 +86,7 @@ export const aggregatedResultFactory: TestDataFactory<AggregatedResult> = (
 		unmatched: 0,
 		updated: 0,
 	},
-	startTime: 0,
-	success: true,
-	wasInterrupted: false,
 	runExecError: undefined,
-	...overrides,
-	testResults: overrides.testResults?.map((t) => testResultFactory(t)) ?? [],
+	coverageMap: undefined,
+	testResults: overrides.testResults?.map(testResultFactory) ?? [],
 });

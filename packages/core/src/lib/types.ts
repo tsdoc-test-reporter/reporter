@@ -93,9 +93,9 @@ export type TestBlockTag = {
 	 * test:
 	 * test.each("should parse email", () => {})
 	 * output:
-	 * testBlockType: "test.each"
+	 * testBlockName: "test.each"
 	 */
-	testBlockType: TestBlockName;
+	testBlockName: TestBlockName;
 	/** The names of the parsed test.
 	 * @example
 	 * test:
@@ -106,11 +106,15 @@ export type TestBlockTag = {
 	testTitle: string;
 };
 
+export type TestBlockTagMap<CustomTags extends string = string> = Partial<
+	Record<AllTagsName | CustomTags, TestBlockTag>
+>;
+
 export type TestBlockDocComment<CustomTags extends string = string> = {
 	testFilePath: string;
 	title: string;
-	testBlockType: TestBlockName;
-	testBlockTags?: Partial<Record<AllTagsName | CustomTags, TestBlockTag>>;
+	testBlockName: TestBlockName;
+	testBlockTags?: TestBlockTagMap<CustomTags>;
 	commentStartPosition: number;
 	commentEndPosition: number;
 };
@@ -160,7 +164,7 @@ export type CommentTagParserConfig<CustomTags extends string> = {
 	 *}
 	 * ```
 	 */
-	testBlockTagNames?: string[];
+	testBlockTagNames?: TestBlockName[];
 	/**
 	 * Separator to use when parsing block tags if you want to supply multiple tags
 	 * to the same block tags
@@ -174,8 +178,8 @@ export type CommentTagParserConfig<CustomTags extends string> = {
 	tagSeparator?: string;
 };
 
-export type CoreDefaults<CustomTags extends string> = {
-	testBlockTagNames: string[];
+export type CoreDefaults<CustomTags extends string = string> = {
+	testBlockTagNames: TestBlockName[];
 	tagSeparator: string;
 	applyTags: (AllTagsName | CustomTags)[];
 };

@@ -1,14 +1,5 @@
-import {
-	DocComment,
-	TextRange,
-	TSDocParser,
-} from '@microsoft/tsdoc';
-import type {
-	Node,
-	SourceFile,
-	CommentRange,
-	CallExpression,
-} from 'typescript';
+import { DocComment, TextRange, TSDocParser } from '@microsoft/tsdoc';
+import { type Node, type SourceFile, type CommentRange, type CallExpression } from 'typescript';
 
 import { allModifierTags, coreDefaults } from '../defaults';
 import type {
@@ -22,20 +13,11 @@ import type {
 	TestBlockName,
 } from '../types';
 import { unquoteString } from '../utils/format.utils';
-import {
-	getJSDocCommentRanges,
-	getNodeName,
-	isTestBlock,
-} from '../utils/ts.utils';
-import {
-	docBlockToDocBlockTags,
-	tagNameToTSDocBlock,
-} from '../utils/tsdoc.utils';
+import { getJSDocCommentRanges, getNodeName, isTestBlock } from '../utils/ts.utils';
+import { docBlockToDocBlockTags, tagNameToTSDocBlock } from '../utils/tsdoc.utils';
 import { BlockTagName } from '../types';
 
-export class CommentTagParser<CustomTag extends string>
-	implements ICommentTagParser<CustomTag>
-{
+export class CommentTagParser<CustomTag extends string> implements ICommentTagParser<CustomTag> {
 	private sourceFile: SourceFile;
 	private sourceFileBuffer: string;
 	private tsDocParser: TSDocParser;
@@ -70,45 +52,44 @@ export class CommentTagParser<CustomTag extends string>
 	}
 
 	private parseTsDocCommentRange({ pos, end }: CommentRange): DocComment {
-		return this.tsDocParser.parseRange(
-			TextRange.fromStringRange(this.sourceFileBuffer, pos, end)
-		).docComment;
+		return this.tsDocParser.parseRange(TextRange.fromStringRange(this.sourceFileBuffer, pos, end))
+			.docComment;
 	}
 
 	private getBlockTags(
 		docComment: DocComment,
-		testBlockType: TestBlockName,
+		testBlockName: TestBlockName,
 		testTitle: string
 	): TestBlockDocComment<CustomTag>['testBlockTags'] {
 		const tags: TestBlockDocComment<CustomTag>['testBlockTags'] = {};
 		for (const tagName of this.applyTags) {
-			const kind: TagKind = docComment.modifierTagSet.hasTagName(tagName) ? "modifier" : "block";
-			if (kind === "modifier") {
-				const modifierTag = docComment.modifierTagSet.nodes.find(node => node.tagName === tagName);
+			const kind: TagKind = docComment.modifierTagSet.hasTagName(tagName) ? 'modifier' : 'block';
+			if (kind === 'modifier') {
+				const modifierTag = docComment.modifierTagSet.nodes.find(
+					(node) => node.tagName === tagName
+				);
 				if (modifierTag) {
 					tags[tagName] = {
-						type: allModifierTags.includes(tagName as ModifierTagName) ? "standard" : "custom",
+						type: allModifierTags.includes(tagName as ModifierTagName) ? 'standard' : 'custom',
 						kind,
 						name: tagName,
-						testBlockType,
+						testBlockName,
 						testTitle,
-					}
+					};
 				}
 			} else {
-				const type: TagType = tagName in tagNameToTSDocBlock ? "standard" : "custom";
-				const docBlock = type === "standard"
-					? docComment[tagNameToTSDocBlock[tagName as BlockTagName]]
-					: docComment.customBlocks.find(block => block.blockTag.tagName === tagName);
+				const type: TagType = tagName in tagNameToTSDocBlock ? 'standard' : 'custom';
+				const docBlock =
+					type === 'standard'
+						? docComment[tagNameToTSDocBlock[tagName as BlockTagName]]
+						: docComment.customBlocks.find((block) => block.blockTag.tagName === tagName);
 				if (docBlock) {
 					tags[tagName] = {
 						type,
-						tags: docBlockToDocBlockTags(
-							docBlock,
-							this.tagSeparator
-						),
+						tags: docBlockToDocBlockTags(docBlock, this.tagSeparator),
 						kind,
 						name: tagName,
-						testBlockType,
+						testBlockName,
 						testTitle,
 					};
 				}
@@ -126,12 +107,8 @@ export class CommentTagParser<CustomTag extends string>
 			return {
 				testFilePath: this.sourceFile.fileName,
 				title,
-				testBlockType: nodeName,
-				testBlockTags: this.getBlockTags(
-					this.parseTsDocCommentRange(comment),
-					nodeName,
-					title
-				),
+				testBlockName: nodeName,
+				testBlockTags: this.getBlockTags(this.parseTsDocCommentRange(comment), nodeName, title),
 				commentStartPosition: comment.pos,
 				commentEndPosition: comment.end,
 			};
@@ -144,10 +121,7 @@ export class CommentTagParser<CustomTag extends string>
 				this.commentRangeToTestBlockDocComment(node)
 			);
 			if (testTags) {
-				this._testBlockDocComments = [
-					...this.testBlockDocComments,
-					...testTags,
-				];
+				this._testBlockDocComments = [...this.testBlockDocComments, ...testTags];
 			}
 		}
 		return node.forEachChild((child) => this.findTestBlockDocComments(child));

@@ -49,11 +49,11 @@ describe('form validation', () => {
 			"testBlockTags": {
 				"@remarks": {
 					"tags": ["WCAG criteria"],
-					"testBlockType": "it"
+					"testBlockName": "it"
 				},
 				"@privateRemarks": {
 					"tags": ["WCAG 2.1", "WCAG 2.2"],
-					"testBlockType": "it"
+					"testBlockName": "it"
 				}
 			}
 		}
@@ -64,7 +64,7 @@ describe('form validation', () => {
 			"testBlockTags": {
 				"@remarks": {
 					"tags": ["Unit tests"],
-					"testBlockType": "describe"
+					"testBlockName": "describe"
 				}
 			}
 		}

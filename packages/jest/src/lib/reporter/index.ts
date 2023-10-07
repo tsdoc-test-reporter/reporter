@@ -1,6 +1,6 @@
 import { AggregatedResult, Config, Reporter, TestContext } from '@jest/reporters';
 import { type ITSDocTagDefinitionParameters, TSDocParser } from '@microsoft/tsdoc';
-import { AllTagsName, coreDefaults } from '@tsdoc-test-reporter/core';
+import { AllTagsName, TestBlockName, coreDefaults } from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
 
 import { defaultOutputFileName } from './defaultValues';
@@ -17,13 +17,13 @@ import { getCompilerOptions, writeToFile } from '../utils/io.util';
 import { getSourceFileHelper } from '../utils/typescript.util';
 import { getTsDocParserConfig } from '../utils/tsdoc.util';
 
-export class TsDocTaggedTestReporter<CustomTag extends string>
+export class TsDocTaggedTestReporter<CustomTags extends string = string>
 	implements Pick<Reporter, 'onRunComplete'>
 {
-	private readonly applyTags: (AllTagsName | CustomTag)[];
+	private readonly applyTags: (AllTagsName | CustomTags)[];
 	private readonly customTags: ITSDocTagDefinitionParameters[] | undefined;
 	private readonly tagSeparator: string;
-	private readonly testBlockTagNames: string[];
+	private readonly testBlockTagNames: TestBlockName[];
 	private readonly outputFileType: OutputFileType;
 	private readonly outputFileName: string;
 	private readonly uiOptions: UIOptions;
@@ -31,9 +31,9 @@ export class TsDocTaggedTestReporter<CustomTag extends string>
 
 	constructor(
 		_globalConfig: Config.GlobalConfig,
-		config: TsDocTaggedTestReporterConfig<CustomTag>
+		config: TsDocTaggedTestReporterConfig<CustomTags>
 	) {
-		this.applyTags = config.applyTags ?? (coreDefaults.applyTags as (AllTagsName | CustomTag)[]);
+		this.applyTags = config.applyTags ?? (coreDefaults.applyTags as (AllTagsName | CustomTags)[]);
 		this.customTags = config.customTags;
 		this.tagSeparator = config.tagSeparator ?? coreDefaults.tagSeparator;
 		this.testBlockTagNames = config.testBlockTagNames ?? coreDefaults.testBlockTagNames;

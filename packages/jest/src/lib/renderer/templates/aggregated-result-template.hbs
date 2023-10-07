@@ -239,7 +239,7 @@
 			<details class="test-details">
 				<summary class="test-summary status-{{status}}">
 					<div class="test-summary-inner">
-						<h2>{{ testFilePath }}</h2>
+						<h2>{{ formatTitle testFilePath }}</h2>
 						<div class="test-summary-status">
 							{{#if numPendingTests }}
 								<span aria-hidden="true" class="test-summary-pending-tests">
@@ -263,10 +263,10 @@
 								</span>
 								<span class="sr-only">Failing tests: {{ numFailingTests }}, </span>
 							{{/if}}
-							<span class="sr-only">Passing tests: {{ numPassingTests }}</span>
 							<span aria-hidden="true" class="test-summary-passing-tests">
 								{{ numPassingTests }}
 							</span>
+							<span class="sr-only">Passing tests: {{ numPassingTests }}</span>
 						</div>
 					</div>
 				</summary>
@@ -314,15 +314,12 @@
 										<summary>Error details</summary>
 										<div class="assertion-error-content">
 											{{#each failureDetails }}
-												<p>
-													Expected:
-													<span class="expected">{{ matcherResult.expected }}</span>
-												</p>
-												<p>
-													Actual:
-													<span class="actual">{{ matcherResult.actual }}</span>
-												</p>
-												{{{ ansiToHTML matcherResult.message }}}
+												{{#if matcherResult }}
+													{{{ ansiToHTML matcherResult.message }}}
+												{{/if}}
+												{{#if name }}
+													{{ name }}
+												{{/if}}
 											{{/each}}
 										</div>
 									</details>

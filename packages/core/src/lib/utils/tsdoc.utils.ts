@@ -7,18 +7,12 @@ import {
 	DocBlock,
 } from '@microsoft/tsdoc';
 
-import { BlockTagName } from '../types';
+import type { BlockTagName } from '../types';
 import { trim } from './format.utils';
 
-type DocCommentSections = Pick<
-	DocComment,
-	'remarksBlock' | 'privateRemarks' | 'deprecatedBlock'
->;
+type DocCommentSections = Pick<DocComment, 'remarksBlock' | 'privateRemarks' | 'deprecatedBlock'>;
 
-export const tagNameToTSDocBlock: Record<
-	BlockTagName,
-	keyof DocCommentSections
-> = {
+export const tagNameToTSDocBlock: Record<BlockTagName, keyof DocCommentSections> = {
 	'@privateRemarks': 'privateRemarks',
 	'@remarks': 'remarksBlock',
 	'@deprecated': 'deprecatedBlock',
@@ -32,10 +26,7 @@ export const isDocParagraph = (docNode: DocNode): docNode is DocParagraph => {
 	return docNode.kind === DocNodeKind.Paragraph;
 };
 
-export const docBlockToDocBlockTags = (
-	docBlock: DocBlock,
-	tagSeparator: string
-): string[] => {
+export const docBlockToDocBlockTags = (docBlock: DocBlock, tagSeparator: string): string[] => {
 	return (
 		docBlock.content.nodes
 			.find(isDocParagraph)

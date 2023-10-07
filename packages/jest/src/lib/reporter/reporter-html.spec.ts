@@ -1,27 +1,31 @@
 import { SourceFile } from 'typescript';
 import * as fs from 'node:fs';
 
-import { reporterGlobalConfig } from './test-data/reporter.global-config';
-import { reporterTestContext } from './test-data/reporter.test-context';
-import { reporterBasicAggregatedResult } from './test-data/reporter.test-results';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as typescriptHelpers from '../utils/typescript.util';
-
 import { TsDocTaggedTestReporter } from '.';
+import {
+	testContextFactory,
+	globalConfigFactory,
+	taggedAggregatedResultFactory,
+} from '../test-utils/factory';
 
 jest.mock('node:fs');
 
 afterEach(jest.resetAllMocks);
 
-const testContext = new Set([reporterTestContext]);
+const testContext = new Set([testContextFactory()]);
+
+const reporterGlobalConfig = globalConfigFactory();
+
+const aggregatedResult = taggedAggregatedResultFactory();
 
 jest.mock('../utils/typescript.util', () => {
-	const { reporterBasicSourceFile, reporterBasicSourceFileName } = jest.requireActual(
-		'./test-data/reporter.source-file'
-	);
+	const { testFileFactory } = jest.requireActual('@tsdoc-test-reporter/core');
+	const sourceFile = testFileFactory({
+		fileName: 'reporter.ts',
+		options: [],
+	});
 	const files: Record<string, SourceFile> = {
-		[reporterBasicSourceFileName]: reporterBasicSourceFile,
+		[sourceFile.fileName]: sourceFile,
 	};
 	return {
 		getSourceFileHelper: () => (fileName: string) => {
@@ -35,7 +39,7 @@ test('creates html report output', () => {
 		outputFileType: 'html',
 		outputFileName: 'output',
 	});
-	reporter.onRunComplete(testContext, reporterBasicAggregatedResult);
+	reporter.onRunComplete(testContext, aggregatedResult);
 	expect(fs.writeFileSync).toBeCalledTimes(1);
 	expect(fs.writeFileSync).toBeCalledWith('output.html', expect.anything(), 'utf-8');
 });

@@ -1,79 +1,240 @@
-import { ITSDocTagDefinitionParameters, TSDocParser } from '@microsoft/tsdoc';
+import { TSDocParser } from '@microsoft/tsdoc';
 
-import {
-	testFileParserBasicFileName,
-	testFileParserBasicSourceFile,
-} from './test-data/test-file-parser-basic.source-file';
-import { testFileParserBasicAggregatedResult } from './test-data/test-file-parser-basic.test-results';
-import { testFileParserCustomAggregatedResult } from './test-data/test-file-parser-custom.test-results';
+import { parseTestFiles } from './index';
+import { TestBlockDocComment, testFileFactory } from '@tsdoc-test-reporter/core';
+import { aggregatedResultFactory } from '../test-utils/factory';
 
-import { parseTestFiles } from '.';
-import {
-	testFileParserCustomFileName,
-	testFileParserCustomSourceFile,
-} from './test-data/test-file-parser-custom.source-file';
-import { getTsDocParserConfig } from '../utils/tsdoc.util';
-import { coreDefaults } from '@tsdoc-test-reporter/core';
-
-test('parse and tag test for files', () => {
-	const taggedTestResults = parseTestFiles({
-		testResults: testFileParserBasicAggregatedResult.testResults,
+test('parse and tag test for source files', () => {
+	const sourceFile = testFileFactory({
+		fileName: 'basic.ts',
+		options: [
+			{
+				testTitle: '@alpha',
+				testBlockName: 'test',
+				tags: [
+					{
+						tagName: '@alpha',
+					},
+				],
+			},
+		],
+	});
+	const { testResults } = aggregatedResultFactory({
+		testResults: [
+			{
+				testFilePath: 'basic.ts',
+				testResults: [
+					{
+						ancestorTitles: [],
+						fullName: '@alpha',
+						title: '@alpha',
+						numPassingAsserts: 1,
+						status: 'passed',
+						failureDetails: [],
+						failureMessages: [],
+					},
+				],
+			},
+		],
+	});
+	const result = parseTestFiles({
+		testResults,
 		tsDocParser: new TSDocParser(),
 		sourceFilesMap: {
-			[testFileParserBasicFileName]: testFileParserBasicSourceFile,
+			[sourceFile.fileName]: sourceFile,
 		},
 	});
-	expect(taggedTestResults[0].testFilePath).toEqual(
-		'test-file-parser-basic.source-file.ts'
-	);
-	const testResult = taggedTestResults[0].testResults;
-	const firstResult = testResult[0];
-	expect(firstResult.title).toEqual('should validate email');
-	expect(firstResult.ancestorTitles).toEqual(['form validation']);
-	const firstTag = firstResult.testBlockComments?.[0];
-	expect(firstTag?.testFilePath).toEqual(
-		'test-file-parser-basic.source-file.ts'
-	);
-	expect(firstTag?.title).toEqual('should validate email');
-	const tags = firstTag?.testBlockTags
-		? firstTag.testBlockTags['@remarks']
-		: undefined;
-	expect(tags?.tags).toEqual(['acceptance criteria']);
-	expect(tags?.testTitle).toEqual('should validate email');
+	expect(result[0].testResults[0].testBlockComments).toEqual<TestBlockDocComment[]>([
+		{
+			testFilePath: sourceFile.fileName,
+			title: '@alpha',
+			testBlockName: 'test',
+			commentStartPosition: 1,
+			commentEndPosition: 19,
+			testBlockTags: {
+				'@alpha': {
+					kind: 'modifier',
+					name: '@alpha',
+					testBlockName: 'test',
+					testTitle: '@alpha',
+					type: 'standard',
+				},
+			},
+		},
+	]);
 });
 
-test('parse and tag custom tags', () => {
-	const customTags: ITSDocTagDefinitionParameters[] = [
-		{
-			tagName: '@custom',
-			syntaxKind: 1,
-		},
-		{
-			tagName: '@custom2',
-			syntaxKind: 1,
-		},
-	];
-	const taggedTestResults = parseTestFiles({
-		applyTags: [...coreDefaults.applyTags, '@custom', '@custom2'],
-		testResults: testFileParserCustomAggregatedResult.testResults,
-		tsDocParser: new TSDocParser(getTsDocParserConfig(customTags)),
+test('parse and tag test for source files with ancestors', () => {
+	const sourceFile = testFileFactory({
+		fileName: 'basic.ts',
+		options: [
+			{
+				testTitle: 'ancestor',
+				testBlockName: 'describe',
+				tags: [
+					{
+						tagName: '@alpha',
+					},
+				],
+				children: [
+					{
+						testBlockName: 'test',
+						testTitle: 'child',
+						tags: [
+							{
+								tagName: '@beta',
+							},
+						],
+					},
+				],
+			},
+		],
+	});
+	const { testResults } = aggregatedResultFactory({
+		testResults: [
+			{
+				testFilePath: 'basic.ts',
+				testResults: [
+					{
+						ancestorTitles: ['ancestor'],
+						fullName: 'child',
+						title: 'child',
+						numPassingAsserts: 1,
+						status: 'passed',
+						failureDetails: [],
+						failureMessages: [],
+					},
+				],
+			},
+		],
+	});
+	const result = parseTestFiles({
+		testResults,
+		tsDocParser: new TSDocParser(),
 		sourceFilesMap: {
-			[testFileParserCustomFileName]: testFileParserCustomSourceFile,
+			[sourceFile.fileName]: sourceFile,
 		},
 	});
-	expect(taggedTestResults[0].testFilePath).toEqual(
-		'test-file-parser-custom.source-file.ts'
-	);
-	const testResult = taggedTestResults[0].testResults;
-	const firstResult = testResult[0];
-	const firstTag = firstResult.testBlockComments?.[0];
-	const tags = firstTag?.testBlockTags
-		? firstTag.testBlockTags['@custom2']
-		: undefined;
-	expect(tags?.tags).toEqual(['acceptance criteria']);
-	const firstAncestorTag = firstResult.ancestorTestBlockComments?.[0];
-	const ancestorTags = firstAncestorTag?.testBlockTags
-		? firstAncestorTag.testBlockTags['@custom']
-		: undefined;
-	expect(ancestorTags?.tags).toEqual(['unit tests']);
+	expect(result[0].testResults[0].testBlockComments).toEqual<TestBlockDocComment[]>([
+		{
+			testFilePath: sourceFile.fileName,
+			title: 'child',
+			testBlockName: 'test',
+			commentStartPosition: 53,
+			commentEndPosition: 72,
+			testBlockTags: {
+				'@beta': {
+					kind: 'modifier',
+					name: '@beta',
+					testBlockName: 'test',
+					testTitle: 'child',
+					type: 'standard',
+				},
+			},
+		},
+	]);
+	expect(result[0].testResults[0].ancestorTestBlockComments).toEqual<TestBlockDocComment[]>([
+		{
+			testFilePath: sourceFile.fileName,
+			title: 'ancestor',
+			testBlockName: 'describe',
+			commentStartPosition: 1,
+			commentEndPosition: 19,
+			testBlockTags: {
+				'@alpha': {
+					kind: 'modifier',
+					name: '@alpha',
+					testBlockName: 'describe',
+					testTitle: 'ancestor',
+					type: 'standard',
+				},
+			},
+		},
+	]);
+});
+
+test('pass down parser options when parsing files', () => {
+	const sourceFile = testFileFactory({
+		fileName: 'basic.ts',
+		options: [
+			{
+				testTitle: '@remarks',
+				testBlockName: 'test',
+				tags: [
+					{
+						tagName: '@remarks',
+						tagContent: 'unit;acceptance',
+					},
+					{
+						tagName: '@alpha',
+					},
+				],
+			},
+			{
+				testTitle: 'ignored',
+				testBlockName: 'it',
+				tags: [
+					{
+						tagName: '@alpha',
+					},
+				],
+			},
+		],
+	});
+	const { testResults } = aggregatedResultFactory({
+		testResults: [
+			{
+				testFilePath: 'basic.ts',
+				testResults: [
+					{
+						ancestorTitles: [],
+						fullName: '@remarks',
+						title: '@remarks',
+						numPassingAsserts: 1,
+						status: 'passed',
+						failureDetails: [],
+						failureMessages: [],
+					},
+					{
+						ancestorTitles: [],
+						fullName: 'ignored',
+						title: 'ignored',
+						numPassingAsserts: 1,
+						status: 'passed',
+						failureDetails: [],
+						failureMessages: [],
+					},
+				],
+			},
+		],
+	});
+	const result = parseTestFiles({
+		applyTags: ['@remarks'],
+		tagSeparator: ';',
+		testBlockTagNames: ['test'],
+		testResults,
+		tsDocParser: new TSDocParser(),
+		sourceFilesMap: {
+			[sourceFile.fileName]: sourceFile,
+		},
+	});
+	expect(result[0].testResults[0].testBlockComments).toEqual<TestBlockDocComment[]>([
+		{
+			testFilePath: sourceFile.fileName,
+			title: '@remarks',
+			testBlockName: 'test',
+			commentStartPosition: 1,
+			commentEndPosition: 47,
+			testBlockTags: {
+				'@remarks': {
+					kind: 'block',
+					name: '@remarks',
+					testBlockName: 'test',
+					testTitle: '@remarks',
+					type: 'standard',
+					tags: ['unit', 'acceptance'],
+				},
+			},
+		},
+	]);
 });

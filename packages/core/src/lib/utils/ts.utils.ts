@@ -2,10 +2,10 @@ import {
 	CallExpression,
 	CommentRange,
 	getLeadingCommentRanges,
-	Identifier,
+	isCallExpression,
+	isIdentifier,
+	isPropertyAccessExpression,
 	Node,
-	PropertyAccessExpression,
-	SyntaxKind,
 } from 'typescript';
 
 enum CharCodes {
@@ -18,27 +18,8 @@ export const isJSDocComment = (buffer: string) => (comment: CommentRange) =>
 	buffer.charCodeAt(comment.pos + 2) === CharCodes.Asterisk &&
 	buffer.charCodeAt(comment.pos + 3) !== CharCodes.Slash;
 
-export const getJSDocCommentRanges = (
-	buffer: string,
-	node: Node
-): CommentRange[] | undefined => {
-	return getLeadingCommentRanges(buffer, node.pos)?.filter(
-		isJSDocComment(buffer)
-	);
-};
-
-export const isCallExpression = (node: Node): node is CallExpression => {
-	return node.kind === SyntaxKind.CallExpression;
-};
-
-export const isPropertyAccessExpression = (
-	node: Node
-): node is PropertyAccessExpression => {
-	return node.kind === SyntaxKind.PropertyAccessExpression;
-};
-
-export const isIdentifier = (node: Node): node is Identifier => {
-	return node.kind === SyntaxKind.Identifier;
+export const getJSDocCommentRanges = (buffer: string, node: Node): CommentRange[] | undefined => {
+	return getLeadingCommentRanges(buffer, node.pos)?.filter(isJSDocComment(buffer));
 };
 
 // TODO: Recurse this bad boy or whatever
@@ -53,10 +34,7 @@ export const getNodeName = (node: Node): string => {
 					return `${node.expression.expression.expression.escapedText}.${node.expression.expression.name.escapedText}.${node.expression.name.escapedText}`;
 				}
 			}
-			if (
-				isIdentifier(node.expression.expression) &&
-				isIdentifier(node.expression.name)
-			) {
+			if (isIdentifier(node.expression.expression) && isIdentifier(node.expression.name)) {
 				return `${node.expression.expression.escapedText}.${node.expression.name.escapedText}`;
 			}
 		}
@@ -69,9 +47,6 @@ export const getNodeName = (node: Node): string => {
 	return '';
 };
 
-export const isTestBlock = (
-	node: Node,
-	testBlockNames: string[]
-): node is CallExpression => {
+export const isTestBlock = (node: Node, testBlockNames: string[]): node is CallExpression => {
 	return isCallExpression(node) && testBlockNames.includes(getNodeName(node));
 };

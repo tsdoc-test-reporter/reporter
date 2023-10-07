@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Config, TestContext } from '@jest/reporters';
 import type { TestDataFactory } from '@tsdoc-test-reporter/core';
 
-export const projectConfigFactory: TestDataFactory<Config.ProjectConfig> = (
-	overrides = {}
-) => ({
+export const projectConfigFactory: TestDataFactory<Config.ProjectConfig> = (overrides = {}) => ({
 	automock: false,
 	cache: false,
 	cacheDirectory: '',
@@ -14,25 +13,12 @@ export const projectConfigFactory: TestDataFactory<Config.ProjectConfig> = (
 	detectOpenHandles: false,
 	errorOnDeprecated: false,
 	extensionsToTreatAsEsm: [],
-	fakeTimers: {},
 	forceCoverageMatch: [],
 	globals: {},
-	haste: {
-		computeSha1: undefined,
-		defaultPlatform: undefined,
-		forceNodeFilesystemAPI: undefined,
-		enableSymlinks: undefined,
-		hasteImplModulePath: undefined,
-		platforms: undefined,
-		throwOnModuleCollision: undefined,
-		hasteMapModulePath: undefined,
-		retainAllFiles: undefined,
-	},
 	id: '',
 	injectGlobals: false,
 	moduleDirectories: [],
 	moduleFileExtensions: [],
-	moduleNameMapper: [],
 	modulePathIgnorePatterns: [],
 	prettierPath: '',
 	resetMocks: false,
@@ -53,21 +39,38 @@ export const projectConfigFactory: TestDataFactory<Config.ProjectConfig> = (
 	testMatch: [],
 	testLocationInResults: false,
 	testPathIgnorePatterns: [],
-	testRegex: [],
 	testRunner: '',
-	transform: [],
 	transformIgnorePatterns: [],
 	watchPathIgnorePatterns: [],
 	openHandlesTimeout: 0,
 	...overrides,
+	fakeTimers: {},
+	transform: [],
+	testRegex: [],
+	moduleNameMapper: [],
+	modulePaths: [],
+	unmockedModulePathPatterns: [],
+	displayName: {
+		name: 'name',
+		color: 'cyan',
+	},
+	haste: {
+		computeSha1: undefined,
+		defaultPlatform: undefined,
+		forceNodeFilesystemAPI: undefined,
+		enableSymlinks: undefined,
+		hasteImplModulePath: undefined,
+		platforms: undefined,
+		throwOnModuleCollision: undefined,
+		hasteMapModulePath: undefined,
+		retainAllFiles: undefined,
+	},
 });
 
-export const testContextFactory: TestDataFactory<TestContext> = (
-	overrides = {}
-) => ({
-	config: projectConfigFactory(overrides.config),
+export const testContextFactory: TestDataFactory<TestContext> = (overrides = {}) => ({
 	hasteFS: undefined as any,
 	moduleMap: undefined as any,
 	resolver: undefined as any,
 	...overrides,
+	config: projectConfigFactory(overrides.config),
 });

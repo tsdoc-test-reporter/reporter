@@ -1,12 +1,6 @@
 import type { TestBlockDocComment } from '@tsdoc-test-reporter/core';
 import type { TestGroup, TestGrouperConfig } from '../types';
-import {
-	failed,
-	passed,
-	pending,
-	skipped,
-	todo,
-} from '../utils/assertion.util';
+import { failed, passed, pending, skipped, todo } from '../utils/assertion.util';
 
 export const groupTests = <CustomTag extends string>({
 	testResult,
@@ -16,32 +10,24 @@ export const groupTests = <CustomTag extends string>({
 	for (const result of testResult.testResults) {
 		for (const assertion of result.testResults) {
 			const topLevelAncestortitle = assertion.ancestorTitles[0];
-			const topLevelAncestorBlockTagComment =
-				assertion.ancestorTestBlockComments?.find(
-					(testBlockComment: TestBlockDocComment<CustomTag>) =>
-						testBlockComment.title === topLevelAncestortitle
-				);
+			const topLevelAncestorBlockTagComment = assertion.ancestorTestBlockComments?.find(
+				(testBlockComment: TestBlockDocComment<CustomTag>) =>
+					testBlockComment.title === topLevelAncestortitle
+			);
 			const groupTag = topLevelAncestorBlockTagComment?.testBlockTags
 				? topLevelAncestorBlockTagComment.testBlockTags[schema.tagName]
 				: undefined;
-			const groupKey =
-				groupTag && groupTag.tags?.length
-					? groupTag.tags[0]
-					: result.testFilePath;
+			const groupKey = groupTag && groupTag.tags?.length ? groupTag.tags[0] : result.testFilePath;
 			const existingTestGroup = grouped.get(groupKey);
 			grouped.set(
 				groupKey,
 				existingTestGroup
 					? {
 							...existingTestGroup,
-							numFailingTests:
-								existingTestGroup.numFailingTests + +failed(assertion),
-							numPassingTests:
-								existingTestGroup.numPassingTests + +passed(assertion),
-							numPendingTests:
-								existingTestGroup.numPendingTests + +pending(assertion),
-							numSkippedTests:
-								existingTestGroup.numSkippedTests + +skipped(assertion),
+							numFailingTests: existingTestGroup.numFailingTests + +failed(assertion),
+							numPassingTests: existingTestGroup.numPassingTests + +passed(assertion),
+							numPendingTests: existingTestGroup.numPendingTests + +pending(assertion),
+							numSkippedTests: existingTestGroup.numSkippedTests + +skipped(assertion),
 							numTodoTests: existingTestGroup.numTodoTests + +todo(assertion),
 							testResults: failed(assertion)
 								? [assertion, ...(existingTestGroup.testResults ?? [])]

@@ -15,4 +15,5 @@ export {
 	testDocBlockCommentFactory,
 	TestDataFactory,
 	sourceFileFactory,
+	testFileFactory,
 } from './lib/test-utils/factory';

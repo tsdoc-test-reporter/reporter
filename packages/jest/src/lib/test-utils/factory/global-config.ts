@@ -1,9 +1,7 @@
 import type { Config } from '@jest/reporters';
 import { TestDataFactory } from '@tsdoc-test-reporter/core';
 
-export const globalConfigFactory: TestDataFactory<Config.GlobalConfig> = (
-	overrides = {}
-) => ({
+export const globalConfigFactory: TestDataFactory<Config.GlobalConfig> = (overrides = {}) => ({
 	bail: 0,
 	changedSince: undefined,
 	changedFilesWithAncestor: false,
@@ -11,17 +9,6 @@ export const globalConfigFactory: TestDataFactory<Config.GlobalConfig> = (
 	collectCoverage: false,
 	collectCoverageFrom: [],
 	coverageDirectory: 'default-coverage-directory',
-	coveragePathIgnorePatterns: undefined,
-	coverageProvider: 'v8',
-	coverageReporters: ['json'],
-	coverageThreshold: {
-		global: {
-			branches: 0,
-			functions: 0,
-			lines: 0,
-			statements: 0,
-		},
-	},
 	detectLeaks: false,
 	detectOpenHandles: false,
 	expand: false,
@@ -47,10 +34,8 @@ export const globalConfigFactory: TestDataFactory<Config.GlobalConfig> = (
 	passWithNoTests: false,
 	projects: [],
 	replname: undefined,
-	reporters: undefined,
 	runTestsByPath: false,
 	rootDir: '.',
-	shard: undefined,
 	silent: undefined,
 	skipFilter: false,
 	snapshotFormat: {},
@@ -67,9 +52,22 @@ export const globalConfigFactory: TestDataFactory<Config.GlobalConfig> = (
 	watch: false,
 	watchAll: false,
 	watchman: false,
-	watchPlugins: undefined,
 	workerIdleMemoryLimit: undefined,
 	openHandlesTimeout: 0,
 	seed: 0,
 	...overrides,
+	coveragePathIgnorePatterns: undefined,
+	coverageProvider: 'v8',
+	coverageReporters: ['json'],
+	coverageThreshold: {
+		global: {
+			branches: 0,
+			functions: 0,
+			lines: 0,
+			statements: 0,
+		},
+	},
+	watchPlugins: undefined,
+	reporters: [],
+	shard: undefined,
 });

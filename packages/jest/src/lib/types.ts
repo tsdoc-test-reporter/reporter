@@ -98,8 +98,8 @@ export type TsDocTaggedTestReporterConfig<CustomTag extends string> = Pick<
 /**
  * @internal
  */
-export type FileParserConfig<CustomTag extends string> = Pick<
-	CommentTagParserConfig<CustomTag>,
+export type FileParserConfig<CustomTags extends string> = Pick<
+	CommentTagParserConfig<CustomTags>,
 	'applyTags' | 'testBlockTagNames' | 'tagSeparator'
 > & {
 	testResults: TestResult[];

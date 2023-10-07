@@ -1,6 +1,6 @@
 import type { BlockTagName, CoreDefaults, ModifierTagName, TestBlockName } from './types';
 
-const allBlockTags: BlockTagName[] = ['@deprecated', '@privateRemarks', '@remarks'];
+export const allBlockTags: BlockTagName[] = ['@deprecated', '@privateRemarks', '@remarks'];
 
 export const allModifierTags: ModifierTagName[] = [
 	'@alpha',
@@ -16,7 +16,7 @@ export const allModifierTags: ModifierTagName[] = [
 	'@virtual',
 ];
 
-const testBlockTagNames: TestBlockName[] = [
+export const testBlockTagNames: TestBlockName[] = [
 	'describe',
 	'describe.each',
 	'describe.only',
@@ -49,7 +49,7 @@ const testBlockTagNames: TestBlockName[] = [
 	'it.todo',
 	'it.concurrent',
 	'it.concurrent.each',
-]
+];
 
 export const coreDefaults: CoreDefaults<string> = {
 	testBlockTagNames: testBlockTagNames,

@@ -6,12 +6,8 @@ export const isStatus =
 		return assertion.status === status;
 	};
 
-export const failed = (assertion: AssertionResult) =>
-	isStatus('failed')(assertion);
-export const passed = (assertion: AssertionResult) =>
-	isStatus('passed')(assertion);
-export const pending = (assertion: AssertionResult) =>
-	isStatus('pending')(assertion);
+export const failed = (assertion: AssertionResult) => isStatus('failed')(assertion);
+export const passed = (assertion: AssertionResult) => isStatus('passed')(assertion);
+export const pending = (assertion: AssertionResult) => isStatus('pending')(assertion);
 export const todo = (assertion: AssertionResult) => isStatus('todo')(assertion);
-export const skipped = (assertion: AssertionResult) =>
-	isStatus('skipped')(assertion);
+export const skipped = (assertion: AssertionResult) => isStatus('skipped')(assertion);

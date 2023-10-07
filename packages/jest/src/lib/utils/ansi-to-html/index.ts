@@ -44,12 +44,7 @@ function getDefaultColors() {
 	return colors;
 }
 
-function setStyleColor(
-	red: number,
-	green: number,
-	blue: number,
-	colors: Record<string, string>
-) {
+function setStyleColor(red: number, green: number, blue: number, colors: Record<string, string>) {
 	const c = 16 + red * 36 + green * 6 + blue;
 	const r = red > 0 ? red * 40 + 55 : 0;
 	const g = green > 0 ? green * 40 + 55 : 0;
@@ -82,12 +77,7 @@ function toColorHexString(ref: [number, number, number]): string {
 	return '#' + results.join('');
 }
 
-function generateOutput(
-	stack: string[],
-	token: string,
-	data: string,
-	options: ConverterOptions
-) {
+function generateOutput(stack: string[], token: string, data: string, options: ConverterOptions) {
 	let result;
 
 	if (token === 'text') {
@@ -95,15 +85,9 @@ function generateOutput(
 	} else if (token === 'display') {
 		result = handleDisplay(stack, data, options);
 	} else if (token === 'xterm256Foreground') {
-		result = pushForegroundColor(
-			stack,
-			options.colors ? options.colors[data] : ''
-		);
+		result = pushForegroundColor(stack, options.colors ? options.colors[data] : '');
 	} else if (token === 'xterm256Background') {
-		result = pushBackgroundColor(
-			stack,
-			options.colors ? options.colors[data] : ''
-		);
+		result = pushBackgroundColor(stack, options.colors ? options.colors[data] : '');
 	} else if (token === 'rgb') {
 		result = handleRgb(stack, data);
 	}
@@ -122,17 +106,10 @@ function handleRgb(stack: string[], data: string): string {
 		})
 		.join('');
 
-	return pushStyle(
-		stack,
-		(operation === 38 ? 'color:#' : 'background-color:#') + rgb
-	);
+	return pushStyle(stack, (operation === 38 ? 'color:#' : 'background-color:#') + rgb);
 }
 
-function handleDisplay(
-	stack: string[],
-	code: number | string,
-	options: ConverterOptions
-): string {
+function handleDisplay(stack: string[], code: number | string, options: ConverterOptions): string {
 	code = parseInt('' + code, 10);
 
 	const codeMap: Record<string | number, () => string | undefined> = {
@@ -143,11 +120,7 @@ function handleDisplay(
 		4: () => pushTag(stack, 'u'),
 		8: () => pushStyle(stack, 'display:none'),
 		9: () => pushTag(stack, 'strike'),
-		22: () =>
-			pushStyle(
-				stack,
-				'font-weight:normal;text-decoration:none;font-style:normal'
-			),
+		22: () => pushStyle(stack, 'font-weight:normal;text-decoration:none;font-style:normal'),
 		23: () => closeTag(stack, 'i'),
 		24: () => closeTag(stack, 'u'),
 		39: () => pushForegroundColor(stack, options.fg ?? ''),
@@ -161,25 +134,13 @@ function handleDisplay(
 	} else if (4 < code && code < 7) {
 		result = pushTag(stack, 'blink');
 	} else if (29 < code && code < 38) {
-		result = pushForegroundColor(
-			stack,
-			options.colors ? options.colors[code - 30] : ''
-		);
+		result = pushForegroundColor(stack, options.colors ? options.colors[code - 30] : '');
 	} else if (39 < code && code < 48) {
-		result = pushBackgroundColor(
-			stack,
-			options.colors ? options.colors[code - 40] : ''
-		);
+		result = pushBackgroundColor(stack, options.colors ? options.colors[code - 40] : '');
 	} else if (89 < code && code < 98) {
-		result = pushForegroundColor(
-			stack,
-			options.colors ? options.colors[8 + (code - 90)] : ''
-		);
+		result = pushForegroundColor(stack, options.colors ? options.colors[8 + (code - 90)] : '');
 	} else if (99 < code && code < 108) {
-		result = pushBackgroundColor(
-			stack,
-			options.colors ? options.colors[8 + (code - 100)] : ''
-		);
+		result = pushBackgroundColor(stack, options.colors ? options.colors[8 + (code - 100)] : '');
 	}
 
 	return result ?? '';
@@ -439,7 +400,7 @@ export class AnsiToHtmlConverter {
 		const { stack, options } = this;
 		const buf = [];
 
-		tokenize(input?.join('') ?? "", options, (token, data) => {
+		tokenize(input?.join('') ?? '', options, (token, data) => {
 			const output = generateOutput(stack, token, data + '', options);
 
 			if (output) {

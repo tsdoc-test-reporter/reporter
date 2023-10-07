@@ -1,21 +1,26 @@
 import { SourceFile } from 'typescript';
 
-import { reporterGlobalConfig } from './test-data/reporter.global-config';
-import { reporterTestContext } from './test-data/reporter.test-context';
-import { reporterHTMLAggregatedResult } from './test-data/reporter-html.test-results';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as typescriptHelpers from '../utils/typescript.util';
-
 import { TsDocTaggedTestReporter } from '.';
+import {
+	globalConfigFactory,
+	taggedAggregatedResultFactory,
+	testContextFactory,
+} from '../test-utils/factory';
 
-const testContext = new Set([reporterTestContext]);
+const testContext = new Set([testContextFactory()]);
+
+const reporterGlobalConfig = globalConfigFactory();
+
+const aggregatedResult = taggedAggregatedResultFactory();
 
 jest.mock('../utils/typescript.util', () => {
-	const { reporterHTMLSourceFile, reporterHTMLSourceFileName } =
-		jest.requireActual('./test-data/reporter-html.source-file');
+	const { testFileFactory } = jest.requireActual('@tsdoc-test-reporter/core');
+	const sourceFile = testFileFactory({
+		fileName: 'reporter.ts',
+		options: [],
+	});
 	const files: Record<string, SourceFile> = {
-		[reporterHTMLSourceFileName]: reporterHTMLSourceFile,
+		[sourceFile.fileName]: sourceFile,
 	};
 	return {
 		getSourceFileHelper: () => (fileName: string) => {
@@ -35,5 +40,5 @@ test.skip('creates html report output', () => {
 			removeAtSignOnTags: true,
 		},
 	});
-	reporter.onRunComplete(testContext, reporterHTMLAggregatedResult);
+	reporter.onRunComplete(testContext, aggregatedResult);
 });

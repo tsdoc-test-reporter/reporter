@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import type { SourceFile } from 'typescript';
 
-import { TsDocTaggedTestReporter } from './index';
+import { TsDocTestReporter } from './index';
 import {
 	testContextFactory,
 	globalConfigFactory,
@@ -35,7 +35,7 @@ jest.mock('../utils/typescript.util', () => {
 });
 
 test('creates json report output', () => {
-	const reporter = new TsDocTaggedTestReporter(reporterGlobalConfig, {
+	const reporter = new TsDocTestReporter(reporterGlobalConfig, {
 		outputFileType: 'json',
 		outputFileName: 'output',
 	});
@@ -45,7 +45,7 @@ test('creates json report output', () => {
 });
 
 test('creates non recursive folder and json report output', () => {
-	const reporter = new TsDocTaggedTestReporter(reporterGlobalConfig, {
+	const reporter = new TsDocTestReporter(reporterGlobalConfig, {
 		outputFileType: 'json',
 		outputFileName: 'reports/output',
 	});
@@ -57,7 +57,7 @@ test('creates non recursive folder and json report output', () => {
 });
 
 test('creates recursive folder and json report output', () => {
-	const reporter = new TsDocTaggedTestReporter(reporterGlobalConfig, {
+	const reporter = new TsDocTestReporter(reporterGlobalConfig, {
 		outputFileType: 'json',
 		outputFileName: 'reports/nested/output',
 	});

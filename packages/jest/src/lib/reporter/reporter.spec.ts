@@ -1,6 +1,6 @@
 import { SourceFile } from 'typescript';
 
-import { TsDocTaggedTestReporter } from '.';
+import { TsDocTestReporter } from '.';
 import {
 	globalConfigFactory,
 	taggedAggregatedResultFactory,
@@ -30,7 +30,7 @@ jest.mock('../utils/typescript.util', () => {
 });
 
 test.skip('creates html report output', () => {
-	const reporter = new TsDocTaggedTestReporter(reporterGlobalConfig, {
+	const reporter = new TsDocTestReporter(reporterGlobalConfig, {
 		outputFileType: 'html',
 		outputFileName: 'output',
 		uiOptions: {

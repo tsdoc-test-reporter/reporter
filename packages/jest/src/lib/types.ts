@@ -67,8 +67,8 @@ export type UIOptions = {
 /**
  * Main config for the reporter used by the consumer
  */
-export type TsDocTaggedTestReporterConfig<CustomTag extends string> = Pick<
-	CommentTagParserConfig<CustomTag>,
+export type TsDocTestReporterConfig<CustomTags extends string = string> = Pick<
+	CommentTagParserConfig<CustomTags>,
 	'applyTags' | 'testBlockTagNames' | 'tagSeparator'
 > & {
 	customTags?: ITSDocTagDefinitionParameters[];

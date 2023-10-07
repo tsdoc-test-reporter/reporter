@@ -1,14 +1,14 @@
-import { TsDocTaggedTestReporter } from './lib/reporter';
+import { TsDocTestReporter } from './lib/reporter';
 export {
 	TaggedAggregatedResult,
 	TaggedAssertionResult,
 	TaggedTestResult,
 	UIOptions,
-	TsDocTaggedTestReporterConfig,
+	TsDocTestReporterConfig as TsDocTaggedTestReporterConfig,
 	OutputFileType,
 } from './lib/types';
 
 /**
  * @hidden
  */
-export default TsDocTaggedTestReporter;
+export default TsDocTestReporter;

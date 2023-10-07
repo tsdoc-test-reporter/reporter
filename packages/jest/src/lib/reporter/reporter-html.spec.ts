@@ -1,7 +1,7 @@
 import { SourceFile } from 'typescript';
 import * as fs from 'node:fs';
 
-import { TsDocTaggedTestReporter } from '.';
+import { TsDocTestReporter } from '.';
 import {
 	testContextFactory,
 	globalConfigFactory,
@@ -35,7 +35,7 @@ jest.mock('../utils/typescript.util', () => {
 });
 
 test('creates html report output', () => {
-	const reporter = new TsDocTaggedTestReporter(reporterGlobalConfig, {
+	const reporter = new TsDocTestReporter(reporterGlobalConfig, {
 		outputFileType: 'html',
 		outputFileName: 'output',
 	});

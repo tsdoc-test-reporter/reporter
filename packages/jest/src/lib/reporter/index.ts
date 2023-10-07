@@ -10,14 +10,14 @@ import { parseTestFiles } from '../test-file-parser';
 import type {
 	OutputFileType,
 	TaggedAggregatedResult,
-	TsDocTaggedTestReporterConfig,
+	TsDocTestReporterConfig,
 	UIOptions,
 } from '../types';
 import { getCompilerOptions, writeToFile } from '../utils/io.util';
 import { getSourceFileHelper } from '../utils/typescript.util';
 import { getTsDocParserConfig } from '../utils/tsdoc.util';
 
-export class TsDocTaggedTestReporter<CustomTags extends string = string>
+export class TsDocTestReporter<CustomTags extends string = string>
 	implements Pick<Reporter, 'onRunComplete'>
 {
 	private readonly applyTags: (AllTagsName | CustomTags)[];
@@ -31,7 +31,7 @@ export class TsDocTaggedTestReporter<CustomTags extends string = string>
 
 	constructor(
 		_globalConfig: Config.GlobalConfig,
-		config: TsDocTaggedTestReporterConfig<CustomTags>
+		config: TsDocTestReporterConfig<CustomTags>
 	) {
 		this.applyTags = config.applyTags ?? (coreDefaults.applyTags as (AllTagsName | CustomTags)[]);
 		this.customTags = config.customTags;

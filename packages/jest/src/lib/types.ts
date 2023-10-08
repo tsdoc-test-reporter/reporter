@@ -15,6 +15,18 @@ export type StatusToIconMap = Record<AssertionResult['status'], string>;
  * Options for when rendering the output for `html`
  */
 export type UIOptions = {
+	/**
+	 * Aggregates tags on the specific tests up to the title.
+	 * Choose to aggregate test tags, with or without ancestor.
+	 * Or aggregate only selected tags by passing an array of
+	 * tags.
+	 * @example
+	 * ```js
+	 * { aggregateTagsToFileHeading: ["@remarks"] }
+	 * ```
+	 * @default false
+	 */
+	aggregateTagsToFileHeading?: boolean | 'withoutAncestors' | 'onlyAncestors' | AllTagsName[];
 	/** Overrides specific colors in the error output. The key is
 	 * the ANSI color you want to override and the value should be
 	 * a HEX color.

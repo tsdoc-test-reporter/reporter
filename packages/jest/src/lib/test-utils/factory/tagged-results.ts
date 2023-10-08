@@ -1,4 +1,4 @@
-import type { TestDataFactory } from '@tsdoc-test-reporter/core';
+import { TestDataFactory, testDocBlockCommentFactory } from '@tsdoc-test-reporter/core';
 
 import { aggregatedResultFactory, assertionResultFactory, testResultFactory } from './results';
 
@@ -8,8 +8,8 @@ export const taggedAssertionResultFactory: TestDataFactory<TaggedAssertionResult
 	overrides = {},
 ) => ({
 	...assertionResultFactory(overrides),
-	ancestorTestBlockComments: [],
-	testBlockComments: [],
+	ancestorTestBlockComments: overrides.ancestorTestBlockComments?.map(testDocBlockCommentFactory),
+	testBlockComments: overrides.testBlockComments?.map(testDocBlockCommentFactory),
 });
 
 export const taggedTestResultFactory: TestDataFactory<TaggedTestResult> = (overrides = {}) => {

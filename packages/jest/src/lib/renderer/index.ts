@@ -6,31 +6,13 @@ import { dirname, resolve } from 'path';
 
 import { customColorMap, statusToIconMap } from './defaultValues';
 
-import { TaggedAggregatedResult, TestGroup, UIOptions } from '../types';
+import { TaggedAggregatedResult, TaggedAssertionResult, UIOptions } from '../types';
 import { AnsiToHtmlConverter } from '../utils/ansi-to-html';
 import type { TestBlockTag } from '@tsdoc-test-reporter/core';
+import { aggregateTags, formatTestBlockTag } from './utils';
 
-function formatTag(title: string, prefix?: string, options?: UIOptions) {
-	const tagPrefix = prefix && options?.showTagNameOnBlockTags ? `${prefix}:` : '';
-	const formattedTagPrefix = options?.removeAtSignOnTags ? tagPrefix.replace('@', '') : tagPrefix;
-	const formattedTitle =
-		options?.removeAtSignOnTags && title.includes('@') ? title.replace('@', '') : title;
-	if (!options?.tagTitleToIconMap) {
-		return `<span class="tag">${formattedTagPrefix} ${formattedTitle}</span>`;
-	}
-	const tagIcon = options?.tagTitleToIconMap[title];
-	if (tagIcon) {
-		return `<span class="tag" aria-hidden="true">${formattedTagPrefix}${tagIcon}</span><span class="sr-only">${formattedTagPrefix}${formattedTitle}</span>`;
-	}
-	return `<span class="tag">${formattedTagPrefix} ${formattedTitle}</span>`;
-}
-
-export const render = (
-	result: Map<string, TestGroup<string>> | TaggedAggregatedResult,
-	options?: UIOptions,
-) => {
-	const templateName =
-		result instanceof Map ? 'grouped-result-template.hbs' : 'aggregated-result-template.hbs';
+export const render = (result: TaggedAggregatedResult, options?: UIOptions) => {
+	const templateName = 'aggregated-result-template.hbs';
 
 	const handlesbarsTemplate = resolve(dirname(__filename), 'templates', templateName);
 
@@ -47,16 +29,16 @@ export const render = (
 		return ansiConverter.toHtml(message);
 	});
 
+	Handlebars.registerHelper('aggregateTagsToTitle', function (result: TaggedAssertionResult[]) {
+		return result.map(aggregateTags(options)).join('');
+	});
+
 	Handlebars.registerHelper('statusToIcon', function (status: AssertionResult['status']) {
 		return options?.statusToIconMap ? options?.statusToIconMap[status] : statusToIconMap[status];
 	});
 
-	Handlebars.registerHelper('formatTag', function (tag: string) {
-		return formatTag(tag, undefined, options);
-	});
-
-	Handlebars.registerHelper('formatTags', function (tag: TestBlockTag) {
-		return tag.tags?.map((t) => formatTag(t, tag.name, options)).join('');
+	Handlebars.registerHelper('formatTags', function (testBlockTag: TestBlockTag) {
+		return formatTestBlockTag(options)(testBlockTag);
 	});
 
 	Handlebars.registerHelper('formatTitle', function (title: string) {
@@ -64,9 +46,8 @@ export const render = (
 	});
 
 	const template = Handlebars.compile(templateFile);
-	const renderableResult = result instanceof Map ? Object.fromEntries(result) : result;
 	return template({
-		result: renderableResult,
+		result,
 		...options,
 		title: options?.title ?? 'Test results',
 	});

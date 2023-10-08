@@ -12,7 +12,7 @@ import { TestBlockDocComment, TestBlockTag } from '../types';
 const getTagValues = (testBlockDocComments: TestBlockDocComment[]) =>
 	Object.values(testBlockDocComments[0].testBlockTags ?? {});
 
-it('transforms custom tag for block', () => {
+test('transforms custom tag for block', () => {
 	const config = new TSDocConfiguration();
 	const customBlockDefinition = new TSDocTagDefinition({
 		tagName: '@custom',
@@ -51,7 +51,7 @@ it('transforms custom tag for block', () => {
 	]);
 });
 
-it('transforms custom tag for modifiers', () => {
+test('transforms custom tag for modifiers', () => {
 	const config = new TSDocConfiguration();
 	const customBlockDefinition = new TSDocTagDefinition({
 		tagName: '@customModifier',

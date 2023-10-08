@@ -112,7 +112,14 @@
 			margin: 0;
 			font-size: 1rem;
 		}
-		.test-summary span {
+		.aggregated-tags {
+			margin-left: auto;
+			margin-right: 1rem;
+			display: inline-flex;
+			justify-content: flex-end;
+			gap: 0.5rem;
+		}
+		.test-summary-status span {
 			padding: 0.25rem 0.5rem;
 			border-style: solid;
 			font-size: 0.85rem;
@@ -240,6 +247,11 @@
 				<summary class="test-summary status-{{status}}">
 					<div class="test-summary-inner">
 						<h2>{{ formatTitle testFilePath }}</h2>
+						{{#if @root.aggregateTagsToFileHeading }}
+							<div class="aggregated-tags">
+								{{{ aggregateTagsToTitle testResults }}}
+							</div>
+						{{/if}}
 						<div class="test-summary-status">
 							{{#if numPendingTests }}
 								<span aria-hidden="true" class="test-summary-pending-tests">
@@ -286,11 +298,7 @@
 										{{#if ancestorTestBlockComments }}
 											{{#each ancestorTestBlockComments }}
 												{{#each testBlockTags }}
-													{{#if tags }}
-														{{{formatTags this }}}
-													{{else}}
-														{{{formatTag @key}}}
-													{{/if}}
+													{{{ formatTags this }}}
 												{{/each}}
 											{{/each}}
 										{{/if}}
@@ -298,11 +306,7 @@
 									{{#if testBlockComments }}
 										{{#each testBlockComments }}
 											{{#each testBlockTags }}
-												{{#if tags }}
-													{{{ formatTags this }}}
-												{{else}}
-													{{{formatTag @key}}}
-												{{/if}}
+												{{{ formatTags this }}}
 											{{/each}}
 										{{/each}}
 									{{/if}}

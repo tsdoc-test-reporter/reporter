@@ -4,6 +4,7 @@ export {
 	TsDocTestReporterConfig,
 	OutputFileType,
 } from './lib/types';
+export { coreDefaults } from "@tsdoc-test-reporter/core";
 
 /**
  * @hidden

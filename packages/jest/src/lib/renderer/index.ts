@@ -15,13 +15,14 @@ function formatTag(title: string, prefix?: string, options?: UIOptions) {
 	const formattedTagPrefix = options?.removeAtSignOnTags ? tagPrefix.replace('@', '') : tagPrefix;
 	const formattedTitle =
 		options?.removeAtSignOnTags && title.includes('@') ? title.replace('@', '') : title;
-	if (!options?.tagTitleToIconMap)
+	if (!options?.tagTitleToIconMap) {
 		return `<span class="tag">${formattedTagPrefix} ${formattedTitle}</span>`;
+	}
 	const tagIcon = options?.tagTitleToIconMap[title];
 	if (tagIcon) {
 		return `<span class="tag" aria-hidden="true">${formattedTagPrefix}${tagIcon}</span><span class="sr-only">${formattedTagPrefix}${formattedTitle}</span>`;
 	}
-	return formattedTitle;
+	return `<span class="tag">${formattedTagPrefix} ${formattedTitle}</span>`;
 }
 
 export const render = (

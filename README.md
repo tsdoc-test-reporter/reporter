@@ -1,73 +1,107 @@
+<img src="logo.png" width="100" height="100" align="center" />
+
 # @tsdoc-test-reporter
 
 **TSDoc Test Reporter** attaches [TSDoc](https://tsdoc.org/) notations as metadata to your test results.
 
-- Supports: **Jest**.
+## Features
+
+- Supports: **Jest**
 - Outputs: **JSON** or **HTML**
+- Use multiple tags in same `block` notation
+- Specifying which test blocks should be parsed (`it`/`test`/`describe`)
 - Supports using custom [TagDefinitions](https://tsdoc.org/pages/packages/tsdoc-config/)
-- Grouping by notation (limited support)
-- Supports specifying which test blocks should be parsed (`it`/`test`/`test.each` etc.)
-- Supports multiple tags in same block notation
+
 
 ## Installing
 
+```bash
+npm install @tsdoc-test-reporter/jest
 ```
-npm i @tsdoc-test-reporter/jest
+
+## Usage
+
+### Basic
+
+1. Add reporter to your jest config (`jest.config.js`)
+```js
+/** @type {import('@jest/types').Config.InitialOptions} */
+module.exports = {
+  reporters: [
+		"default",
+		"@tsdoc-test-reporter/jest",
+	]
+};
 ```
-
-## Example
-
-### Input
-
+2. Add TSDoc comments to a test of your choice:
 ```ts
 /**
- * @remarks unit tests
+ * @remarks WCAG Criteria
  */
-describe('form validation', () => {
-	/**
-	 * @remarks WCAG criteria
-	 * @privateRemarks WCAG 2.1, WCAG 2.2
-	 */
-	test('validate email', () => {
-		expect(true).toBe(true);
-	});
-});
+test("get correct background color based on text color", () => {
+	expect(true).toBe(true);
+})
+
+```
+3. Run tests
+4. Open the newly generated file `tsdoc-test-reporter-report.html` in the browser of your choice
+
+### With config
+
+> See Documentation for full docs of possible options
+
+```js
+/** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
+const options = {
+  testBlockTagNames: ["test", "test.each"],
+  applyTags: ["@remarks"],
+  outputFileName: "reports/tsdoc-report",
+  tsConfigPath: "./tsconfig.json",
+  tagSeparator: ";",
+	// These are only applied for HTML Report
+  uiOptions: {
+    title: "Title of HTML Page",
+    hideAncestorTitles: false,
+    hideAncestorTags: false,
+    removeAtSignOnTags: true,
+    showTagNameOnBlockTags: false,
+    statusToIconMap: {
+      passed: "🎉"
+    },
+    tagTitleToIconMap: {
+      "WCAG Criteria": "♿"
+    }
+  }
+}
+
+/** @type {import('@jest/types').Config.InitialOptions} */
+module.exports = {
+  reporters: [
+		"default",
+		["@tsdoc-test-reporter/jest", options]
+	]
+};
 ```
 
-### Output
+### With Custom User Supplied tags
 
-#### JSON
+```js
+const { coreDefaults } = require("@tsdoc-test-reporter/jest")
 
-```json
-{
-	"ancestorTitles": ["form validation"],
-	"fullName": "validate email",
-	"title": "validate email",
-	"status": "passed",
-	"testBlockComments": [
-		{
-			"testBlockTags": {
-				"@remarks": {
-					"tags": ["WCAG criteria"],
-					"testBlockName": "it"
-				},
-				"@privateRemarks": {
-					"tags": ["WCAG 2.1", "WCAG 2.2"],
-					"testBlockName": "it"
-				}
-			}
-		}
-	],
-	"ancestorTestBlockComments": [
-		{
-			"title": "form validation",
-			"testBlockTags": {
-				"@remarks": {
-					"tags": ["Unit tests"],
-					"testBlockName": "describe"
-				}
-			}
-		}
-	]
+/** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
+const options = {
+  applyTags: [...coreDefaults.applyTags, "@customModifierTag"],
+  customTags: [{
+    tagName: "@customModifierTag",
+    syntaxKind: 2,
+	}]
 }
+
+/** @type {import('@jest/types').Config.InitialOptions} */
+module.exports = {
+  reporters: [
+		"default",
+		["@tsdoc-test-reporter/jest", options]
+	]
+};
 ```

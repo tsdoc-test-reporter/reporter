@@ -77,9 +77,9 @@ const options = {
 /** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
   reporters: [
-		"default",
-		["@tsdoc-test-reporter/jest", options]
-	]
+    "default",
+    ["@tsdoc-test-reporter/jest", options]
+  ]
 };
 ```
 
@@ -91,17 +91,19 @@ const { coreDefaults } = require("@tsdoc-test-reporter/jest")
 /** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
 const options = {
   applyTags: [...coreDefaults.applyTags, "@customModifierTag"],
-  customTags: [{
-    tagName: "@customModifierTag",
-    syntaxKind: 2,
-	}]
+  customTags: [
+    {
+      tagName: "@customModifierTag",
+      syntaxKind: 2,
+    }
+  ]
 }
 
 /** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
   reporters: [
-		"default",
-		["@tsdoc-test-reporter/jest", options]
-	]
+    "default",
+    ["@tsdoc-test-reporter/jest", options]
+  ]
 };
 ```

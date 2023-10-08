@@ -26,8 +26,12 @@ export const getCompilerOptionsThatFollowExtends = (filename: string): CompilerO
 		const path = require.resolve(config.extends);
 		compositeOptions = getCompilerOptionsThatFollowExtends(path);
 	}
-	return {
+	const options = {
 		...compositeOptions,
 		...config.compilerOptions,
-	};
+	}
+	if("moduleResolution" in options) {
+		delete options.moduleResolution;
+	}
+	return options;
 };

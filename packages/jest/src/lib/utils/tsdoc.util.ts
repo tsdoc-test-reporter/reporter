@@ -5,7 +5,7 @@ import {
 } from '@microsoft/tsdoc';
 
 export const getTsDocParserConfig = (
-	customTags?: ITSDocTagDefinitionParameters[]
+	customTags?: ITSDocTagDefinitionParameters[],
 ): TSDocConfiguration | undefined => {
 	if (!customTags?.length) {
 		return undefined;

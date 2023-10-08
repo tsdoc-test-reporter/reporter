@@ -18,7 +18,7 @@ import { testBlockTagFactory } from './test-doc-block-tag';
  * ```
  */
 export const testDocBlockCommentFactory: TestDataFactory<TestBlockDocComment> = (
-	overrides = {}
+	overrides = {},
 ) => ({
 	testFilePath: 'default-test-file-path.ts',
 	title: 'default test title',
@@ -31,7 +31,7 @@ export const testDocBlockCommentFactory: TestDataFactory<TestBlockDocComment> = 
 				Object.entries(overrides.testBlockTags).map(([tagName, tag]) => [
 					tagName,
 					testBlockTagFactory(tag),
-				])
+				]),
 		  )
 		: undefined,
 });

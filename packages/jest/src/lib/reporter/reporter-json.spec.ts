@@ -66,7 +66,7 @@ test('creates recursive folder and json report output', () => {
 	expect(fs.writeFileSync).toHaveBeenCalledWith(
 		'reports/nested/output.json',
 		expect.anything(),
-		'utf-8'
+		'utf-8',
 	);
 	expect(fs.mkdirSync).toHaveBeenCalledTimes(1);
 	expect(fs.mkdirSync).toHaveBeenCalledWith('reports/nested', {

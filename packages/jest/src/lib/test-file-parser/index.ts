@@ -26,7 +26,7 @@ export const parseTestFiles = <CustomTags extends string>({
 			testResults: result.testResults.map((testResult) => ({
 				...testResult,
 				ancestorTestBlockComments: testBlockDocComments.filter((t) =>
-					testResult.ancestorTitles.includes(t.title)
+					testResult.ancestorTitles.includes(t.title),
 				),
 				testBlockComments: testBlockDocComments.filter((t) => t.title === testResult.title),
 			})),

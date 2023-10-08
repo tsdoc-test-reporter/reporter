@@ -121,7 +121,7 @@ export type TestBlockDocComment<CustomTags extends string = string> = {
 
 export type WithTestDocBlockComments<
 	Type extends object,
-	CustomTags extends string = string
+	CustomTags extends string = string,
 > = Type & {
 	ancestorTestBlockComments?: TestBlockDocComment<CustomTags>[];
 	testBlockComments?: TestBlockDocComment<CustomTags>[];

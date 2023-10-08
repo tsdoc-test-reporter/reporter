@@ -13,7 +13,7 @@ export const defaultCompilerOptions: CompilerOptions = {
 
 export const getSourceFileHelper = (
 	fileNames: string[],
-	compilerOptions: CompilerOptions = defaultCompilerOptions
+	compilerOptions: CompilerOptions = defaultCompilerOptions,
 ) => {
 	const program = createProgram(fileNames, compilerOptions);
 	return (fileName: string): SourceFile | undefined => program.getSourceFile(fileName);

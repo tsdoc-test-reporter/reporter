@@ -8,10 +8,10 @@ jest.mock('../utils/typescript.util', () => {
 	return {
 		...jest.requireActual('../utils/typescript.util'),
 		getCompilerOptionsThatFollowExtends: () => ({
-			"declaration": false,
-			"target": "es2015",
-			"module": "esnext",
-			"baseUrl": "./src"
+			declaration: false,
+			target: 'es2015',
+			module: 'esnext',
+			baseUrl: './src',
 		}),
 	};
 });
@@ -67,10 +67,10 @@ test('gets compiler options from tsConfig.json', () => {
 	const consoleSpy = jest.spyOn(console, 'log');
 	const compilerOptions = getCompilerOptions();
 	expect(compilerOptions).toEqual({
-		"declaration": false,
-		"target": "es2015",
-		"module": "esnext",
-		"baseUrl": "./src"
+		declaration: false,
+		target: 'es2015',
+		module: 'esnext',
+		baseUrl: './src',
 	});
 	expect(consoleSpy).toHaveBeenCalledTimes(0);
 });

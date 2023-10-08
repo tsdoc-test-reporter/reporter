@@ -5,7 +5,7 @@ import { aggregatedResultFactory, assertionResultFactory, testResultFactory } fr
 import type { TaggedAggregatedResult, TaggedAssertionResult, TaggedTestResult } from '../../types';
 
 export const taggedAssertionResultFactory: TestDataFactory<TaggedAssertionResult> = (
-	overrides = {}
+	overrides = {},
 ) => ({
 	...assertionResultFactory(overrides),
 	ancestorTestBlockComments: [],
@@ -20,7 +20,7 @@ export const taggedTestResultFactory: TestDataFactory<TaggedTestResult> = (overr
 };
 
 export const taggedAggregatedResultFactory: TestDataFactory<TaggedAggregatedResult> = (
-	overrides = {}
+	overrides = {},
 ) => {
 	return {
 		...aggregatedResultFactory(overrides),

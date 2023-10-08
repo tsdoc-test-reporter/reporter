@@ -28,7 +28,7 @@ test('writes to nested folder on windows where sep is posix', () => {
 	expect(fs.writeFileSync).toHaveBeenCalledWith(
 		'reports\\nested\\output.json',
 		expect.anything(),
-		'utf-8'
+		'utf-8',
 	);
 	expect(fs.mkdirSync).toHaveBeenCalledTimes(1);
 	expect(fs.mkdirSync).toHaveBeenCalledWith('reports\\nested', {

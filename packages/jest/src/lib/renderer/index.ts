@@ -26,7 +26,7 @@ function formatTag(title: string, prefix?: string, options?: UIOptions) {
 
 export const render = (
 	result: Map<string, TestGroup<string>> | TaggedAggregatedResult,
-	options?: UIOptions
+	options?: UIOptions,
 ) => {
 	const templateName =
 		result instanceof Map ? 'grouped-result-template.hbs' : 'aggregated-result-template.hbs';

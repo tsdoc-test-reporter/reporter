@@ -19,13 +19,12 @@ importers:
       '@typescript-eslint/parser': 5.62.0
       chalk: ^5.1.2
       eslint: 8.46.0
-      eslint-config-prettier: 8.1.0
       eslint-plugin-import: ^2.26.0
       husky: ^8.0.1
       jest: 29.4.3
       jest-environment-jsdom: 29.4.3
       nx: 16.9.1
-      prettier: ^2.6.2
+      prettier: ^3.0.3
       ts-jest: 29.1.1
       ts-node: 10.9.1
       tslib: ^2.3.0
@@ -38,7 +37,7 @@ importers:
       '@commitlint/config-conventional': 17.7.0
       '@commitlint/config-nx-scopes': 17.6.4_nx@16.9.1
       '@nx/devkit': 16.9.1_nx@16.9.1
-      '@nx/eslint-plugin': 16.9.1_lfsdasl3l4geo4zjmsfzzr4drq
+      '@nx/eslint-plugin': 16.9.1_n5fopufkzwutkahgprfwufhura
       '@nx/jest': 16.9.1_ics6nbf7notjsxunh6xmj3p26y
       '@nx/js': 16.9.1_q75dhyw2vmziwhxiic7soq2mgy
       '@nx/linter': 16.9.1_5uy4cas3rouzwfsv62axyfc5lm
@@ -49,13 +48,12 @@ importers:
       '@typescript-eslint/parser': 5.62.0_7haavtekmro7ptbnqmctjaodju
       chalk: 5.3.0
       eslint: 8.46.0
-      eslint-config-prettier: 8.1.0_eslint@8.46.0
       eslint-plugin-import: 2.28.1_zx2ldm4646tzugbvbfrlkdfxxm
       husky: 8.0.3
       jest: 29.4.3_lpnbhgxso4u2juc7wocetwmymy
       jest-environment-jsdom: 29.4.3
       nx: 16.9.1
-      prettier: 2.8.7
+      prettier: 3.0.3
       ts-jest: 29.1.1_rxozz63jk7hypl2n3htpoff644
       ts-node: 10.9.1_etpc26ppp2rl6r7uwdtdoynnly
       typedoc: 0.24.8_typescript@5.1.6
@@ -2195,10 +2193,10 @@ packages:
       - nx
     dev: true
 
-  /@nrwl/eslint-plugin-nx/16.9.1_lfsdasl3l4geo4zjmsfzzr4drq:
+  /@nrwl/eslint-plugin-nx/16.9.1_n5fopufkzwutkahgprfwufhura:
     resolution: {integrity: sha512-G1bHWYgZuuXz51leJgleFltiyVzXpE5jKcApnSMnzbnP0HzeJO9QHruCX+t7bST3SXDV1uVXgovLyqfffCkNNA==}
     dependencies:
-      '@nx/eslint-plugin': 16.9.1_lfsdasl3l4geo4zjmsfzzr4drq
+      '@nx/eslint-plugin': 16.9.1_n5fopufkzwutkahgprfwufhura
     transitivePeerDependencies:
       - '@swc-node/register'
       - '@swc/core'
@@ -2302,7 +2300,7 @@ packages:
       tslib: 2.5.0
     dev: true
 
-  /@nx/eslint-plugin/16.9.1_lfsdasl3l4geo4zjmsfzzr4drq:
+  /@nx/eslint-plugin/16.9.1_n5fopufkzwutkahgprfwufhura:
     resolution: {integrity: sha512-pBZYZRyeM+rxDW3mBXFz4fjXEb43sVLWHcjgMOlSkYQz79NY0YK0sntBxBCVIUNQF/rES8ZEzhfr3a+3fWgptA==}
     peerDependencies:
       '@typescript-eslint/parser': ^5.60.1
@@ -2311,7 +2309,7 @@ packages:
       eslint-config-prettier:
         optional: true
     dependencies:
-      '@nrwl/eslint-plugin-nx': 16.9.1_lfsdasl3l4geo4zjmsfzzr4drq
+      '@nrwl/eslint-plugin-nx': 16.9.1_n5fopufkzwutkahgprfwufhura
       '@nx/devkit': 16.9.1_nx@16.9.1
       '@nx/js': 16.9.1_q75dhyw2vmziwhxiic7soq2mgy
       '@typescript-eslint/parser': 5.62.0_7haavtekmro7ptbnqmctjaodju
@@ -2319,7 +2317,6 @@ packages:
       '@typescript-eslint/utils': 5.62.0_7haavtekmro7ptbnqmctjaodju
       chalk: 4.1.2
       confusing-browser-globals: 1.0.11
-      eslint-config-prettier: 8.1.0_eslint@8.46.0
       jsonc-eslint-parser: 2.3.0
       semver: 7.5.3
       tslib: 2.5.0
@@ -3918,15 +3915,6 @@ packages:
       optionator: 0.8.3
     optionalDependencies:
       source-map: 0.6.1
-    dev: true
-
-  /eslint-config-prettier/8.1.0_eslint@8.46.0:
-    resolution: {integrity: sha512-oKMhGv3ihGbCIimCAjqkdzx2Q+jthoqnXSP+d86M9tptwugycmTFdVR4IpLgq2c4SHifbwO90z2fQ8/Aio73yw==}
-    hasBin: true
-    peerDependencies:
-      eslint: '>=7.0.0'
-    dependencies:
-      eslint: 8.46.0
     dev: true
 
   /eslint-import-resolver-node/0.3.7:
@@ -6160,9 +6148,9 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier/2.8.7:
-    resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==}
-    engines: {node: '>=10.13.0'}
+  /prettier/3.0.3:
+    resolution: {integrity: sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==}
+    engines: {node: '>=14'}
     hasBin: true
     dev: true
 

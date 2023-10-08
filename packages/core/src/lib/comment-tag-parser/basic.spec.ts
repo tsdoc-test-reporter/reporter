@@ -29,7 +29,7 @@ describe('transform all tags in the standard', () => {
 				...parserOptions,
 			});
 			expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>(expected);
-		}
+		},
 	);
 });
 
@@ -56,7 +56,7 @@ describe('transform all tags in the standard for each test block name', () => {
 				...parserOptions,
 			});
 			expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>(expected);
-		}
+		},
 	);
 });
 

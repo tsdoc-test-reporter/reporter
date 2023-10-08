@@ -210,7 +210,7 @@ function closeTag(stack: string[], style: string): string | undefined {
 function tokenize(
 	text: string,
 	options: ConverterOptions,
-	callback: (one: string, two: string | number) => void
+	callback: (one: string, two: string | number) => void,
 ): string[] {
 	let ansiMatch = false;
 	const ansiHandler = 3;

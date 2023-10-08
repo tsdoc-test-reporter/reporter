@@ -59,14 +59,14 @@ export class CommentTagParser<CustomTag extends string> implements ICommentTagPa
 	private getBlockTags(
 		docComment: DocComment,
 		testBlockName: TestBlockName,
-		testTitle: string
+		testTitle: string,
 	): TestBlockDocComment<CustomTag>['testBlockTags'] {
 		const tags: TestBlockDocComment<CustomTag>['testBlockTags'] = {};
 		for (const tagName of this.applyTags) {
 			const kind: TagKind = docComment.modifierTagSet.hasTagName(tagName) ? 'modifier' : 'block';
 			if (kind === 'modifier') {
 				const modifierTag = docComment.modifierTagSet.nodes.find(
-					(node) => node.tagName === tagName
+					(node) => node.tagName === tagName,
 				);
 				if (modifierTag) {
 					tags[tagName] = {
@@ -99,7 +99,7 @@ export class CommentTagParser<CustomTag extends string> implements ICommentTagPa
 	}
 
 	private commentRangeToTestBlockDocComment(
-		node: CallExpression
+		node: CallExpression,
 	): (comment: CommentRange) => TestBlockDocComment<CustomTag> {
 		return (comment: CommentRange): TestBlockDocComment<CustomTag> => {
 			const nodeName = getNodeName(node) as 'describe' | 'test';
@@ -118,7 +118,7 @@ export class CommentTagParser<CustomTag extends string> implements ICommentTagPa
 	private findTestBlockDocComments(node: Node): void {
 		if (isTestBlock(node, this.testBlockTagNames)) {
 			const testTags = getJSDocCommentRanges(this.sourceFileBuffer, node)?.map(
-				this.commentRangeToTestBlockDocComment(node)
+				this.commentRangeToTestBlockDocComment(node),
 			);
 			if (testTags) {
 				this._testBlockDocComments = [...this.testBlockDocComments, ...testTags];

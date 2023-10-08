@@ -12,7 +12,7 @@ export const groupTests = <CustomTag extends string>({
 			const topLevelAncestortitle = assertion.ancestorTitles[0];
 			const topLevelAncestorBlockTagComment = assertion.ancestorTestBlockComments?.find(
 				(testBlockComment: TestBlockDocComment<CustomTag>) =>
-					testBlockComment.title === topLevelAncestortitle
+					testBlockComment.title === topLevelAncestortitle,
 			);
 			const groupTag = topLevelAncestorBlockTagComment?.testBlockTags
 				? topLevelAncestorBlockTagComment.testBlockTags[schema.tagName]
@@ -42,7 +42,7 @@ export const groupTests = <CustomTag extends string>({
 							numTodoTests: +todo(assertion),
 							numSkippedTests: +skipped(assertion),
 							testResults: [assertion],
-					  }
+					  },
 			);
 		}
 	}

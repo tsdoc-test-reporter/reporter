@@ -29,10 +29,7 @@ export class TsDocTestReporter<CustomTags extends string = string>
 	private readonly uiOptions: UIOptions;
 	private readonly compilerOptions: CompilerOptions;
 
-	constructor(
-		_globalConfig: Config.GlobalConfig,
-		config: TsDocTestReporterConfig<CustomTags>
-	) {
+	constructor(_globalConfig: Config.GlobalConfig, config: TsDocTestReporterConfig<CustomTags>) {
 		this.applyTags = config.applyTags ?? (coreDefaults.applyTags as (AllTagsName | CustomTags)[]);
 		this.customTags = config.customTags;
 		this.tagSeparator = config.tagSeparator ?? coreDefaults.tagSeparator;
@@ -45,12 +42,15 @@ export class TsDocTestReporter<CustomTags extends string = string>
 
 	public onRunComplete(
 		_testContexts: Set<TestContext>,
-		results: AggregatedResult
+		results: AggregatedResult,
 	): void | Promise<void> {
 		const fileNames = results.testResults.map((result) => result.testFilePath);
 		const getSourceFile = getSourceFileHelper(fileNames, this.compilerOptions);
 		const sourceFilesMap = Object.fromEntries(
-			results.testResults.map((result) => [result.testFilePath, getSourceFile(result.testFilePath)])
+			results.testResults.map((result) => [
+				result.testFilePath,
+				getSourceFile(result.testFilePath),
+			]),
 		);
 
 		const result: TaggedAggregatedResult = {

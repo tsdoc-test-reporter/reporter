@@ -28,7 +28,7 @@ export const writeToFile = ({
 			writeFileSync(
 				`${pathElements.slice(0, -1).join(sep)}${sep}${fileName}.${outputFileType}`,
 				buffer,
-				'utf-8'
+				'utf-8',
 			);
 		} else {
 			writeFileSync(`${fileName}.${outputFileType}`, buffer, 'utf-8');

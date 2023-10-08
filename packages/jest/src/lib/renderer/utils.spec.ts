@@ -200,9 +200,9 @@ describe('aggregateTags', () => {
 		).toEqual('<span class="tag">@beta</span>');
 	});
 
-  test('aggregate only selected tags', () => {
+	test('aggregate only selected tags', () => {
 		expect(
-			aggregateTags({ aggregateTagsToFileHeading: ["@beta"] })(
+			aggregateTags({ aggregateTagsToFileHeading: ['@beta'] })(
 				taggedAssertionResultFactory({
 					title: 'test',
 					status: 'passed',

@@ -36,7 +36,7 @@ export const aggregateTags = (options?: UIOptions) => (result: TaggedAssertionRe
 	}
 	const testBlockComments = [
 		...(result.ancestorTestBlockComments &&
-		options.aggregateTagsToFileHeading !== 'withoutAncestors'
+			options.aggregateTagsToFileHeading !== 'withoutAncestors'
 			? result.ancestorTestBlockComments
 			: []),
 		...(result.testBlockComments && options.aggregateTagsToFileHeading !== 'onlyAncestors'
@@ -46,16 +46,14 @@ export const aggregateTags = (options?: UIOptions) => (result: TaggedAssertionRe
 	if (!testBlockComments.length) {
 		return '';
 	}
-	const allTags =  testBlockComments.flatMap(getTagsFromComment)
+	const allTags = testBlockComments.flatMap(getTagsFromComment);
 	const filterByTagName = Array.isArray(options.aggregateTagsToFileHeading);
 	const filteredTags = filterByTagName
 		? allTags.filter((testBlockTag) =>
-				filterByTagName && testBlockTag
-					? (options.aggregateTagsToFileHeading as string[]).includes(testBlockTag?.name)
-					: true,
-			)
+			filterByTagName && testBlockTag
+				? (options.aggregateTagsToFileHeading as string[]).includes(testBlockTag?.name)
+				: true,
+		)
 		: allTags;
-	return filteredTags
-		.flatMap(formatTestBlockTag(options))
-		.join('');
+	return [...new Set(filteredTags.flatMap(formatTestBlockTag(options)))].join('');
 };

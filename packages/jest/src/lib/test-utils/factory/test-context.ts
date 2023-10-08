@@ -33,7 +33,6 @@ export const projectConfigFactory: TestDataFactory<Config.ProjectConfig> = (over
 	skipFilter: false,
 	slowTestThreshold: 0,
 	snapshotSerializers: [],
-	snapshotFormat: {},
 	testEnvironment: '',
 	testEnvironmentOptions: {},
 	testMatch: [],
@@ -54,6 +53,8 @@ export const projectConfigFactory: TestDataFactory<Config.ProjectConfig> = (over
 		name: 'name',
 		color: 'cyan',
 	},
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	snapshotFormat: {} as any,
 	haste: {
 		computeSha1: undefined,
 		defaultPlatform: undefined,

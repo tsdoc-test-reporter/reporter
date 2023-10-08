@@ -2,6 +2,10 @@
 	"name": "tsdoc-test-reporter",
 	"version": "0.0.1",
 	"license": "MIT",
+	"author": {
+		"name": "Jesper Orb",
+		"email": "github@jesperorb.com"
+	},
 	"scripts": {
 		"publish:core": "node ./tools/scripts/publish.mjs core latest",
 		"publish:jest": "node ./tools/scripts/publish.mjs jest latest",
@@ -29,7 +33,7 @@
 		"chalk": "^5.1.2",
 		"eslint": "8.46.0",
 		"eslint-plugin-import": "^2.26.0",
-		"husky": "^8.0.1",
+		"husky": "^8.0.3",
 		"jest": "29.4.3",
 		"jest-environment-jsdom": "29.4.3",
 		"nx": "16.9.1",

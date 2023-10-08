@@ -38,7 +38,6 @@ export const globalConfigFactory: TestDataFactory<Config.GlobalConfig> = (overri
 	rootDir: '.',
 	silent: undefined,
 	skipFilter: false,
-	snapshotFormat: {},
 	errorOnDeprecated: false,
 	testFailureExitCode: 0,
 	testNamePattern: undefined,
@@ -56,6 +55,8 @@ export const globalConfigFactory: TestDataFactory<Config.GlobalConfig> = (overri
 	openHandlesTimeout: 0,
 	seed: 0,
 	...overrides,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	snapshotFormat: {} as any,
 	coveragePathIgnorePatterns: undefined,
 	coverageProvider: 'v8',
 	coverageReporters: ['json'],

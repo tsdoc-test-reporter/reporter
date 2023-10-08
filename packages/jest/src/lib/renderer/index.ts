@@ -9,7 +9,7 @@ import { customColorMap, statusToIconMap } from './defaultValues';
 import { TaggedAggregatedResult, TaggedAssertionResult, UIOptions } from '../types';
 import { AnsiToHtmlConverter } from '../utils/ansi-to-html';
 import type { TestBlockTag } from '@tsdoc-test-reporter/core';
-import { aggregateTags, formatTestBlockTag } from './utils';
+import { aggregateTagsForResults, formatTestBlockTag } from './utils';
 
 export const render = (result: TaggedAggregatedResult, options?: UIOptions) => {
 	const templateName = 'aggregated-result-template.hbs';
@@ -30,7 +30,7 @@ export const render = (result: TaggedAggregatedResult, options?: UIOptions) => {
 	});
 
 	Handlebars.registerHelper('aggregateTagsToTitle', function (result: TaggedAssertionResult[]) {
-		return result.map(aggregateTags(options)).join('');
+		return aggregateTagsForResults(result, options);
 	});
 
 	Handlebars.registerHelper('statusToIcon', function (status: AssertionResult['status']) {

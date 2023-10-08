@@ -55,5 +55,9 @@ export const aggregateTags = (options?: UIOptions) => (result: TaggedAssertionRe
 				: true,
 		)
 		: allTags;
-	return [...new Set(filteredTags.flatMap(formatTestBlockTag(options)))].join('');
+	return filteredTags.map(formatTestBlockTag(options)).join('');
 };
+
+export const aggregateTagsForResults = (results: TaggedAssertionResult[], options?: UIOptions) => {
+	return [...new Set(results.map(aggregateTags(options)))].join('');
+}

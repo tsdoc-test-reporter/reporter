@@ -1,7 +1,6 @@
 // import * as fs from 'node:fs';
 
-import { writeToFile } from '../utils/io.util';
-
+import { writeToFile } from '@tsdoc-test-reporter/core';
 import { render } from '.';
 import { taggedAggregatedResultFactory } from '../test-utils/factory';
 

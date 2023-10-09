@@ -1,8 +1,5 @@
-import { CompilerOptions } from 'typescript';
-
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { posix, resolve, sep } from 'node:path';
-import { defaultCompilerOptions, getCompilerOptionsThatFollowExtends } from './typescript.util';
+import { posix, sep } from 'node:path';
 
 export type WriteToFileConfig = {
 	buffer: string;
@@ -35,18 +32,5 @@ export const writeToFile = ({
 		}
 	} catch (error: unknown) {
 		console.error(error);
-	}
-};
-
-export const getCompilerOptions = (customPath?: string): CompilerOptions => {
-	const tsConfigPath = resolve(process.cwd(), customPath ?? 'tsconfig.json');
-	if (!existsSync(tsConfigPath)) {
-		return defaultCompilerOptions;
-	}
-	try {
-		return getCompilerOptionsThatFollowExtends(tsConfigPath);
-	} catch (error) {
-		console.warn('\nUnable to parse TSConfig File. Using default values');
-		return defaultCompilerOptions;
 	}
 };

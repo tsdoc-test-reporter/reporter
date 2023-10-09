@@ -18,9 +18,9 @@ const reporterGlobalConfig = globalConfigFactory();
 
 const aggregatedResult = taggedAggregatedResultFactory();
 
-jest.mock('../utils/typescript.util', () => {
-	const { testFileFactory } = jest.requireActual('@tsdoc-test-reporter/core');
-	const sourceFile = testFileFactory({
+jest.mock('@tsdoc-test-reporter/core', () => {
+	const actual = jest.requireActual('@tsdoc-test-reporter/core');
+	const sourceFile = actual.testFileFactory({
 		fileName: 'reporter.ts',
 		options: [],
 	});
@@ -28,13 +28,14 @@ jest.mock('../utils/typescript.util', () => {
 		[sourceFile.fileName]: sourceFile,
 	};
 	return {
+		...actual,
 		getSourceFileHelper: () => (fileName: string) => {
 			return files[fileName];
 		},
 	};
 });
 
-test('creates json report output', () => {
+test.only('creates json report output', () => {
 	const reporter = new TsDocTestReporter(reporterGlobalConfig, {
 		outputFileType: 'json',
 		outputFileName: 'output',

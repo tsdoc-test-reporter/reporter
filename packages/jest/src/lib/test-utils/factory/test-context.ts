@@ -43,6 +43,8 @@ export const projectConfigFactory: TestDataFactory<Config.ProjectConfig> = (over
 	watchPathIgnorePatterns: [],
 	openHandlesTimeout: 0,
 	...overrides,
+	collectCoverageFrom: [],
+	coverageDirectory: '',
 	fakeTimers: {},
 	transform: [],
 	testRegex: [],

@@ -23,26 +23,26 @@ export const groupTests = <CustomTag extends string>({
 				groupKey,
 				existingTestGroup
 					? {
-							...existingTestGroup,
-							numFailingTests: existingTestGroup.numFailingTests + +failed(assertion),
-							numPassingTests: existingTestGroup.numPassingTests + +passed(assertion),
-							numPendingTests: existingTestGroup.numPendingTests + +pending(assertion),
-							numSkippedTests: existingTestGroup.numSkippedTests + +skipped(assertion),
-							numTodoTests: existingTestGroup.numTodoTests + +todo(assertion),
-							testResults: failed(assertion)
-								? [assertion, ...(existingTestGroup.testResults ?? [])]
-								: existingTestGroup.testResults?.concat([assertion]),
-					  }
+						...existingTestGroup,
+						numFailingTests: existingTestGroup.numFailingTests + +failed(assertion),
+						numPassingTests: existingTestGroup.numPassingTests + +passed(assertion),
+						numPendingTests: existingTestGroup.numPendingTests + +pending(assertion),
+						numSkippedTests: existingTestGroup.numSkippedTests + +skipped(assertion),
+						numTodoTests: existingTestGroup.numTodoTests + +todo(assertion),
+						testResults: failed(assertion)
+							? [assertion, ...(existingTestGroup.testResults ?? [])]
+							: existingTestGroup.testResults?.concat([assertion]),
+					}
 					: {
-							groupTitle: groupKey,
-							groupTagName: groupTag ? schema.tagName : 'fileName',
-							numFailingTests: +failed(assertion),
-							numPassingTests: +passed(assertion),
-							numPendingTests: +pending(assertion),
-							numTodoTests: +todo(assertion),
-							numSkippedTests: +skipped(assertion),
-							testResults: [assertion],
-					  },
+						groupTitle: groupKey,
+						groupTagName: groupTag ? schema.tagName : 'fileName',
+						numFailingTests: +failed(assertion),
+						numPassingTests: +passed(assertion),
+						numPendingTests: +pending(assertion),
+						numTodoTests: +todo(assertion),
+						numSkippedTests: +skipped(assertion),
+						testResults: [assertion],
+					},
 			);
 		}
 	}

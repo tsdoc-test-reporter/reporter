@@ -1,6 +1,16 @@
 import { AggregatedResult, Config, Reporter, TestContext } from '@jest/reporters';
 import { type ITSDocTagDefinitionParameters, TSDocParser } from '@microsoft/tsdoc';
-import { AllTagsName, TestBlockName, coreDefaults } from '@tsdoc-test-reporter/core';
+import {
+	AllTagsName,
+	OutputFileType,
+	TestBlockName,
+	UIOptions,
+	coreDefaults,
+	getCompilerOptions,
+	getSourceFileHelper,
+	getTsDocParserConfig,
+	writeToFile,
+} from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
 
 import { defaultOutputFileName } from './defaultValues';
@@ -8,14 +18,9 @@ import { defaultOutputFileName } from './defaultValues';
 import { render } from '../renderer';
 import { parseTestFiles } from '../test-file-parser';
 import type {
-	OutputFileType,
 	TaggedAggregatedResult,
 	TsDocTestReporterConfig,
-	UIOptions,
 } from '../types';
-import { getCompilerOptions, writeToFile } from '../utils/io.util';
-import { getSourceFileHelper } from '../utils/typescript.util';
-import { getTsDocParserConfig } from '../utils/tsdoc.util';
 
 export class TsDocTestReporter<CustomTags extends string = string>
 	implements Pick<Reporter, 'onRunComplete'>
@@ -59,7 +64,7 @@ export class TsDocTestReporter<CustomTags extends string = string>
 				applyTags: this.applyTags,
 				tagSeparator: this.tagSeparator,
 				testBlockTagNames: this.testBlockTagNames,
-				testResults: results.testResults,
+				result: results.testResults,
 				tsDocParser: new TSDocParser(getTsDocParserConfig(this.customTags)),
 				sourceFilesMap,
 			}),

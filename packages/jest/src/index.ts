@@ -1,6 +1,6 @@
 import { TsDocTestReporter } from './lib/reporter';
-export { UIOptions, TsDocTestReporterConfig, OutputFileType } from './lib/types';
-export { coreDefaults } from '@tsdoc-test-reporter/core';
+export { TsDocTestReporterConfig } from './lib/types';
+export { coreDefaults, UIOptions } from '@tsdoc-test-reporter/core';
 
 /**
  * @hidden

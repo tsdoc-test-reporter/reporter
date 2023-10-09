@@ -1,0 +1,38 @@
+{
+	"name": "vitest",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "packages/vitest/src",
+	"projectType": "library",
+	"targets": {
+		"publish": {
+			"command": "node tools/scripts/publish.mjs vitest {args.ver} {args.tag}",
+			"dependsOn": ["test", "lint", "build"]
+		},
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/packages/vitest",
+				"main": "packages/vitest/src/index.ts",
+				"tsConfig": "packages/vitest/tsconfig.lib.json",
+				"assets": ["packages/vitest/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["packages/vitest/**/*.ts", "packages/vitest/package.json"]
+			}
+		},
+		"test": {
+			"executor": "@nx/vite:test",
+			"outputs": ["{options.reportsDirectory}"],
+			"options": {
+				"passWithNoTests": true,
+				"reportsDirectory": "../../coverage/packages/vitest"
+			}
+		}
+	},
+	"tags": []
+}

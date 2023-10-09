@@ -55,6 +55,7 @@ export const globalConfigFactory: TestDataFactory<Config.GlobalConfig> = (overri
 	openHandlesTimeout: 0,
 	seed: 0,
 	...overrides,
+	runInBand: false,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	snapshotFormat: {} as any,
 	coveragePathIgnorePatterns: undefined,

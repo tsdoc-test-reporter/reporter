@@ -28,10 +28,10 @@ export const testDocBlockCommentFactory: TestDataFactory<TestBlockDocComment> = 
 	...overrides,
 	testBlockTags: overrides.testBlockTags
 		? Object.fromEntries(
-				Object.entries(overrides.testBlockTags).map(([tagName, tag]) => [
-					tagName,
-					testBlockTagFactory(tag),
-				]),
-		  )
+			Object.entries(overrides.testBlockTags).map(([tagName, tag]) => [
+				tagName,
+				testBlockTagFactory(tag),
+			]),
+		)
 		: undefined,
 });

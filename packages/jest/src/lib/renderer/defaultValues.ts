@@ -1,6 +1,4 @@
-import { StatusToIconMap } from '../types';
-
-export const statusToIconMap: StatusToIconMap = {
+export const statusToIconMap: Record<string, string> = {
 	passed: '✅',
 	failed: '❌',
 	skipped: '⏭️',

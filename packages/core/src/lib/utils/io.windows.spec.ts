@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import { writeToFile } from './io.util';
+import { writeToFile } from './io.utils';
 
 jest.mock('node:fs');
 

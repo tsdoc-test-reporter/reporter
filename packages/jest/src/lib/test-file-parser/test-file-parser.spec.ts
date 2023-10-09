@@ -38,7 +38,7 @@ test('parse and tag test for source files', () => {
 		],
 	});
 	const result = parseTestFiles({
-		testResults,
+		result: testResults,
 		tsDocParser: new TSDocParser(),
 		sourceFilesMap: {
 			[sourceFile.fileName]: sourceFile,
@@ -109,7 +109,7 @@ test('parse and tag test for source files with ancestors', () => {
 		],
 	});
 	const result = parseTestFiles({
-		testResults,
+		result: testResults,
 		tsDocParser: new TSDocParser(),
 		sourceFilesMap: {
 			[sourceFile.fileName]: sourceFile,
@@ -212,7 +212,7 @@ test('pass down parser options when parsing files', () => {
 		applyTags: ['@remarks'],
 		tagSeparator: ';',
 		testBlockTagNames: ['test'],
-		testResults,
+		result: testResults,
 		tsDocParser: new TSDocParser(),
 		sourceFilesMap: {
 			[sourceFile.fileName]: sourceFile,

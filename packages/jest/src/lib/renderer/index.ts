@@ -6,10 +6,10 @@ import { dirname, resolve } from 'path';
 
 import { customColorMap, statusToIconMap } from './defaultValues';
 
-import { TaggedAggregatedResult, TaggedAssertionResult, UIOptions } from '../types';
+import { TaggedAggregatedResult, TaggedAssertionResult } from '../types';
 import { AnsiToHtmlConverter } from '../utils/ansi-to-html';
-import type { TestBlockTag } from '@tsdoc-test-reporter/core';
-import { aggregateTagsForResults, formatTestBlockTag } from './utils';
+import { renderTags, type TestBlockTag, type UIOptions } from '@tsdoc-test-reporter/core';
+import { aggregateTagsForResults } from './utils';
 
 export const render = (result: TaggedAggregatedResult, options?: UIOptions) => {
 	const templateName = 'aggregated-result-template.hbs';
@@ -38,7 +38,7 @@ export const render = (result: TaggedAggregatedResult, options?: UIOptions) => {
 	});
 
 	Handlebars.registerHelper('formatTags', function (testBlockTag: TestBlockTag) {
-		return formatTestBlockTag(options)(testBlockTag);
+		return renderTags(options)(testBlockTag);
 	});
 
 	Handlebars.registerHelper('formatTitle', function (title: string) {

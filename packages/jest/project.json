@@ -4,6 +4,10 @@
 	"sourceRoot": "packages/jest/src",
 	"projectType": "library",
 	"targets": {
+		"publish": {
+			"command": "node tools/scripts/publish.mjs jest {args.ver} {args.tag}",
+			"dependsOn": ["lint", "test", "build"]
+		},
 		"build": {
 			"executor": "@nx/js:tsc",
 			"outputs": ["{options.outputPath}"],

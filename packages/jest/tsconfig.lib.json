@@ -6,6 +6,6 @@
 		"module": "CommonJS",
 		"types": []
 	},
-	"include": ["**/*.ts"],
+	"include": ["**/*.ts", "../core/src/lib/utils/tsdoc.util.ts"],
 	"exclude": ["jest.config.ts", "**/*.spec.ts", "**/test-data", "**/test-utils"]
 }

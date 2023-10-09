@@ -16,7 +16,8 @@
 		"baseUrl": ".",
 		"paths": {
 			"@tsdoc-test-reporter/core": ["packages/core/src/index.ts"],
-			"@tsdoc-test-reporter/jest": ["packages/jest/src/index.ts"]
+			"@tsdoc-test-reporter/jest": ["packages/jest/src/index.ts"],
+			"@tsdoc-test-reporter/vitest": ["packages/vitest/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

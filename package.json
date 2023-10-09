@@ -7,8 +7,6 @@
 		"email": "github@jesperorb.com"
 	},
 	"scripts": {
-		"publish:core": "node ./tools/scripts/publish.mjs core latest",
-		"publish:jest": "node ./tools/scripts/publish.mjs jest latest",
 		"publish:docs": "node ./tools/scripts/publishDocs.mjs",
 		"build:dev": "node ./tools/scripts/buildDev.mjs",
 		"docs": "typedoc"
@@ -26,11 +24,14 @@
 		"@nx/jest": "16.9.1",
 		"@nx/js": "16.9.1",
 		"@nx/linter": "16.9.1",
+		"@nx/vite": "16.9.1",
 		"@nx/workspace": "16.9.1",
 		"@types/jest": "29.4.4",
 		"@types/node": "18.7.1",
 		"@typescript-eslint/eslint-plugin": "5.62.0",
 		"@typescript-eslint/parser": "5.62.0",
+		"@vitest/coverage-c8": "~0.32.0",
+		"@vitest/ui": "~0.32.0",
 		"chalk": "^5.1.2",
 		"eslint": "8.46.0",
 		"eslint-plugin-import": "^2.26.0",
@@ -43,7 +44,13 @@
 		"ts-jest": "29.1.1",
 		"ts-node": "10.9.1",
 		"typedoc": "^0.24.8",
-		"typescript": "~5.1.3"
+		"typescript": "~5.1.3",
+		"verdaccio": "^5.0.4",
+		"vite": "~4.3.9",
+		"vitest": "~0.32.0"
 	},
-	"homepage": "https://tsdoc-test-reporter.github.io/reporter"
+	"homepage": "https://tsdoc-test-reporter.github.io/reporter",
+	"nx": {
+		"includedScripts": []
+	}
 }

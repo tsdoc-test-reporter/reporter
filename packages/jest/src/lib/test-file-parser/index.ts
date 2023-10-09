@@ -1,24 +1,25 @@
-import { CommentTagParser } from '@tsdoc-test-reporter/core';
+import { CommentTagParser, FileParserConfig } from '@tsdoc-test-reporter/core';
 
-import type { FileParserConfig, TaggedTestResult } from '../types';
+import type { TaggedTestResult } from '../types';
+import type { TestResult } from '@jest/test-result';
 
 export const parseTestFiles = <CustomTags extends string>({
 	tsDocParser,
-	testResults,
+	result,
 	testBlockTagNames,
 	tagSeparator,
 	sourceFilesMap,
 	applyTags,
-}: FileParserConfig<CustomTags>): TaggedTestResult<CustomTags>[] => {
-	return testResults.flatMap((result) => {
+}: FileParserConfig<TestResult, CustomTags>): TaggedTestResult<CustomTags>[] => {
+	return result.flatMap((result) => {
 		const sourceFile = sourceFilesMap[result.testFilePath];
 		if (!sourceFile) return result;
 		const { testBlockDocComments } = new CommentTagParser<CustomTags>({
 			sourceFile,
-			tsDocParser: tsDocParser,
-			applyTags: applyTags,
+			tsDocParser,
+			applyTags,
 			testBlockTagNames,
-			tagSeparator: tagSeparator,
+			tagSeparator,
 		});
 		if (!testBlockDocComments.length) return result;
 		return {

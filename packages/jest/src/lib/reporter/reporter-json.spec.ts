@@ -1,3 +1,4 @@
+import { test, expect, vi, afterEach } from 'vitest';
 import * as fs from 'node:fs';
 import type { SourceFile } from 'typescript';
 
@@ -8,9 +9,11 @@ import {
 	taggedAggregatedResultFactory,
 } from '../test-utils/factory';
 
-jest.mock('node:fs');
+vi.mock('node:fs');
 
-afterEach(jest.resetAllMocks);
+afterEach(() => {
+	vi.resetAllMocks();
+});
 
 const testContext = new Set([testContextFactory()]);
 
@@ -18,8 +21,9 @@ const reporterGlobalConfig = globalConfigFactory();
 
 const aggregatedResult = taggedAggregatedResultFactory();
 
-jest.mock('@tsdoc-test-reporter/core', () => {
-	const actual = jest.requireActual('@tsdoc-test-reporter/core');
+vi.mock('@tsdoc-test-reporter/core', async () => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const actual = await vi.importActual<any>('@tsdoc-test-reporter/core');
 	const sourceFile = actual.testFileFactory({
 		fileName: 'reporter.ts',
 		options: [],

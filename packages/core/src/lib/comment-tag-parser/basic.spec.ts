@@ -1,3 +1,4 @@
+import { test, describe, expect } from 'vitest';
 import { TSDocParser } from '@microsoft/tsdoc';
 import { CommentTagParser } from './index';
 import { testFileFactory } from '../test-utils/factory/test-file';
@@ -20,7 +21,7 @@ describe('transform all tags in the standard', () => {
 			tags: allModifierTags,
 		}),
 	];
-	it.each(testData)(
+	test.each(testData)(
 		'$options.0.testBlockName: $options.0.tags.0.tagName: $options.0.tags.0',
 		({ expected, fileName, options, parserOptions }) => {
 			const { testBlockDocComments } = new CommentTagParser({
@@ -47,7 +48,7 @@ describe('transform all tags in the standard for each test block name', () => {
 			tagContent: ['a tag'],
 		}),
 	]);
-	it.each(testData)(
+	test.each(testData)(
 		'$options.0.testBlockName: $options.0.tags.0.tagName: $options.0.tags.0',
 		({ expected, fileName, options, parserOptions }) => {
 			const { testBlockDocComments } = new CommentTagParser({

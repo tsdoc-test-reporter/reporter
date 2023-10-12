@@ -1,14 +1,19 @@
+import { vi, test, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'node:fs';
 
 import { writeToFile } from './io.utils';
 
-jest.mock('node:fs');
+vi.mock('node:fs');
 
-beforeEach(jest.resetModules);
+beforeEach(() => {
+	vi.resetAllMocks();
+});
 
-afterEach(jest.resetAllMocks);
+afterEach(() => {
+	vi.resetAllMocks();
+});
 
-jest.mock('node:path', () => {
+vi.mock('node:path', () => {
 	return {
 		__esModule: true,
 		posix: {

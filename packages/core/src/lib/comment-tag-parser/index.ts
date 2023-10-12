@@ -1,7 +1,7 @@
 import { DocComment, TextRange, TSDocParser } from '@microsoft/tsdoc';
 import { type Node, type SourceFile, type CommentRange, type CallExpression } from 'typescript';
 
-import { allModifierTags, coreDefaults } from '../defaults';
+import { allModifierTags, ancestorTagNames, coreDefaults } from '../defaults';
 import type {
 	AllTagsName,
 	CommentTagParserConfig,
@@ -12,7 +12,7 @@ import type {
 	TestBlockDocComment,
 	TestBlockName,
 } from '../types';
-import { unquoteString } from '../utils/format.utils';
+import { unquoteString } from '../utils/string.utils';
 import { getJSDocCommentRanges, getNodeName, isTestBlock } from '../utils/ts.utils';
 import { docBlockToDocBlockTags, tagNameToTSDocBlock } from '../utils/tsdoc.utils';
 import { BlockTagName } from '../types';
@@ -102,11 +102,12 @@ export class CommentTagParser<CustomTag extends string> implements ICommentTagPa
 		node: CallExpression,
 	): (comment: CommentRange) => TestBlockDocComment<CustomTag> {
 		return (comment: CommentRange): TestBlockDocComment<CustomTag> => {
-			const nodeName = getNodeName(node) as 'describe' | 'test';
+			const nodeName = getNodeName(node) as TestBlockName;
 			const title = this.getTestTitle(node);
 			return {
 				testFilePath: this.sourceFile.fileName,
 				title,
+				type: ancestorTagNames.includes(nodeName) ? 'ancestor' : 'test',
 				testBlockName: nodeName,
 				testBlockTags: this.getBlockTags(this.parseTsDocCommentRange(comment), nodeName, title),
 				commentStartPosition: comment.pos,

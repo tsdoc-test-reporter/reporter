@@ -8,6 +8,7 @@
 output.html
 output.json
 tsdoc-test-reporter-report.json
+tsdoc-test-reporter-report.html
 
 # dependencies
 node_modules

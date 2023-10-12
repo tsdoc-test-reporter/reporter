@@ -5,6 +5,8 @@ import {
 	TSDocTagSyntaxKind,
 } from '@microsoft/tsdoc';
 
+import { test, expect } from 'vitest';
+
 import { CommentTagParser } from '.';
 import { testFileFactory } from '../test-utils/factory/test-file';
 import { TestBlockDocComment, TestBlockTag } from '../types';

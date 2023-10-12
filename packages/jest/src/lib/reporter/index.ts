@@ -4,23 +4,22 @@ import {
 	AllTagsName,
 	OutputFileType,
 	TestBlockName,
+	TsDocTestReporterConfig,
 	UIOptions,
 	coreDefaults,
+	defaultOutputFileName,
 	getCompilerOptions,
-	getSourceFileHelper,
+	getSourceFilesMap,
 	getTsDocParserConfig,
+	parseTestFiles,
+	render,
 	writeToFile,
 } from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
 
-import { defaultOutputFileName } from './defaultValues';
-
-import { render } from '../renderer';
-import { parseTestFiles } from '../test-file-parser';
-import type {
-	TaggedAggregatedResult,
-	TsDocTestReporterConfig,
-} from '../types';
+import type { TaggedAggregatedResult } from '../types';
+import { toUITestResults } from '../renderer';
+import { resultMapper } from './reporter.utils';
 
 export class TsDocTestReporter<CustomTags extends string = string>
 	implements Pick<Reporter, 'onRunComplete'>
@@ -33,48 +32,64 @@ export class TsDocTestReporter<CustomTags extends string = string>
 	private readonly outputFileName: string;
 	private readonly uiOptions: UIOptions;
 	private readonly compilerOptions: CompilerOptions;
+	private readonly outputJsonAs: 'raw' | 'ui';
 
-	constructor(_globalConfig: Config.GlobalConfig, config: TsDocTestReporterConfig<CustomTags>) {
-		this.applyTags = config.applyTags ?? (coreDefaults.applyTags as (AllTagsName | CustomTags)[]);
-		this.customTags = config.customTags;
-		this.tagSeparator = config.tagSeparator ?? coreDefaults.tagSeparator;
-		this.testBlockTagNames = config.testBlockTagNames ?? coreDefaults.testBlockTagNames;
-		this.outputFileType = config.outputFileType ?? 'html';
-		this.outputFileName = config.outputFileName ?? defaultOutputFileName;
-		this.uiOptions = config.uiOptions ?? {};
-		this.compilerOptions = getCompilerOptions(config.tsConfigPath);
+	constructor(_globalConfig: Config.GlobalConfig, options: TsDocTestReporterConfig<CustomTags>) {
+		this.applyTags = options.applyTags ?? (coreDefaults.applyTags as (AllTagsName | CustomTags)[]);
+		this.customTags = options.customTags;
+		this.tagSeparator = options.tagSeparator ?? coreDefaults.tagSeparator;
+		this.testBlockTagNames = options.testBlockTagNames ?? coreDefaults.testBlockTagNames;
+		this.outputFileType = options.outputFileType ?? 'html';
+		this.outputFileName = options.outputFileName ?? defaultOutputFileName;
+		this.outputJsonAs = options.outputJsonAs ?? 'raw';
+		this.uiOptions = options.uiOptions ?? {};
+		this.compilerOptions = getCompilerOptions(options.tsConfigPath);
+	}
+
+	private getBuffer(result: TaggedAggregatedResult): string {
+		switch (this.outputFileType) {
+			case 'html':
+				return render(toUITestResults(result.testResults, this.uiOptions), this.uiOptions);
+			case 'json':
+				return JSON.stringify(
+					this.outputJsonAs === 'raw'
+						? result
+						: {
+								results: toUITestResults(result.testResults, this.uiOptions),
+						  },
+				);
+			default:
+				return '';
+		}
 	}
 
 	public onRunComplete(
 		_testContexts: Set<TestContext>,
 		results: AggregatedResult,
 	): void | Promise<void> {
-		const fileNames = results.testResults.map((result) => result.testFilePath);
-		const getSourceFile = getSourceFileHelper(fileNames, this.compilerOptions);
-		const sourceFilesMap = Object.fromEntries(
-			results.testResults.map((result) => [
-				result.testFilePath,
-				getSourceFile(result.testFilePath),
-			]),
+		const sourceFilesMap = getSourceFilesMap(
+			results.testResults,
+			'testFilePath',
+			this.compilerOptions,
 		);
-
-		const result: TaggedAggregatedResult = {
-			...results,
-			testResults: parseTestFiles({
-				applyTags: this.applyTags,
-				tagSeparator: this.tagSeparator,
-				testBlockTagNames: this.testBlockTagNames,
-				result: results.testResults,
-				tsDocParser: new TSDocParser(getTsDocParserConfig(this.customTags)),
-				sourceFilesMap,
-			}),
-		};
+		const testResults = parseTestFiles({
+			result: results.testResults,
+			filePath: 'testFilePath',
+			resultMapper,
+			sourceFilesMap,
+			applyTags: this.applyTags,
+			tagSeparator: this.tagSeparator,
+			testBlockTagNames: this.testBlockTagNames,
+			tsDocParser: new TSDocParser(getTsDocParserConfig(this.customTags)),
+		});
 
 		writeToFile({
 			outputFileType: this.outputFileType,
 			outputFileName: this.outputFileName,
-			buffer:
-				this.outputFileType === 'html' ? render(result, this.uiOptions) : JSON.stringify(result),
+			buffer: this.getBuffer({
+				...results,
+				testResults,
+			}),
 		});
 	}
 }

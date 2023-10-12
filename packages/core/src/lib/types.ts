@@ -1,4 +1,4 @@
-import type { TSDocParser } from '@microsoft/tsdoc';
+import type { ITSDocTagDefinitionParameters, TSDocParser } from '@microsoft/tsdoc';
 import type { SourceFile } from 'typescript';
 
 /**
@@ -6,6 +6,8 @@ import type { SourceFile } from 'typescript';
  * is a user supplied tag.
  */
 export type TagType = 'standard' | 'custom';
+
+export type TestBlockType = 'test' | 'ancestor';
 
 /**
  * @hidden
@@ -64,7 +66,7 @@ export type TagKind = 'block' | 'modifier' | 'inline';
 /**
  * The internal representation of a parsed tag (`@`) from TSDoc.
  */
-export type TestBlockTag = {
+export type TestBlockTag<CustomTags extends string = string> = {
 	/**
 	 * If the tag is from the Standard TSDoc or is supplied
 	 * as a custom tag by the user.
@@ -85,7 +87,7 @@ export type TestBlockTag = {
 	 * "@remarks"
 	 * "@myCustomTag"
 	 */
-	name: string;
+	name: AllTagsName | CustomTags;
 	/** Specifies if it is a modifier or block tag  */
 	kind: TagKind;
 	/** Parsed name of test-function that the comment has been extracted from
@@ -107,23 +109,30 @@ export type TestBlockTag = {
 };
 
 export type TestBlockTagMap<CustomTags extends string = string> = Partial<
-	Record<AllTagsName | CustomTags, TestBlockTag>
+	Record<AllTagsName | CustomTags, TestBlockTag<CustomTags>>
 >;
 
+/**
+ * Representation of a TSDoc comment with all parsed tags
+ */
 export type TestBlockDocComment<CustomTags extends string = string> = {
 	testFilePath: string;
 	title: string;
 	testBlockName: TestBlockName;
+	type: TestBlockType;
 	testBlockTags?: TestBlockTagMap<CustomTags>;
 	commentStartPosition: number;
 	commentEndPosition: number;
 };
 
+/**
+ * Creates a type that has testBlockComments
+ * attached to it
+ */
 export type WithTestDocBlockComments<
 	Type extends object,
 	CustomTags extends string = string,
 > = Type & {
-	ancestorTestBlockComments?: TestBlockDocComment<CustomTags>[];
 	testBlockComments?: TestBlockDocComment<CustomTags>[];
 };
 
@@ -178,6 +187,43 @@ export type CommentTagParserConfig<CustomTags extends string> = {
 	tagSeparator?: string;
 };
 
+/**
+ * Main config for the reporter used by the consumer
+ */
+export type TsDocTestReporterConfig<CustomTags extends string = string> = Pick<
+	CommentTagParserConfig<CustomTags>,
+	'applyTags' | 'testBlockTagNames' | 'tagSeparator'
+> & {
+	customTags?: ITSDocTagDefinitionParameters[];
+	/**
+	 * @default "html"
+	 */
+	outputFileType?: OutputFileType;
+	/**
+	 * Specifies the name of the generated file. Supports folders.
+	 * @example
+	 * "output"
+	 * "reports/output"
+	 * @default 'tsdoc-test-reporter-report'
+	 */
+	outputFileName?: string;
+	/**
+	 * Sets if output when json is raw data or the same data that is rendered
+	 * when using HTML
+	 * @default 'raw'
+	 */
+	outputJsonAs?: 'raw' | 'ui';
+	/** Options to configure the output of `outputFileType: "html"` */
+	uiOptions?: UIOptions;
+	/**
+	 * Use this option if you have placed your tsconfig in a subfolder
+	 * or have renamed your config. The reporter will otherwise
+	 * look for the config in the root folder by default.
+	 * @default './tsconfig.json'
+	 */
+	tsConfigPath?: string;
+};
+
 export type CoreDefaults<CustomTags extends string = string> = {
 	testBlockTagNames: TestBlockName[];
 	tagSeparator: string;
@@ -217,6 +263,11 @@ export type UIOptions = {
 	hideAncestorTitles?: boolean;
 	/** Hides the tags from ancestors (describe blocks) on individual test result */
 	hideAncestorTags?: boolean;
+	/**
+	 * Custom formatting of test file path shown in accordion summary
+	 * @param title filepath
+	 */
+	formatTitle?: (title: string) => string;
 	/** Removes the `@` symbol on tags in the generated output.
 	 * @example
 	 * `@beta` -> `beta`
@@ -254,11 +305,41 @@ export type UIOptions = {
 /**
  * @internal
  */
-export type FileParserConfig<Result extends object, CustomTags extends string = string> = Pick<
-	CommentTagParserConfig<CustomTags>,
-	'applyTags' | 'testBlockTagNames' | 'tagSeparator'
-> & {
+export type FileParserConfig<
+	Result extends object,
+	Output extends object,
+	CustomTags extends string = string,
+> = Pick<CommentTagParserConfig<CustomTags>, 'applyTags' | 'testBlockTagNames' | 'tagSeparator'> & {
 	result: Result[];
 	tsDocParser: TSDocParser;
 	sourceFilesMap: Record<string, SourceFile | undefined>;
+	resultMapper: (result: Result, testBlockDocComments: TestBlockDocComment[]) => Output;
+	filePath: keyof Result;
+};
+
+export type UITag = {
+	text: string;
+	icon?: string;
+	type: TestBlockType;
+};
+
+export type UIAssertion = {
+	title: string;
+	ancestorTitles?: string[];
+	status: 'pass' | 'fail' | 'skip' | 'todo' | 'run' | 'only';
+	tags: UITag[];
+};
+
+export type UITestResultMeta = {
+	passed: number;
+	failed: number;
+	skipped: number;
+	todo: number;
+};
+
+export type UITestResult = {
+	title: string;
+	meta: UITestResultMeta;
+	aggregatedTags?: UITag[];
+	assertions: UIAssertion[];
 };

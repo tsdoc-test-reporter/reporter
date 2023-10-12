@@ -26,11 +26,11 @@
 			}
 		},
 		"test": {
-			"executor": "@nx/jest:jest",
-			"outputs": ["{workspaceRoot}/coverage/packages/core"],
+			"executor": "@nx/vite:test",
+			"outputs": ["{options.reportsDirectory}"],
 			"options": {
-				"jestConfig": "packages/core/jest.config.ts",
-				"passWithNoTests": true
+				"passWithNoTests": true,
+				"reportsDirectory": "../../coverage/packages/core"
 			}
 		}
 	},

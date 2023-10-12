@@ -1,54 +1,44 @@
-import { AssertionResult } from '@jest/test-result';
-import * as Handlebars from 'handlebars';
+import {
+	aggregateTags,
+	formatTitle,
+	getTagsFromTestBlockComments,
+	type UIAssertion,
+	type UIOptions,
+	type UITestResult,
+} from '@tsdoc-test-reporter/core';
+import type { TaggedTestResult } from '../types';
+import type { AssertionResult } from '@jest/test-result';
 
-import { readFileSync } from 'fs';
-import { dirname, resolve } from 'path';
-
-import { customColorMap, statusToIconMap } from './defaultValues';
-
-import { TaggedAggregatedResult, TaggedAssertionResult } from '../types';
-import { AnsiToHtmlConverter } from '../utils/ansi-to-html';
-import { renderTags, type TestBlockTag, type UIOptions } from '@tsdoc-test-reporter/core';
-import { aggregateTagsForResults } from './utils';
-
-export const render = (result: TaggedAggregatedResult, options?: UIOptions) => {
-	const templateName = 'aggregated-result-template.hbs';
-
-	const handlesbarsTemplate = resolve(dirname(__filename), 'templates', templateName);
-
-	const currentDirectory = process.cwd();
-
-	const templateFile = readFileSync(handlesbarsTemplate, 'utf-8');
-
-	const ansiConverter = new AnsiToHtmlConverter({
-		newline: true,
-		colors: options?.ansiCustomColorMap ?? customColorMap,
-	});
-
-	Handlebars.registerHelper('ansiToHTML', function (message: string) {
-		return ansiConverter.toHtml(message);
-	});
-
-	Handlebars.registerHelper('aggregateTagsToTitle', function (result: TaggedAssertionResult[]) {
-		return aggregateTagsForResults(result, options);
-	});
-
-	Handlebars.registerHelper('statusToIcon', function (status: AssertionResult['status']) {
-		return options?.statusToIconMap ? options?.statusToIconMap[status] : statusToIconMap[status];
-	});
-
-	Handlebars.registerHelper('formatTags', function (testBlockTag: TestBlockTag) {
-		return renderTags(options)(testBlockTag);
-	});
-
-	Handlebars.registerHelper('formatTitle', function (title: string) {
-		return title.replace(currentDirectory, '');
-	});
-
-	const template = Handlebars.compile(templateFile);
-	return template({
-		result,
-		...options,
-		title: options?.title ?? 'Test results',
-	});
+const jestStatusToUiStatus: Record<AssertionResult['status'], UIAssertion['status']> = {
+	passed: 'pass',
+	failed: 'fail',
+	skipped: 'skip',
+	pending: 'skip',
+	todo: 'todo',
+	disabled: 'skip',
+	focused: 'only',
 };
+
+export const toUITestResult =
+	(options?: UIOptions) =>
+	(result: TaggedTestResult): UITestResult => {
+		const assertions: UIAssertion[] = result.testResults.map((assertion) => ({
+			title: assertion.title,
+			status: jestStatusToUiStatus[assertion.status],
+			tags: getTagsFromTestBlockComments(assertion.testBlockComments, options),
+		}));
+		return {
+			title: formatTitle(result.testFilePath, options?.formatTitle),
+			meta: {
+				passed: result.numPassingTests,
+				failed: result.numFailingTests,
+				skipped: result.numPendingTests,
+				todo: result.numTodoTests,
+			},
+			aggregatedTags: aggregateTags(assertions),
+			assertions,
+		};
+	};
+
+export const toUITestResults = (results: TaggedTestResult[], options?: UIOptions) =>
+	results.map(toUITestResult(options));

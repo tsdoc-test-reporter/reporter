@@ -16,13 +16,7 @@ export const allModifierTags: ModifierTagName[] = [
 	'@virtual',
 ];
 
-export const testBlockTagNames: TestBlockName[] = [
-	'describe',
-	'describe.each',
-	'describe.only',
-	'describe.skip',
-	'describe.skip.each',
-	'describe.only.each',
+export const testTagNames: TestBlockName[] = [
 	'test',
 	'test.each',
 	'test.only',
@@ -50,6 +44,17 @@ export const testBlockTagNames: TestBlockName[] = [
 	'it.concurrent',
 	'it.concurrent.each',
 ];
+
+export const ancestorTagNames: TestBlockName[] = [
+	'describe',
+	'describe.each',
+	'describe.only',
+	'describe.skip',
+	'describe.skip.each',
+	'describe.only.each',
+];
+
+export const testBlockTagNames: TestBlockName[] = [...testTagNames, ...ancestorTagNames];
 
 export const coreDefaults: CoreDefaults<string> = {
 	testBlockTagNames: testBlockTagNames,

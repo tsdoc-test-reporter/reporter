@@ -10,8 +10,6 @@ export const assertionResultFactory: TestDataFactory<AssertionResult> = (overrid
 	numPassingAsserts: 0,
 	status: 'passed',
 	title: 'test',
-	testBlockComments: undefined,
-	ancestorTestBlockComments: undefined,
 	...overrides,
 	location: undefined,
 	ancestorTitles: overrides.ancestorTitles ?? [],

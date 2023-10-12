@@ -1,3 +1,4 @@
+import { test, vi } from 'vitest';
 import { SourceFile } from 'typescript';
 
 import { TsDocTestReporter } from '.';
@@ -13,8 +14,9 @@ const reporterGlobalConfig = globalConfigFactory();
 
 const aggregatedResult = taggedAggregatedResultFactory();
 
-jest.mock('@tsdoc-test-reporter/core', () => {
-	const actual = jest.requireActual('@tsdoc-test-reporter/core');
+vi.mock('@tsdoc-test-reporter/core', async () => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const actual = await vi.importActual<any>('@tsdoc-test-reporter/core');
 	const sourceFile = actual.testFileFactory({
 		fileName: 'reporter.ts',
 		options: [],

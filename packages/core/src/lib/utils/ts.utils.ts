@@ -71,6 +71,18 @@ export const getSourceFileHelper = (
 	return (fileName: string): SourceFile | undefined => program.getSourceFile(fileName);
 };
 
+export const getSourceFilesMap = <TestResult extends object, Key extends keyof TestResult>(
+	results: TestResult[],
+	filepath: Key,
+	compilerOptions: CompilerOptions,
+) => {
+	const fileNames = results.map((result) => result[filepath] as string);
+	const getSourceFile = getSourceFileHelper(fileNames, compilerOptions);
+	return Object.fromEntries(
+		results.map((result) => [result[filepath], getSourceFile(result[filepath] as string)]),
+	);
+};
+
 export const getCompilerOptionsThatFollowExtends = (filename: string): CompilerOptions => {
 	let compositeOptions = {};
 	const config = readConfigFile(filename, sys.readFile).config;

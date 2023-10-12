@@ -7,12 +7,11 @@ export default defineConfig({
 	cacheDir: '../../node_modules/.vite/vitest',
 	plugins: [nxViteTsPaths()],
 	test: {
-		globals: true,
 		cache: {
 			dir: '../../node_modules/.vitest',
 		},
 		environment: 'node',
-		reporters: ["./src/index.ts"],
+		reporters: ['./src/index.ts'],
 		include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 	},
 });

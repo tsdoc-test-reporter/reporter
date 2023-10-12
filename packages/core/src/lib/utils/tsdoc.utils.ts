@@ -11,7 +11,7 @@ import {
 } from '@microsoft/tsdoc';
 
 import type { BlockTagName } from '../types';
-import { trim } from './format.utils';
+import { trim } from './string.utils';
 
 type DocCommentSections = Pick<DocComment, 'remarksBlock' | 'privateRemarks' | 'deprecatedBlock'>;
 

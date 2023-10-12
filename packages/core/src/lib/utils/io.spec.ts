@@ -1,13 +1,14 @@
+import { test, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as fs from 'node:fs';
 
 import { writeToFile } from './io.utils';
 import { getCompilerOptions } from './ts.utils';
 
-jest.mock('node:fs');
+vi.mock('node:fs');
 
-jest.mock('@tsdoc-test-reporter/core', () => {
+vi.mock('@tsdoc-test-reporter/core', async () => {
 	return {
-		...jest.requireActual('@tsdoc-test-reporter/core'),
+		...vi.importActual('@tsdoc-test-reporter/core'),
 		getCompilerOptionsThatFollowExtends: () => ({
 			declaration: false,
 			target: 'es2015',
@@ -17,9 +18,13 @@ jest.mock('@tsdoc-test-reporter/core', () => {
 	};
 });
 
-beforeEach(jest.resetModules);
+beforeEach(() => {
+	vi.resetAllMocks();
+});
 
-afterEach(jest.resetAllMocks);
+afterEach(() => {
+	vi.resetAllMocks();
+});
 
 test('writes html file to simple file name', () => {
 	writeToFile({
@@ -56,7 +61,7 @@ test('writes to nested folder', () => {
 });
 
 test('gets default compiler options', () => {
-	jest.spyOn(fs, 'existsSync').mockReturnValue(false);
+	vi.spyOn(fs, 'existsSync').mockReturnValue(false);
 	const compilerOptions = getCompilerOptions();
 	expect(compilerOptions).toEqual({
 		target: 99,
@@ -64,8 +69,8 @@ test('gets default compiler options', () => {
 });
 
 test.skip('gets compiler options from tsConfig.json', () => {
-	jest.spyOn(fs, 'existsSync').mockReturnValue(true);
-	const consoleSpy = jest.spyOn(console, 'log');
+	vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+	const consoleSpy = vi.spyOn(console, 'log');
 	const compilerOptions = getCompilerOptions();
 	expect(compilerOptions).toEqual({
 		declaration: false,

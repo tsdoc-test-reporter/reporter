@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"outDir": "../../dist/out-tsc",
 		"module": "commonjs",
-		"types": ["jest", "node"]
+		"types": ["vitest/importMeta", "vite/client", "node", "vitest"]
 	},
 	"include": [
 		"jest.config.ts",

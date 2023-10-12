@@ -30,11 +30,11 @@
 			}
 		},
 		"test": {
-			"executor": "@nx/jest:jest",
-			"outputs": ["{workspaceRoot}/coverage/packages/jest"],
+			"executor": "@nx/vite:test",
+			"outputs": ["{options.reportsDirectory}"],
 			"options": {
-				"jestConfig": "packages/jest/jest.config.ts",
-				"passWithNoTests": true
+				"passWithNoTests": true,
+				"reportsDirectory": "../../coverage/packages/jest"
 			}
 		}
 	},

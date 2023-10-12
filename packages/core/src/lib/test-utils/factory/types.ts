@@ -1,4 +1,4 @@
-type DeepPartial<T> = {
+export type DeepPartial<T> = {
 	[P in keyof T]?: T[P] extends (infer U)[]
 		? DeepPartial<U>[]
 		: T[P] extends Readonly<infer U>[]
@@ -10,4 +10,6 @@ type DeepPartial<T> = {
  * @internal
  * @hidden
  */
-export type TestDataFactory<Model> = (overrides?: DeepPartial<Model>) => Model;
+export type TestDataFactory<Model, ReturnModel = Model> = (
+	overrides?: DeepPartial<Model>,
+) => ReturnModel;

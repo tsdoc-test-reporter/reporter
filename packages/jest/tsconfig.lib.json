@@ -3,9 +3,8 @@
 	"compilerOptions": {
 		"outDir": "../../dist/out-tsc",
 		"declaration": true,
-		"module": "CommonJS",
-		"types": []
+		"types": ["node", "vitest"]
 	},
-	"include": ["**/*.ts", "../core/src/lib/utils/tsdoc.util.ts"],
-	"exclude": ["jest.config.ts", "**/*.spec.ts", "**/test-data", "**/test-utils"]
+	"include": ["src/**/*.ts"],
+	"exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }

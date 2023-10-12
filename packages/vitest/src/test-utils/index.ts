@@ -1,1 +1,10 @@
-export { taskResultFactory, taskFactory, fileFactory } from './factory';
+export {
+	taskResultFactory,
+	taskFactory,
+	fileFactory,
+	testFactory,
+	suiteFactory,
+	taggedSuiteFactory,
+	taggedTestFactory,
+	taggedFileFactory,
+} from './factory';

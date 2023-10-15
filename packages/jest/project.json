@@ -5,7 +5,7 @@
 	"projectType": "library",
 	"targets": {
 		"publish": {
-			"command": "node tools/scripts/publish.mjs jest {args.ver} {args.tag}",
+			"command": "node tools/scripts/publish.mjs jest {args.tag} {args.version}",
 			"dependsOn": ["lint", "test", "build"]
 		},
 		"build": {

@@ -1,5 +1,7 @@
 # path to a directory with all packages
 storage: ../tmp/local-registry/storage
+listen:
+  - 0.0.0.0:4873
 
 # a list of other known repositories we can talk to
 uplinks:
@@ -8,6 +10,12 @@ uplinks:
     maxage: 60m
 
 packages:
+  '@tsdoc-test-reporter/*':
+    # scoped packages
+    access: $all
+    publish: $all
+    unpublish: $all
+    proxy: npmjs
   '**':
     # give all users (including non-authenticated users) full access
     # because it is a local registry

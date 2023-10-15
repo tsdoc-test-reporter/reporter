@@ -1,6 +1,6 @@
-# Contributing to TSDoc Test Reporter
+# Contributing to @tsdoc-test-reporter
 
-A big welcome and thank you for considering contributing to _TSDoc Test Reporter_!
+A big welcome and thank you for considering contributing to _@tsdoc-test-reporter_!
 
 Reading and following these guidelines will help us make the contribution process easy and effective for everyone involved. It also communicates that you agree to respect the time of the developers managing and developing these open source projects. In return, we will reciprocate that respect by addressing your issue, assessing changes, and helping you finalize your pull requests.
 
@@ -9,6 +9,7 @@ Reading and following these guidelines will help us make the contribution proces
 - [Getting Started](#getting-started)
   - [Issues](#issues)
   - [Pull Requests](#pull-requests)
+  - [Local setup](#local-setup)
 - [License](#license)
 
 ## Getting Started
@@ -38,6 +39,25 @@ In general, we follow the ["fork-and-pull" Git workflow](https://github.com/susa
 6. Push changes to your fork
 7. Open a PR in our repository and follow the PR template so that we can efficiently review the changes.
 
-### License
+## Local setup
+
+1. Install pnpm ([instructions here on pnpms website](https://pnpm.io/installation))
+2. Install dependencies with pnpm
+```bash
+pnpm install
+```
+3. Run the tests. This is the main way to test each package:
+```bash
+# test core
+pnpm nx test core
+# test jest
+pnpm nx test jest
+# test vitest
+pnpm nx test vitest
+```
+
+Note that the `vitest`-package is setup to call itself when tests have been run with the default config. A HTML-report will be generated in the root folder of the project where you can view the output of the tests. This is only setup for Vitest as it is not right now technically possible to do the same for Jest.
+
+## License
 
 By contributing, you agree that your contributions will be licensed under its MIT License.

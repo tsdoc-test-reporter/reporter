@@ -5,7 +5,7 @@
 	"projectType": "library",
 	"targets": {
 		"publish": {
-			"command": "node tools/scripts/publish.mjs vitest {args.ver} {args.tag}",
+			"command": "node tools/scripts/publish.mjs vitest {args.tag} {args.version}",
 			"dependsOn": ["test", "lint", "build"]
 		},
 		"build": {

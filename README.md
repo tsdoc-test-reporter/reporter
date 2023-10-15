@@ -14,13 +14,23 @@
 
 ## Installing
 
+### Jest
+
 ```bash
 npm install @tsdoc-test-reporter/jest
+```
+
+### Vitest
+
+```bash
+npm install @tsdoc-test-reporter/vitest
 ```
 
 ## Usage
 
 ### Basic
+
+#### Jest
 
 1. Add reporter to your jest config (`jest.config.js`)
 
@@ -80,6 +90,8 @@ module.exports = {
 ```
 
 ### With Custom User Supplied tags
+
+#### Jest
 
 ```js
 const { coreDefaults } = require('@tsdoc-test-reporter/jest');

@@ -1,11 +1,15 @@
-# vitest
+# @tsdoc-test-reporter/vitest
 
-This library was generated with [Nx](https://nx.dev).
+TsDoc Test Teporter for Vitest
 
-## Building
+## Installing
 
-Run `nx build vitest` to build the library.
+```bash
+npm install @tsdoc-test-reporter/vitest
+```
 
-## Running unit tests
+## Testing
 
-Run `nx test vitest` to execute the unit tests via [Jest](https://jestjs.io).
+```bash
+pnpm nx test vitest
+```

@@ -1,6 +1,18 @@
 # @tsdoc-test-reporter/core
 
-`@tsdoc-test-reporter/core` contains the main logic for parsing comment tags from a TypeScript file. It requires a TypeScript `SourceFile` and the `TSDocParser` from `@microsoft/tsdoc`.
+@tsdoc-test-reporter/core contains the main logic for parsing comment tags from a TypeScript file. It requires a TypeScript `SourceFile` and the `TSDocParser` from `@microsoft/tsdoc`.
+
+## Installing
+
+```bash
+npm install @tsdoc-test-reporter/core
+```
+
+## Testing
+
+```bash
+pnpm nx test core
+```
 
 ## Minimal required setup
 

@@ -1,5 +1,5 @@
 import { test, expect, describe } from 'vitest';
-import { UITestResult, testDocBlockCommentFactory } from '@tsdoc-test-reporter/core';
+import { UIAssertion, UITestResult, testDocBlockCommentFactory } from '@tsdoc-test-reporter/core';
 import { taggedFileFactory, taggedSuiteFactory, taggedTestFactory } from '../../test-utils';
 import { aggregateAssertions, toUITestResult } from './index';
 
@@ -33,7 +33,7 @@ describe('aggregate assertions', () => {
 				[],
 				[],
 			),
-		).toEqual([
+		).toEqual<UIAssertion[]>([
 			{
 				ancestorTitles: [],
 				status: 'pass',
@@ -42,6 +42,7 @@ describe('aggregate assertions', () => {
 					{
 						type: 'test',
 						text: '@alpha',
+						name: "@alpha",
 						icon: undefined,
 					},
 				],
@@ -96,7 +97,7 @@ describe('aggregate assertions', () => {
 				[],
 				[],
 			),
-		).toEqual([
+		).toEqual<UIAssertion[]>([
 			{
 				ancestorTitles: ['describe name'],
 				status: 'pass',
@@ -105,11 +106,13 @@ describe('aggregate assertions', () => {
 					{
 						type: 'test',
 						text: '@beta',
+						name: "@beta",
 						icon: undefined,
 					},
 					{
 						type: 'ancestor',
 						text: '@alpha',
+						name: "@alpha",
 						icon: undefined,
 					},
 				],
@@ -165,7 +168,7 @@ describe('aggregate assertions', () => {
 				[],
 				{ hideAncestorTags: true },
 			),
-		).toEqual([
+		).toEqual<UIAssertion[]>([
 			{
 				ancestorTitles: ['describe name'],
 				status: 'pass',
@@ -174,6 +177,7 @@ describe('aggregate assertions', () => {
 					{
 						type: 'test',
 						text: '@beta',
+						name: "@beta",
 						icon: undefined,
 					},
 				],
@@ -185,7 +189,7 @@ describe('aggregate assertions', () => {
 describe('ui result', () => {
 	test('convert to ui result', () => {
 		expect(
-			toUITestResult()(
+			toUITestResult({ aggregateTagsToFileHeading: true, })(
 				taggedFileFactory({
 					name: 'file name',
 					filepath: 'test-file-path.ts',
@@ -221,6 +225,7 @@ describe('ui result', () => {
 					icon: undefined,
 					text: '@alpha',
 					type: 'test',
+					name: "@alpha",
 				},
 			],
 			assertions: [
@@ -233,6 +238,7 @@ describe('ui result', () => {
 							icon: undefined,
 							text: '@alpha',
 							type: 'test',
+							name: "@alpha",
 						},
 					],
 				},
@@ -249,7 +255,7 @@ describe('ui result', () => {
 
 	test('convert nested to ui result', () => {
 		expect(
-			toUITestResult()(
+			toUITestResult({ aggregateTagsToFileHeading: true })(
 				taggedFileFactory({
 					name: 'file name',
 					filepath: 'test-file-path.ts',
@@ -306,11 +312,13 @@ describe('ui result', () => {
 					icon: undefined,
 					text: '@alpha',
 					type: 'test',
+					name: "@alpha",
 				},
 				{
 					icon: undefined,
 					text: '@beta',
 					type: 'ancestor',
+					name: "@beta",
 				},
 			],
 			assertions: [
@@ -323,11 +331,13 @@ describe('ui result', () => {
 							icon: undefined,
 							text: '@alpha',
 							type: 'test',
+							name: "@alpha",
 						},
 						{
 							icon: undefined,
 							text: '@beta',
 							type: 'ancestor',
+							name: "@beta",
 						},
 					],
 				},

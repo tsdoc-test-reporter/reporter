@@ -245,6 +245,9 @@ export type UIOptions = {
 	 * ```js
 	 * { aggregateTagsToFileHeading: ["@remarks"] }
 	 * ```
+	 * ```js
+	 * { aggregateTagsToFileHeading: "onlyAncestors" }
+	 * ```
 	 * @default false
 	 */
 	aggregateTagsToFileHeading?: boolean | 'withoutAncestors' | 'onlyAncestors' | AllTagsName[];
@@ -321,6 +324,7 @@ export type UITag = {
 	text: string;
 	icon?: string;
 	type: TestBlockType;
+	name: AllTagsName;
 };
 
 export type UIAssertion = {

@@ -11,5 +11,6 @@ export const uiTagFactory: TestDataFactory<UITag> = (overrides = {}) => ({
   text: "tag",
   type: "test",
   icon: undefined,
+  name: "@alpha",
   ...overrides,
 });

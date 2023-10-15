@@ -11,7 +11,6 @@ test("format results", () => {
       statusMap: statusToIconMap,
     })
   );
-  console.log(result);
   expect(result).toEqual(
     expect.stringContaining(
       `<details class="test-details">`

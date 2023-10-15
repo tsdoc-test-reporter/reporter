@@ -43,10 +43,13 @@ export const toUITestResult =
 	(options?: UIOptions) =>
 	(file: TaggedFile): UITestResult => {
 		const assertions = file.tasks ? aggregateAssertions(file.tasks, [], [], options) : [];
+		const aggregatedTags =  options?.aggregateTagsToFileHeading
+			? aggregateTags(assertions, options.aggregateTagsToFileHeading)
+			: undefined;
 		return {
 			title: formatTitle(file.filepath, options?.formatTitle),
 			meta: aggregateMeta(assertions),
-			aggregatedTags: aggregateTags(assertions),
+			aggregatedTags,
 			assertions,
 		};
 	};

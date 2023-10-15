@@ -1,4 +1,5 @@
 import type {
+	AllTagsName,
 	TestBlockDocComment,
 	UIAssertion,
 	UIOptions,
@@ -23,12 +24,14 @@ export const getTagsFromTestBlockComments = (
 				if (tag.tags?.length) {
 					return tag.tags.map((blockTag) => ({
 						type: t.type,
+						name: tag.name as AllTagsName,
 						text: options?.showTagNameOnBlockTags ? `${tag.name}: ${blockTag}` : blockTag,
 						icon: options?.tagTitleToIconMap ? options.tagTitleToIconMap[blockTag] : undefined,
 					}));
 				}
 				return {
 					type: t.type,
+					name: tag.name as AllTagsName,
 					text: options?.removeAtSignOnTags ? tag.name.replace('@', '') : tag.name,
 					icon: options?.tagTitleToIconMap ? options.tagTitleToIconMap[tag.name] : undefined,
 				};
@@ -69,8 +72,26 @@ export const formatTitle = (title: string, customFormatter?: (title: string) => 
 /**
  * Extracts all tags from assertions and remove duplicates
  */
-export const aggregateTags = (assertions: UIAssertion[]): UITag[] => {
-	return [...new Map(assertions.flatMap((t) => t.tags).map((t) => [t.text, t])).values()];
+export const aggregateTags = (
+	assertions: UIAssertion[],
+	option: UIOptions["aggregateTagsToFileHeading"]
+): UITag[] => {
+	return [...new Map(
+		assertions
+			.flatMap((a) => a.tags)
+			.filter(t => {
+				if(option === "onlyAncestors") {
+					return t.type === "ancestor";
+				}
+				if(option === "withoutAncestors") {
+					return t.type === "test";
+				}
+				if(Array.isArray(option)) {
+					return option.includes(t.name);
+				}
+				return true;
+			})
+			.map((t) => [t.text, t])).values()];
 };
 
 export const render = (results: UITestResult[], options?: UIOptions) => {

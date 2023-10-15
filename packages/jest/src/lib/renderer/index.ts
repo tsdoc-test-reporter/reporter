@@ -27,6 +27,9 @@ export const toUITestResult =
 			status: jestStatusToUiStatus[assertion.status],
 			tags: getTagsFromTestBlockComments(assertion.testBlockComments, options),
 		}));
+		const aggregatedTags = options?.aggregateTagsToFileHeading
+			? aggregateTags(assertions, options.aggregateTagsToFileHeading)
+			: undefined;
 		return {
 			title: formatTitle(result.testFilePath, options?.formatTitle),
 			meta: {
@@ -35,7 +38,7 @@ export const toUITestResult =
 				skipped: result.numPendingTests,
 				todo: result.numTodoTests,
 			},
-			aggregatedTags: aggregateTags(assertions),
+			aggregatedTags,
 			assertions,
 		};
 	};

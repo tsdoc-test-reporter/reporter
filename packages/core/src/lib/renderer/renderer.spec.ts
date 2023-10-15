@@ -14,6 +14,7 @@ describe('aggregate tags', () => {
 						{
 							text: '@alpha',
 							type: 'test',
+              name: "@alpha",
 						},
 					],
 				},
@@ -24,14 +25,122 @@ describe('aggregate tags', () => {
 						{
 							text: '@alpha',
 							type: 'test',
+              name: "@alpha",
 						},
 					],
 				},
-			]),
-		).toEqual([
+			], false),
+		).toEqual<UITag[]>([
 			{
 				text: '@alpha',
 				type: 'test',
+        name: "@alpha",
+			},
+		]);
+	});
+
+  test('should only aggregate ancestors', () => {
+		expect(
+			aggregateTags([
+				{
+					title: 'title',
+					status: 'pass',
+					tags: [
+						{
+							text: '@alpha',
+							type: 'test',
+              name: "@alpha",
+						},
+					],
+				},
+				{
+					title: 'title',
+					status: 'pass',
+					tags: [
+						{
+							text: '@beta',
+							type: 'ancestor',
+              name: "@beta",
+						},
+					],
+				},
+			], "onlyAncestors"),
+		).toEqual<UITag[]>([
+			{
+				text: '@beta',
+				type: 'ancestor',
+        name: "@beta",
+			},
+		]);
+	});
+
+  test('should only aggregate without ancestors', () => {
+		expect(
+			aggregateTags([
+				{
+					title: 'title',
+					status: 'pass',
+					tags: [
+						{
+							text: '@alpha',
+							type: 'test',
+              name: "@alpha",
+						},
+					],
+				},
+				{
+					title: 'title',
+					status: 'pass',
+					tags: [
+						{
+							text: '@beta',
+							type: 'ancestor',
+              name: "@beta",
+						},
+					],
+				},
+			], "withoutAncestors"),
+		).toEqual<UITag[]>([
+			{
+				text: '@alpha',
+				type: 'test',
+        name: "@alpha",
+			},
+		]);
+	});
+
+
+  test('should only aggregate certain tags', () => {
+		expect(
+			aggregateTags([
+				{
+					title: 'title',
+					status: 'pass',
+					tags: [
+						{
+							text: '@alpha',
+							type: 'test',
+              name: "@alpha",
+						},
+					],
+				},
+				{
+					title: 'title',
+					status: 'pass',
+					tags: [
+						{
+							text: '@beta',
+							type: 'ancestor',
+              name: "@beta",
+						},
+					],
+				},
+			], ["@alpha"]),
+		).toEqual<UITag[]>([
+			{
+				text: '@alpha',
+				type: 'test',
+        name: "@alpha",
 			},
 		]);
 	});
@@ -146,16 +255,19 @@ describe("get tags from test block comments", () => {
         text: "@alpha",
         type: "test",
         icon: undefined,
+        name: "@alpha",
       },
       {
         text: "@beta",
         type: "ancestor",
         icon: undefined,
+        name: "@beta",
       },
       {
         text: "tag",
         type: "ancestor",
         icon: undefined,
+        name: "@remarks"
       }
     ])
   })
@@ -188,6 +300,7 @@ describe("get tags from test block comments", () => {
         text: "@remarks: tag",
         type: "test",
         icon: undefined,
+        name: "@remarks",
       }
     ])
   })
@@ -219,6 +332,7 @@ describe("get tags from test block comments", () => {
         text: "alpha",
         type: "test",
         icon: undefined,
+        name: "@alpha",
       }
     ])
   })
@@ -250,6 +364,7 @@ describe("get tags from test block comments", () => {
         text: "@alpha",
         type: "test",
         icon: "🎉",
+        name: "@alpha",
       }
     ])
   })

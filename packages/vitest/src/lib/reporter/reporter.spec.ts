@@ -31,11 +31,9 @@ vi.mock('@tsdoc-test-reporter/core', async () => {
 	});
 	return {
 		...actual,
-		getSourceFileHelper: () => (fileName: string) => {
-			return {
+		getSourceFilesMap: () =>({
 				[sourceFile.fileName]: sourceFile,
-			}[fileName];
-		},
+		})
 	};
 });
 
@@ -105,16 +103,6 @@ test('create json report with output as ui results', () => {
 					skipped: 0,
 					todo: 0,
 				},
-				aggregatedTags: [
-					{
-						type: 'test',
-						text: 'unit',
-					},
-					{
-						type: 'test',
-						text: 'acceptance',
-					},
-				],
 				assertions: [
 					{
 						title: 'test name',
@@ -122,10 +110,12 @@ test('create json report with output as ui results', () => {
 						tags: [
 							{
 								type: 'test',
+								name: "@remarks",
 								text: 'unit',
 							},
 							{
 								type: 'test',
+								name: "@remarks",
 								text: 'acceptance',
 							},
 						],

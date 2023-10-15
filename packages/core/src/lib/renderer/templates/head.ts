@@ -193,7 +193,6 @@ export const formatHead = ({ title, style }: Props): string =>
 			.tag {
 				padding: 0.15rem 0.25rem;
 				border-radius: 4px;
-				font-size: 0.85rem;
 				border: 1px solid var(--tag-border-color);
 				background-color: var(--tag-background-color);
 			}

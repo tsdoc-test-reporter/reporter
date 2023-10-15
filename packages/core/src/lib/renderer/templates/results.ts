@@ -12,7 +12,7 @@ export const formatResults = ({ results, statusMap }: Props): string =>
 		.map(
 			(result) =>
 				` <details class="test-details">
-				${formatSummary({ title: result.title, meta: result.meta })}
+				${formatSummary({ title: result.title, meta: result.meta, tags: result.aggregatedTags })}
 				${formatContent({ assertions: result.assertions, statusMap })}
 			</details>`,
 		)

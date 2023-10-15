@@ -42,7 +42,7 @@ describe('aggregate assertions', () => {
 					{
 						type: 'test',
 						text: '@alpha',
-						name: "@alpha",
+						name: '@alpha',
 						icon: undefined,
 					},
 				],
@@ -106,13 +106,13 @@ describe('aggregate assertions', () => {
 					{
 						type: 'test',
 						text: '@beta',
-						name: "@beta",
+						name: '@beta',
 						icon: undefined,
 					},
 					{
 						type: 'ancestor',
 						text: '@alpha',
-						name: "@alpha",
+						name: '@alpha',
 						icon: undefined,
 					},
 				],
@@ -177,7 +177,7 @@ describe('aggregate assertions', () => {
 					{
 						type: 'test',
 						text: '@beta',
-						name: "@beta",
+						name: '@beta',
 						icon: undefined,
 					},
 				],
@@ -189,7 +189,7 @@ describe('aggregate assertions', () => {
 describe('ui result', () => {
 	test('convert to ui result', () => {
 		expect(
-			toUITestResult({ aggregateTagsToFileHeading: true, })(
+			toUITestResult({ aggregateTagsToFileHeading: true })(
 				taggedFileFactory({
 					name: 'file name',
 					filepath: 'test-file-path.ts',
@@ -225,7 +225,7 @@ describe('ui result', () => {
 					icon: undefined,
 					text: '@alpha',
 					type: 'test',
-					name: "@alpha",
+					name: '@alpha',
 				},
 			],
 			assertions: [
@@ -238,7 +238,7 @@ describe('ui result', () => {
 							icon: undefined,
 							text: '@alpha',
 							type: 'test',
-							name: "@alpha",
+							name: '@alpha',
 						},
 					],
 				},
@@ -312,13 +312,13 @@ describe('ui result', () => {
 					icon: undefined,
 					text: '@alpha',
 					type: 'test',
-					name: "@alpha",
+					name: '@alpha',
 				},
 				{
 					icon: undefined,
 					text: '@beta',
 					type: 'ancestor',
-					name: "@beta",
+					name: '@beta',
 				},
 			],
 			assertions: [
@@ -331,13 +331,13 @@ describe('ui result', () => {
 							icon: undefined,
 							text: '@alpha',
 							type: 'test',
-							name: "@alpha",
+							name: '@alpha',
 						},
 						{
 							icon: undefined,
 							text: '@beta',
 							type: 'ancestor',
-							name: "@beta",
+							name: '@beta',
 						},
 					],
 				},

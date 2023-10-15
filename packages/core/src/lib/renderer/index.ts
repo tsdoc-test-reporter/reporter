@@ -74,24 +74,27 @@ export const formatTitle = (title: string, customFormatter?: (title: string) => 
  */
 export const aggregateTags = (
 	assertions: UIAssertion[],
-	option: UIOptions["aggregateTagsToFileHeading"]
+	option: UIOptions['aggregateTagsToFileHeading'],
 ): UITag[] => {
-	return [...new Map(
-		assertions
-			.flatMap((a) => a.tags)
-			.filter(t => {
-				if(option === "onlyAncestors") {
-					return t.type === "ancestor";
-				}
-				if(option === "withoutAncestors") {
-					return t.type === "test";
-				}
-				if(Array.isArray(option)) {
-					return option.includes(t.name);
-				}
-				return true;
-			})
-			.map((t) => [t.text, t])).values()];
+	return [
+		...new Map(
+			assertions
+				.flatMap((a) => a.tags)
+				.filter((t) => {
+					if (option === 'onlyAncestors') {
+						return t.type === 'ancestor';
+					}
+					if (option === 'withoutAncestors') {
+						return t.type === 'test';
+					}
+					if (Array.isArray(option)) {
+						return option.includes(t.name);
+					}
+					return true;
+				})
+				.map((t) => [t.text, t]),
+		).values(),
+	];
 };
 
 export const render = (results: UITestResult[], options?: UIOptions) => {

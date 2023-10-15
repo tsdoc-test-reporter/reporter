@@ -31,9 +31,9 @@ vi.mock('@tsdoc-test-reporter/core', async () => {
 	});
 	return {
 		...actual,
-		getSourceFilesMap: () =>({
-				[sourceFile.fileName]: sourceFile,
-		})
+		getSourceFilesMap: () => ({
+			[sourceFile.fileName]: sourceFile,
+		}),
 	};
 });
 
@@ -110,12 +110,12 @@ test('create json report with output as ui results', () => {
 						tags: [
 							{
 								type: 'test',
-								name: "@remarks",
+								name: '@remarks',
 								text: 'unit',
 							},
 							{
 								type: 'test',
-								name: "@remarks",
+								name: '@remarks',
 								text: 'acceptance',
 							},
 						],

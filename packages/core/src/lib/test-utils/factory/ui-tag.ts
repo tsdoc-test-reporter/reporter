@@ -8,9 +8,9 @@ import type { UITag } from '../../types';
  * Factory function for creating a {@link UITag}
  */
 export const uiTagFactory: TestDataFactory<UITag> = (overrides = {}) => ({
-  text: "tag",
-  type: "test",
-  icon: undefined,
-  name: "@alpha",
-  ...overrides,
+	text: 'tag',
+	type: 'test',
+	icon: undefined,
+	name: '@alpha',
+	...overrides,
 });

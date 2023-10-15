@@ -22,9 +22,9 @@ vi.mock('@tsdoc-test-reporter/core', async () => {
 	});
 	return {
 		...actual,
-		getSourceFilesMap: () =>({
-				[sourceFile.fileName]: sourceFile,
-		})
+		getSourceFilesMap: () => ({
+			[sourceFile.fileName]: sourceFile,
+		}),
 	};
 });
 

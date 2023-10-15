@@ -43,7 +43,7 @@ export const toUITestResult =
 	(options?: UIOptions) =>
 	(file: TaggedFile): UITestResult => {
 		const assertions = file.tasks ? aggregateAssertions(file.tasks, [], [], options) : [];
-		const aggregatedTags =  options?.aggregateTagsToFileHeading
+		const aggregatedTags = options?.aggregateTagsToFileHeading
 			? aggregateTags(assertions, options.aggregateTagsToFileHeading)
 			: undefined;
 		return {

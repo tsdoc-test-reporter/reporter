@@ -6,4 +6,4 @@ export const trim = (s: string) => s.trim();
 
 export const stripTabsAndNewlines = (s: string): string => {
 	return s.replace(/\t/g, '').replace(/\r/g, '').replace(/\n/g, '');
-} 
+};

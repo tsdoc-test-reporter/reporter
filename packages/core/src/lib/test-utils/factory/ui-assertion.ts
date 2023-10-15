@@ -9,9 +9,9 @@ import { uiTagFactory } from './ui-tag';
  * Factory function for creating a {@link UIAssertion}
  */
 export const uiAssertionFactory: TestDataFactory<UIAssertion> = (overrides = {}) => ({
-  title: "assertion title",
-  status: "pass",
-  ...overrides,
-  ancestorTitles: overrides.ancestorTitles as string[] ?? [],
-  tags: overrides.tags?.map(uiTagFactory) ?? [],
+	title: 'assertion title',
+	status: 'pass',
+	...overrides,
+	ancestorTitles: (overrides.ancestorTitles as string[]) ?? [],
+	tags: overrides.tags?.map(uiTagFactory) ?? [],
 });

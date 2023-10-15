@@ -11,8 +11,8 @@ import { uiAssertionFactory } from './ui-assertion';
  * Factory function for creating a {@link UITestResult}
  */
 export const uiTestResultFactory: TestDataFactory<UITestResult> = (overrides = {}) => ({
-  title: "test result title",
-  ...overrides,
+	title: 'test result title',
+	...overrides,
 	meta: uiTestResultMetaFactory(overrides.meta),
 	aggregatedTags: overrides.aggregatedTags?.map(uiTagFactory) ?? undefined,
 	assertions: overrides.assertions?.map(uiAssertionFactory) ?? [],

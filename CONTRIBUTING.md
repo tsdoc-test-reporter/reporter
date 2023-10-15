@@ -43,10 +43,13 @@ In general, we follow the ["fork-and-pull" Git workflow](https://github.com/susa
 
 1. Install pnpm ([instructions here on pnpms website](https://pnpm.io/installation))
 2. Install dependencies with pnpm
+
 ```bash
 pnpm install
 ```
+
 3. Run the tests. This is the main way to test each package:
+
 ```bash
 # test core
 pnpm nx test core

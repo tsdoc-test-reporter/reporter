@@ -20,10 +20,12 @@ test('format summary with aggregated tags', () => {
 		formatSummary({
 			title: 'title',
 			meta: uiTestResultMetaFactory(),
-			tags: [uiTagFactory({
-				text: "tag",
-				type: "test",
-			})]
+			tags: [
+				uiTagFactory({
+					text: 'tag',
+					type: 'test',
+				}),
+			],
 		}),
 	);
 	expect(result).toEqual(expect.stringContaining(`<summary class="test-summary">`));

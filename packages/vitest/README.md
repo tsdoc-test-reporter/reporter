@@ -1,6 +1,6 @@
 # @tsdoc-test-reporter/vitest
 
-TsDoc Test Teporter for Vitest
+TsDocTestReporter for Vitest
 
 ## Installing
 

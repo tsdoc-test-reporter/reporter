@@ -13,7 +13,11 @@ export const formatSummary = ({ title, meta, tags }: Props): string =>
 		<div class="test-summary-inner">
 			<h2>${title}</h2>
 			<div>
-				${tags?.length ? `<div class="assertion-tags">${tags.map(tag => formatTag({ tag })).join("")}` : ""}
+				${
+					tags?.length
+						? `<div class="assertion-tags">${tags.map((tag) => formatTag({ tag })).join('')}`
+						: ''
+				}
 				${formatMeta(meta)}
 			</div>
 		</div>

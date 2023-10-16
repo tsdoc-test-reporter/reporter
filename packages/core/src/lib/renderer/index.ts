@@ -1,6 +1,7 @@
 import type {
 	AllTagsName,
 	TestBlockDocComment,
+	TsDocTestReporterConfig,
 	UIAssertion,
 	UIOptions,
 	UITag,
@@ -110,4 +111,20 @@ export const render = (results: UITestResult[], options?: UIOptions) => {
 					<main>${formatHeader({ title })} ${formatResults({ results, statusMap })}</main>
 				</body>
 			</html>`;
+};
+
+export const getRenderOutput = <Type>(
+	results: Type,
+	getRenderData: (results: Type) => UITestResult[],
+	options: TsDocTestReporterConfig<string>,
+): string => {
+	switch (options.outputFileType) {
+		case 'json':
+			return JSON.stringify({
+				results: options.outputJsonAs === 'raw' ? results : getRenderData(results),
+			});
+		case 'html':
+		default:
+			return render(getRenderData(results), options.uiOptions);
+	}
 };

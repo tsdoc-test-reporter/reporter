@@ -1,6 +1,6 @@
 # @tsdoc-test-reporter/jest
 
-TsDoc Test Teporter for Jest
+TsDocTestReporter for Jest
 
 ## Installing
 

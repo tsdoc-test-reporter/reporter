@@ -143,7 +143,7 @@ export type ICommentTagParser<CustomTags extends string> = {
 /**
  * Config for parsing comments from a single file
  */
-export type CommentTagParserConfig<CustomTags extends string> = {
+export type CommentTagParserConfig<CustomTags extends string = AllTagsName> = {
 	/** The source file to parse */
 	sourceFile: SourceFile;
 	/** @see {@link TSDocParser} from `"@microsoft/tsdoc"` that needs
@@ -190,7 +190,7 @@ export type CommentTagParserConfig<CustomTags extends string> = {
 /**
  * Main config for the reporter used by the consumer
  */
-export type TsDocTestReporterConfig<CustomTags extends string = string> = Pick<
+export type TsDocTestReporterConfig<CustomTags extends string = AllTagsName> = Pick<
 	CommentTagParserConfig<CustomTags>,
 	'applyTags' | 'testBlockTagNames' | 'tagSeparator'
 > & {
@@ -224,13 +224,15 @@ export type TsDocTestReporterConfig<CustomTags extends string = string> = Pick<
 	tsConfigPath?: string;
 };
 
-export type CoreDefaults<CustomTags extends string = string> = {
+export type OutputFileType = 'json' | 'html';
+
+export type CoreDefaults<CustomTags extends string = AllTagsName> = {
 	testBlockTagNames: TestBlockName[];
 	tagSeparator: string;
 	applyTags: (AllTagsName | CustomTags)[];
+	outputFileType: OutputFileType;
+	outputFileName: string;
 };
-
-export type OutputFileType = 'json' | 'html';
 
 /**
  * Options for when rendering the output for `html`

@@ -44,4 +44,5 @@ export {
 	aggregateTags,
 	defaultOutputFileName,
 	formatTitle,
+	getRenderOutput,
 } from './lib/renderer';

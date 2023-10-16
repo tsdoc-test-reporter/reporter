@@ -128,13 +128,13 @@ module.exports = {
 
 ```ts
 // reporter.ts
-import TsDocTestReporter from '@tsdoc-test-reporter/vitest';
+import TSDocTestReporter from '@tsdoc-test-reporter/vitest';
 import { Reporter } from 'vitest/reporters';
 import { File } from 'vitest';
 
 export default class MyDefaultReporter extends Reporter {
 	async onFinished(files: File[]) {
-		new TsDocTestReporter({
+		new TSDocTestReporter({
 			testBlockTagNames: ['test', 'test.each'],
 			applyTags: ['@remarks'],
 			outputFileName: 'reports/tsdoc-report',
@@ -200,13 +200,13 @@ module.exports = {
 
 ```ts
 // reporter.ts
-import TsDocTestReporter, { coreDefaults } from '@tsdoc-test-reporter/vitest';
+import TSDocTestReporter, { coreDefaults } from '@tsdoc-test-reporter/vitest';
 import { Reporter } from 'vitest/reporters';
 import { File } from 'vitest';
 
 export default class MyDefaultReporter extends Reporter {
 	async onFinished(files: File[]) {
-		new TsDocTestReporter({
+		new TSDocTestReporter({
 			applyTags: [...coreDefaults.applyTags, '@customModifierTag'],
 			customTags: [
 				{

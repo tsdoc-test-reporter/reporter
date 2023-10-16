@@ -1,4 +1,4 @@
-<img src="logo.png" width="100" height="100" align="center" />
+![social_preview](https://github.com/tsdoc-test-reporter/reporter/assets/21122051/5c8bb5cd-5772-47d2-8264-cc43cf5886ca)
 
 # @tsdoc-test-reporter
 
@@ -129,10 +129,10 @@ module.exports = {
 ```ts
 // reporter.ts
 import TsDocTestReporter from '@tsdoc-test-reporter/vitest';
-import { DefaultReporter } from 'vitest/reporters';
+import { Reporter } from 'vitest/reporters';
 import { File } from 'vitest';
 
-export default class MyDefaultReporter extends DefaultReporter {
+export default class MyDefaultReporter extends Reporter {
 	async onFinished(files: File[]) {
 		new TsDocTestReporter({
 			testBlockTagNames: ['test', 'test.each'],
@@ -201,10 +201,10 @@ module.exports = {
 ```ts
 // reporter.ts
 import TsDocTestReporter, { coreDefaults } from '@tsdoc-test-reporter/vitest';
-import { DefaultReporter } from 'vitest/reporters';
+import { Reporter } from 'vitest/reporters';
 import { File } from 'vitest';
 
-export default class MyDefaultReporter extends DefaultReporter {
+export default class MyDefaultReporter extends Reporter {
 	async onFinished(files: File[]) {
 		new TsDocTestReporter({
 			applyTags: [...coreDefaults.applyTags, '@customModifierTag'],

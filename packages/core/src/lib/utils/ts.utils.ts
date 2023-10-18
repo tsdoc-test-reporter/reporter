@@ -35,14 +35,14 @@ export const getJSDocCommentRanges = (buffer: string, node: Node): CommentRange[
 	return getLeadingCommentRanges(buffer, node.pos)?.filter(isJSDocComment(buffer));
 };
 
-export const getNodeName = (expression: Expression, prefix = ""): string => {
-	if(isIdentifier(expression)) {
+export const getNodeName = (expression: Expression, prefix = ''): string => {
+	if (isIdentifier(expression)) {
 		return prefix + expression.escapedText;
 	}
-	if(isPropertyAccessExpression(expression)) {
-		return getNodeName(expression.name, getNodeName(expression.expression, prefix) + ".")
+	if (isPropertyAccessExpression(expression)) {
+		return getNodeName(expression.name, getNodeName(expression.expression, prefix) + '.');
 	}
-	return "";
+	return '';
 };
 
 export const isTestBlock = (node: Node, testBlockNames: string[]): node is CallExpression => {

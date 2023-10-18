@@ -5,22 +5,22 @@ import { getCompilerOptions } from './ts.utils';
 
 vi.mock('node:fs');
 
-vi.mock("typescript", async () => {
-	const actual = await vi.importActual<object>("typescript")
+vi.mock('typescript', async () => {
+	const actual = await vi.importActual<object>('typescript');
 	return {
 		...actual,
 		readConfigFile: () => ({
-      config: {
+			config: {
 				compilerOptions: {
 					declaration: false,
 					target: 'es2015',
 					module: 'esnext',
 					baseUrl: './src',
-				}
-      }
-		})
-	}
-})
+				},
+			},
+		}),
+	};
+});
 
 beforeEach(() => {
 	vi.resetAllMocks();
@@ -29,7 +29,6 @@ beforeEach(() => {
 afterEach(() => {
 	vi.resetAllMocks();
 });
-
 
 test('gets default compiler options', () => {
 	vi.spyOn(fs, 'existsSync').mockReturnValue(false);

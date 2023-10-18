@@ -46,4 +46,3 @@ test('writes to nested folder', () => {
 		recursive: true,
 	});
 });
-

@@ -8,7 +8,7 @@ import {
 	aggregatedResultFactory,
 } from '../test-utils/factory';
 
-import { TSDocTestReporter } from "./index";
+import { TSDocTestReporter } from './index';
 
 const testContext = new Set([testContextFactory()]);
 
@@ -60,7 +60,7 @@ test('create html report', () => {
 
 test('create json report', () => {
 	const reporter = new TSDocTestReporter(reporterGlobalConfig, {
-		outputFileType: "json",
+		outputFileType: 'json',
 	});
 	reporter.onRunComplete(testContext, aggregatedResult);
 	expect(fs.writeFileSync).toHaveBeenCalledWith(
@@ -72,8 +72,8 @@ test('create json report', () => {
 
 test('create json report with custom file name', () => {
 	const reporter = new TSDocTestReporter(reporterGlobalConfig, {
-		outputFileName: "custom-file-name",
-		outputFileType: "json",
+		outputFileName: 'custom-file-name',
+		outputFileType: 'json',
 	});
 	reporter.onRunComplete(testContext, aggregatedResult);
 	expect(fs.writeFileSync).toHaveBeenCalledWith(
@@ -88,30 +88,36 @@ test('create json report with output as ui results', () => {
 		outputFileType: 'json',
 		outputJsonAs: 'ui',
 	});
-	reporter.onRunComplete(testContext, aggregatedResultFactory({
-		testResults: [{
-			testFilePath: "reporter.spec.ts",
-			testResults: [{
-				title: "test name",
-				status: "passed",
-				numPassingAsserts: 1,
-			}],
-			numPassingTests: 1,
-		}]
-	}))
+	reporter.onRunComplete(
+		testContext,
+		aggregatedResultFactory({
+			testResults: [
+				{
+					testFilePath: 'reporter.spec.ts',
+					testResults: [
+						{
+							title: 'test name',
+							status: 'passed',
+						},
+					],
+				},
+			],
+		}),
+	);
 	const expected: { results: UITestResult[] } = {
 		results: [
 			{
 				title: 'reporter.spec.ts',
 				meta: {
-					passed: 1,
 					failed: 0,
+					passed: 1,
 					skipped: 0,
 					todo: 0,
 				},
 				assertions: [
 					{
 						title: 'test name',
+						ancestorTitles: [],
 						status: 'pass',
 						tags: [
 							{
@@ -131,7 +137,7 @@ test('create json report with output as ui results', () => {
 		],
 	};
 	expect(fs.writeFileSync).toHaveBeenCalledWith(
-		"tsdoc-test-reporter-report.json",
+		'tsdoc-test-reporter-report.json',
 		expect.stringContaining(JSON.stringify(expected)),
 		'utf-8',
 	);

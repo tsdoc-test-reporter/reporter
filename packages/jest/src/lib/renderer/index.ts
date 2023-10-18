@@ -1,4 +1,5 @@
 import {
+	aggregateMeta,
 	aggregateTags,
 	formatTitle,
 	getTagsFromTestBlockComments,
@@ -24,6 +25,7 @@ export const toUITestResult =
 	(result: TaggedTestResult): UITestResult => {
 		const assertions: UIAssertion[] = result.testResults.map((assertion) => ({
 			title: assertion.title,
+			ancestorTitles: options?.hideAncestorTitles ? undefined : assertion.ancestorTitles,
 			status: jestStatusToUiStatus[assertion.status],
 			tags: getTagsFromTestBlockComments(assertion.testBlockComments, options),
 		}));
@@ -32,12 +34,7 @@ export const toUITestResult =
 			: undefined;
 		return {
 			title: formatTitle(result.testFilePath, options?.formatTitle),
-			meta: {
-				passed: result.numPassingTests,
-				failed: result.numFailingTests,
-				skipped: result.numPendingTests,
-				todo: result.numTodoTests,
-			},
+			meta: aggregateMeta(assertions),
 			aggregatedTags,
 			assertions,
 		};

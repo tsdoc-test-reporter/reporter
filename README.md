@@ -2,7 +2,7 @@
 
 # @tsdoc-test-reporter
 
-**TSDoc Test Reporter** attaches [TSDoc](https://tsdoc.org/) notations as metadata to your test results.
+**@tsdoc-test-reporter** is a test reporter that attaches [TSDoc](https://tsdoc.org/) comments to your test results. It enables you to attach metadata to your unit tests in the form of comments.
 
 ## Features
 

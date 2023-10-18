@@ -21,7 +21,7 @@ export const aggregateAssertions = (
 		if (isSuite(task) && task.tasks) {
 			return aggregateAssertions(
 				task.tasks,
-				ancestorTitles.concat([task.name]),
+				options?.hideAncestorTitles ? [] : ancestorTitles.concat([task.name]),
 				options?.hideAncestorTags
 					? []
 					: ancestorTags.concat(getTagsFromTestBlockComments(task.testBlockComments, options)),

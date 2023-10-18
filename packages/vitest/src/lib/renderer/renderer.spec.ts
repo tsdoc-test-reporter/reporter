@@ -184,6 +184,71 @@ describe('aggregate assertions', () => {
 			},
 		]);
 	});
+
+	test('suites and tasks to assertions when hideAncestorTitles: true', () => {
+		expect(
+			aggregateAssertions(
+				[
+					taggedSuiteFactory({
+						name: 'describe name',
+						testBlockComments: [
+							testDocBlockCommentFactory({
+								title: 'describe name',
+								testBlockName: 'describe',
+								type: 'ancestor',
+								testBlockTags: {
+									'@alpha': {
+										kind: 'modifier',
+										name: '@alpha',
+										testTitle: 'describe name',
+										testBlockName: 'describe',
+										type: 'standard',
+									},
+								},
+							}),
+						],
+						tasks: [
+							{
+								name: 'test name',
+								testBlockComments: [
+									testDocBlockCommentFactory({
+										title: 'test name',
+										testBlockName: 'test',
+										testBlockTags: {
+											'@beta': {
+												kind: 'modifier',
+												name: '@beta',
+												testTitle: 'test name',
+												testBlockName: 'test',
+												type: 'standard',
+											},
+										},
+									}),
+								],
+							},
+						],
+					}),
+				],
+				[],
+				[],
+				{ hideAncestorTags: true, hideAncestorTitles: true },
+			),
+		).toEqual<UIAssertion[]>([
+			{
+				ancestorTitles: [],
+				status: 'pass',
+				title: 'test name',
+				tags: [
+					{
+						type: 'test',
+						text: '@beta',
+						name: '@beta',
+						icon: undefined,
+					},
+				],
+			},
+		]);
+	});
 });
 
 describe('ui result', () => {

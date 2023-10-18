@@ -39,9 +39,7 @@ vi.mock('@tsdoc-test-reporter/core', async () => {
 
 test('create html report', () => {
 	const reporter = new TSDocTestReporter();
-	reporter.onFinished([
-		fileFactory({})
-	]);
+	reporter.onFinished([fileFactory({})]);
 	expect(fs.writeFileSync).toHaveBeenCalledWith(
 		'tsdoc-test-reporter-report.html',
 		expect.stringContaining('<!doctype html>'),
@@ -53,9 +51,7 @@ test('create json report', () => {
 	const reporter = new TSDocTestReporter({
 		outputFileType: 'json',
 	});
-	reporter.onFinished([
-		fileFactory({})
-	]);
+	reporter.onFinished([fileFactory({})]);
 	expect(fs.writeFileSync).toHaveBeenCalledWith(
 		'tsdoc-test-reporter-report.json',
 		expect.stringContaining('{"results"'),
@@ -68,9 +64,7 @@ test('create json report with custom file name', () => {
 		outputFileType: 'json',
 		outputFileName: 'custom-file-name',
 	});
-	reporter.onFinished([
-		fileFactory({})
-	]);
+	reporter.onFinished([fileFactory({})]);
 	expect(fs.writeFileSync).toHaveBeenCalledWith(
 		'custom-file-name.json',
 		expect.stringContaining('{"results"'),

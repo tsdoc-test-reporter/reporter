@@ -22,6 +22,7 @@ export const getTagsFromTestBlockComments = (
 		testBlockComments?.flatMap((t) =>
 			Object.values(t.testBlockTags ?? {}).flatMap((tag) => {
 				if (!tag) return [];
+				if (options?.hideAncestorTags && t.type === 'ancestor') return [];
 				if (tag.tags?.length) {
 					return tag.tags.map((blockTag) => ({
 						type: t.type,

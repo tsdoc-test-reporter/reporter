@@ -109,7 +109,11 @@ export const render = (results: UITestResult[], options?: UIOptions) => {
 			<html lang="en">
 				${formatHead({ title, style: options?.style ?? '' })}
 				<body>
-					<main>${formatHeader({ title })} ${formatResults({ results, statusMap })}</main>
+					<main>${formatHeader({ title })} ${formatResults({
+						results,
+						statusMap,
+						showTextOnMeta: options?.showTextOnTestSummaryMeta,
+					})}</main>
 				</body>
 			</html>`;
 };

@@ -295,6 +295,10 @@ export type UIOptions = {
 	 * `a tag name` -> `@remarks a tag name`
 	 */
 	showTagNameOnBlockTags?: boolean;
+	/**
+	 * Show text next to the summary for skipped, todo, failing and passing tests
+	 */
+	showTextOnTestSummaryMeta?: boolean;
 	/** Maps a specific status to a supplied icon, overrides default.
 	 * @example
 	 * { statusToIconMap: { passed: '🎉' } }

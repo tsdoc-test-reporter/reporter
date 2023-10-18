@@ -33,7 +33,7 @@ export const aggregateAssertions = (
 				title: task.name,
 				ancestorTitles,
 				tags: getTagsFromTestBlockComments(task.testBlockComments, options).concat(ancestorTags),
-				status: task.result?.state ?? 'skip',
+				status: task.result?.state ?? task.mode ?? 'run',
 			},
 		];
 	});

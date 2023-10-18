@@ -4,17 +4,17 @@ import { stripTabsAndNewlines } from '../../utils/string.utils';
 import { formatMeta } from './meta';
 
 test('format meta with no tests', () => {
-	const result = stripTabsAndNewlines(formatMeta(uiTestResultMetaFactory()));
+	const result = stripTabsAndNewlines(formatMeta({ meta: uiTestResultMetaFactory() }));
 	expect(result).toEqual(expect.stringContaining(`<div class="test-summary-status"></div>`));
 });
 
 test('format meta with passed', () => {
 	const result = stripTabsAndNewlines(
-		formatMeta(
-			uiTestResultMetaFactory({
+		formatMeta({
+			meta: uiTestResultMetaFactory({
 				passed: 1,
 			}),
-		),
+		}),
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
@@ -25,11 +25,11 @@ test('format meta with passed', () => {
 
 test('format meta with skipped', () => {
 	const result = stripTabsAndNewlines(
-		formatMeta(
-			uiTestResultMetaFactory({
+		formatMeta({
+			meta: uiTestResultMetaFactory({
 				skipped: 1,
 			}),
-		),
+		}),
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
@@ -40,11 +40,11 @@ test('format meta with skipped', () => {
 
 test('format meta with skipped', () => {
 	const result = stripTabsAndNewlines(
-		formatMeta(
-			uiTestResultMetaFactory({
+		formatMeta({
+			meta: uiTestResultMetaFactory({
 				failed: 1,
 			}),
-		),
+		}),
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
@@ -55,15 +55,31 @@ test('format meta with skipped', () => {
 
 test('format meta with todo', () => {
 	const result = stripTabsAndNewlines(
-		formatMeta(
-			uiTestResultMetaFactory({
+		formatMeta({
+			meta: uiTestResultMetaFactory({
 				todo: 1,
 			}),
-		),
+		}),
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
 			`<span aria-hidden="true" class="test-summary-todo-tests"> 1 </span><span class="sr-only">Todo tests: 1, </span>`,
+		),
+	);
+});
+
+test('format meta with text displayed', () => {
+	const result = stripTabsAndNewlines(
+		formatMeta({
+			meta: uiTestResultMetaFactory({
+				todo: 1,
+			}),
+			showText: true,
+		}),
+	);
+	expect(result).toEqual(
+		expect.stringContaining(
+			`<span aria-hidden="true" class="test-summary-todo-tests">Todo: 1 </span><span class="sr-only">Todo tests: 1, </span>`,
 		),
 	);
 });

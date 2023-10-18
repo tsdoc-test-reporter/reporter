@@ -121,7 +121,6 @@ export const formatHead = ({ title, style }: Props): string =>
 			.test-summary-status span {
 				padding: 0.25rem 0.5rem;
 				border-style: solid;
-				font-size: 0.85rem;
 				border-width: 1px 1px 1px 0;
 			}
 			.test-summary-status {

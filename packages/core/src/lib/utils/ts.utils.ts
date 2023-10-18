@@ -14,6 +14,7 @@ import {
 	ScriptTarget,
 	SourceFile,
 	sys,
+	Expression,
 } from 'typescript';
 
 export const defaultCompilerOptions: CompilerOptions = {
@@ -34,33 +35,18 @@ export const getJSDocCommentRanges = (buffer: string, node: Node): CommentRange[
 	return getLeadingCommentRanges(buffer, node.pos)?.filter(isJSDocComment(buffer));
 };
 
-// TODO: Recurse this bad boy or whatever
-export const getNodeName = (node: Node): string => {
-	if (isCallExpression(node)) {
-		if (isPropertyAccessExpression(node.expression)) {
-			if (isPropertyAccessExpression(node.expression.expression)) {
-				if (
-					isIdentifier(node.expression.expression.expression) &&
-					isIdentifier(node.expression.expression.name)
-				) {
-					return `${node.expression.expression.expression.escapedText}.${node.expression.expression.name.escapedText}.${node.expression.name.escapedText}`;
-				}
-			}
-			if (isIdentifier(node.expression.expression) && isIdentifier(node.expression.name)) {
-				return `${node.expression.expression.escapedText}.${node.expression.name.escapedText}`;
-			}
-		}
-		if (isIdentifier(node.expression)) {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			return node.expression.escapedText;
-		}
+export const getNodeName = (expression: Expression, prefix = ""): string => {
+	if(isIdentifier(expression)) {
+		return prefix + expression.escapedText;
 	}
-	return '';
+	if(isPropertyAccessExpression(expression)) {
+		return getNodeName(expression.name, getNodeName(expression.expression, prefix) + ".")
+	}
+	return "";
 };
 
 export const isTestBlock = (node: Node, testBlockNames: string[]): node is CallExpression => {
-	return isCallExpression(node) && testBlockNames.includes(getNodeName(node));
+	return isCallExpression(node) && testBlockNames.includes(getNodeName(node.expression));
 };
 
 export const getSourceFileHelper = (

@@ -102,7 +102,7 @@ export class CommentTagParser<CustomTag extends string> implements ICommentTagPa
 		node: CallExpression,
 	): (comment: CommentRange) => TestBlockDocComment<CustomTag> {
 		return (comment: CommentRange): TestBlockDocComment<CustomTag> => {
-			const nodeName = getNodeName(node) as TestBlockName;
+			const nodeName = getNodeName(node.expression) as TestBlockName;
 			const title = this.getTestTitle(node);
 			return {
 				testFilePath: this.sourceFile.fileName,

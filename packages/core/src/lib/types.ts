@@ -16,7 +16,18 @@ type TestBlockNamesBase = 'describe' | 'test' | 'it';
 /**
  * @hidden
  */
-type TestBlockNamesExtended = 'each' | 'only' | 'skip' | 'failing' | 'concurrent' | 'todo';
+type TestBlockNamesExtended =
+	| 'each'
+	| 'only'
+	| 'skip'
+	| 'failing'
+	| 'fails'
+	| 'concurrent'
+	| 'todo'
+	| 'skipIf'
+	| 'runIf'
+	| 'sequential'
+	| 'shuffle';
 
 /**
  * All names of functions in test files that are considered belonging to
@@ -29,7 +40,8 @@ type TestBlockNamesExtended = 'each' | 'only' | 'skip' | 'failing' | 'concurrent
 export type TestBlockName =
 	| TestBlockNamesBase
 	| `${TestBlockNamesBase}.${TestBlockNamesExtended}`
-	| `${TestBlockNamesBase}.${TestBlockNamesExtended}.${TestBlockNamesExtended}`;
+	| `${TestBlockNamesBase}.${TestBlockNamesExtended}.${TestBlockNamesExtended}`
+	| `${TestBlockNamesBase}.${TestBlockNamesExtended}.${TestBlockNamesExtended}.${TestBlockNamesExtended}`;
 
 /**
  * All tag names that are specified as modifiers in TSDoc.

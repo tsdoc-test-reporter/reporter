@@ -29,9 +29,10 @@ export {
 } from './lib/test-utils/factory';
 export {
 	getCompilerOptionsThatFollowExtends,
-	getSourceFileHelper,
+	programFactory,
 	getCompilerOptions,
 	getSourceFilesMap,
+	getTestTitleFromExpression,
 } from './lib/utils/ts.utils';
 export { getTsDocParserConfig } from './lib/utils/tsdoc.utils';
 export { writeToFile } from './lib/utils/io.utils';

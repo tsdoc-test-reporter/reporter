@@ -7,6 +7,9 @@ import {
 	TsDocTestReporterConfig,
 	getSourceFilesMap,
 	getRenderOutput,
+	programFactory,
+	getTestTitleFromExpression,
+	AllTagsName,
 } from '@tsdoc-test-reporter/core';
 import type { Reporter, File } from 'vitest';
 import { TSDocParser } from '@microsoft/tsdoc';
@@ -15,7 +18,7 @@ import type { TaggedFile } from '../../types';
 import { toUITestResults } from '../renderer';
 import { resultMapper } from './reporter.utils';
 
-export class TSDocTestReporter<CustomTags extends string = string> implements Reporter {
+export class TSDocTestReporter<CustomTags extends string = AllTagsName> implements Reporter {
 	private readonly compilerOptions: CompilerOptions;
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
 
@@ -28,12 +31,16 @@ export class TSDocTestReporter<CustomTags extends string = string> implements Re
 	}
 
 	public getTaggedResult(files: File[]): TaggedFile[] {
-		return parseTestFiles<File, TaggedFile, CustomTags>({
+		const program = programFactory(files, 'filepath', this.compilerOptions);
+		const typeChecker = program.getTypeChecker();
+		return parseTestFiles<File, TaggedFile>({
 			result: files,
 			filePath: 'filepath',
 			resultMapper,
-			sourceFilesMap: getSourceFilesMap(files, 'filepath', this.compilerOptions),
-			applyTags: this.options.applyTags,
+			getTestTitleFromExpression: (expression) =>
+				getTestTitleFromExpression(expression, typeChecker),
+			sourceFilesMap: getSourceFilesMap(files, 'filepath', program),
+			applyTags: this.options.applyTags as AllTagsName[],
 			tagSeparator: this.options.tagSeparator,
 			testBlockTagNames: this.options.testBlockTagNames,
 			tsDocParser: new TSDocParser(getTsDocParserConfig(this.options.customTags)),

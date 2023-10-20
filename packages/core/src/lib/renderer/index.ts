@@ -123,13 +123,16 @@ export const getRenderOutput = <Type>(
 	getRenderData: (results: Type) => UITestResult[],
 	options: TsDocTestReporterConfig<string>,
 ): string => {
+	const onBeforeRender = options.onBeforeRender
+		? options.onBeforeRender
+		: (results: UITestResult[]) => results;
 	switch (options.outputFileType) {
 		case 'json':
 			return JSON.stringify({
-				results: options.outputJsonAs === 'raw' ? results : getRenderData(results),
+				results: options.outputJsonAs === 'raw' ? results : onBeforeRender(getRenderData(results)),
 			});
 		case 'html':
 		default:
-			return render(getRenderData(results), options.uiOptions);
+			return render(onBeforeRender(getRenderData(results)), options.uiOptions);
 	}
 };

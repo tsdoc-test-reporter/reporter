@@ -1,10 +1,4 @@
-import type {
-	AllTagsName,
-	BlockTagName,
-	CoreDefaults,
-	ModifierTagName,
-	TestBlockName,
-} from './types';
+import type { BlockTagName, CoreDefaults, ModifierTagName, TestBlockName } from './types';
 
 export const allBlockTags: BlockTagName[] = ['@deprecated', '@privateRemarks', '@remarks'];
 
@@ -78,7 +72,7 @@ export const testBlockTagNames: TestBlockName[] = [...testTagNames, ...ancestorT
 
 export const defaultOutputFileName = 'tsdoc-test-reporter-report';
 
-export const coreDefaults: CoreDefaults<AllTagsName> = {
+export const coreDefaults: CoreDefaults = {
 	testBlockTagNames: testBlockTagNames,
 	tagSeparator: ',',
 	applyTags: [...allBlockTags, ...allModifierTags],

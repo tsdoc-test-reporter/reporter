@@ -4,6 +4,7 @@ import { coreDefaults } from '../defaults';
 import { parseTestFiles } from './index';
 import { testFileFactory } from '../test-utils/factory/test-file';
 import { WithTestDocBlockComments } from '../types';
+import { mockedGetTestTitleFromExpression } from '../test-utils';
 
 type TestData = {
 	filePath: string;
@@ -17,6 +18,7 @@ test('parses test files', () => {
 		parseTestFiles<TestData, TestDataOutput>({
 			...coreDefaults,
 			tsDocParser: new TSDocParser(),
+			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 			sourceFilesMap: {
 				[fileName]: testFileFactory({
 					fileName,

@@ -10,8 +10,9 @@ import { test, expect } from 'vitest';
 import { CommentTagParser } from '.';
 import { testFileFactory } from '../test-utils/factory/test-file';
 import { TestBlockDocComment, TestBlockTag } from '../types';
+import { mockedGetTestTitleFromExpression } from '../test-utils';
 
-const getTagValues = (testBlockDocComments: TestBlockDocComment[]) =>
+const getTagValues = (testBlockDocComments: TestBlockDocComment<'@custom' | '@customModifier'>[]) =>
 	Object.values(testBlockDocComments[0].testBlockTags ?? {});
 
 test('transforms custom tag for block', () => {
@@ -40,8 +41,9 @@ test('transforms custom tag for block', () => {
 		sourceFile,
 		tsDocParser: new TSDocParser(config),
 		applyTags: ['@custom'],
+		getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 	});
-	expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
+	expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag<'@custom'>[]>([
 		{
 			testBlockName: 'test',
 			testTitle: '@custom',
@@ -78,8 +80,9 @@ test('transforms custom tag for modifiers', () => {
 		sourceFile,
 		tsDocParser: new TSDocParser(config),
 		applyTags: ['@customModifier'],
+		getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 	});
-	expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
+	expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag<'@customModifier'>[]>([
 		{
 			testBlockName: 'test',
 			testTitle: '@customModifier',

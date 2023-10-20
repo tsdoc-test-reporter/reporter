@@ -12,10 +12,13 @@ import {
 	createProgram,
 	readConfigFile,
 	ScriptTarget,
-	SourceFile,
 	sys,
 	Expression,
+	TypeChecker,
+	isEnumDeclaration,
+	Program,
 } from 'typescript';
+import { unquoteString } from './string.utils';
 
 export const defaultCompilerOptions: CompilerOptions = {
 	target: ScriptTarget.Latest,
@@ -49,23 +52,44 @@ export const isTestBlock = (node: Node, testBlockNames: string[]): node is CallE
 	return isCallExpression(node) && testBlockNames.includes(getNodeName(node.expression));
 };
 
-export const getSourceFileHelper = (
-	fileNames: string[],
-	compilerOptions: CompilerOptions = defaultCompilerOptions,
-) => {
-	const program = createProgram(fileNames, compilerOptions);
-	return (fileName: string): SourceFile | undefined => program.getSourceFile(fileName);
+export const getTestTitleFromExpression = (title: Expression, typeChecker: TypeChecker): string => {
+	if (isIdentifier(title)) {
+		const type = typeChecker.getTypeAtLocation(title);
+		if (type.isStringLiteral()) {
+			return type.value;
+		}
+	}
+	if (isPropertyAccessExpression(title)) {
+		const type = typeChecker.getTypeAtLocation(title.expression);
+		const name = title.name.escapedText;
+		const declaration = type.getSymbol()?.valueDeclaration;
+		if (declaration && isEnumDeclaration(declaration)) {
+			const member = declaration.members.find((member) => {
+				return isIdentifier(member.name) ? member.name.escapedText === name : false;
+			});
+			if (!member?.initializer) return '';
+			return unquoteString(member.initializer.getText());
+		}
+	}
+	return '';
 };
 
-export const getSourceFilesMap = <TestResult extends object, Key extends keyof TestResult>(
+export const programFactory = <TestResult extends object, Key extends keyof TestResult>(
 	results: TestResult[],
 	filepath: Key,
 	compilerOptions: CompilerOptions,
 ) => {
 	const fileNames = results.map((result) => result[filepath] as string);
-	const getSourceFile = getSourceFileHelper(fileNames, compilerOptions);
+	return createProgram(fileNames, compilerOptions);
+};
+
+export const getSourceFilesMap = <TestResult extends object, Key extends keyof TestResult>(
+	results: TestResult[],
+	filepath: Key,
+	program: Program,
+) => {
 	return Object.fromEntries(
-		results.map((result) => [result[filepath], getSourceFile(result[filepath] as string)]),
+		results.map((result) => [result[filepath], program.getSourceFile(result[filepath] as string)]),
 	);
 };
 

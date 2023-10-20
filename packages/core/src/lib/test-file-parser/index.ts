@@ -1,10 +1,10 @@
 import { CommentTagParser } from '../comment-tag-parser';
-import { FileParserConfig } from '../types';
+import { AllTagsName, FileParserConfig } from '../types';
 
 export const parseTestFiles = <
 	Result extends object,
 	Output extends object,
-	CustomTags extends string = string,
+	CustomTags extends string = AllTagsName,
 >({
 	tsDocParser,
 	result,
@@ -14,6 +14,7 @@ export const parseTestFiles = <
 	applyTags,
 	resultMapper,
 	filePath,
+	getTestTitleFromExpression,
 }: FileParserConfig<Result, Output, CustomTags>): Output[] => {
 	return result.flatMap((result) => {
 		const sourceFile = sourceFilesMap[result[filePath] as string];
@@ -24,6 +25,7 @@ export const parseTestFiles = <
 			applyTags,
 			testBlockTagNames,
 			tagSeparator,
+			getTestTitleFromExpression,
 		});
 		if (!testBlockDocComments.length) return result as unknown as Output;
 		return resultMapper(result, testBlockDocComments);

@@ -1,5 +1,5 @@
 import type { ITSDocTagDefinitionParameters, TSDocParser } from '@microsoft/tsdoc';
-import type { SourceFile } from 'typescript';
+import type { Expression, SourceFile } from 'typescript';
 
 /**
  * Describes if the tag is part of the specification or if it
@@ -78,7 +78,7 @@ export type TagKind = 'block' | 'modifier' | 'inline';
 /**
  * The internal representation of a parsed tag (`@`) from TSDoc.
  */
-export type TestBlockTag<CustomTags extends string = string> = {
+export type TestBlockTag<CustomTags extends string = AllTagsName> = {
 	/**
 	 * If the tag is from the Standard TSDoc or is supplied
 	 * as a custom tag by the user.
@@ -120,14 +120,14 @@ export type TestBlockTag<CustomTags extends string = string> = {
 	testTitle: string;
 };
 
-export type TestBlockTagMap<CustomTags extends string = string> = Partial<
+export type TestBlockTagMap<CustomTags extends string = AllTagsName> = Partial<
 	Record<AllTagsName | CustomTags, TestBlockTag<CustomTags>>
 >;
 
 /**
  * Representation of a TSDoc comment with all parsed tags
  */
-export type TestBlockDocComment<CustomTags extends string = string> = {
+export type TestBlockDocComment<CustomTags extends string = AllTagsName> = {
 	testFilePath: string;
 	title: string;
 	testBlockName: TestBlockName;
@@ -143,12 +143,12 @@ export type TestBlockDocComment<CustomTags extends string = string> = {
  */
 export type WithTestDocBlockComments<
 	Type extends object,
-	CustomTags extends string = string,
+	CustomTags extends string = AllTagsName,
 > = Type & {
 	testBlockComments?: TestBlockDocComment<CustomTags>[];
 };
 
-export type ICommentTagParser<CustomTags extends string> = {
+export type ICommentTagParser<CustomTags extends string = AllTagsName> = {
 	testBlockDocComments: TestBlockDocComment<CustomTags>[];
 };
 
@@ -197,6 +197,13 @@ export type CommentTagParserConfig<CustomTags extends string = AllTagsName> = {
 	 * @default ","
 	 */
 	tagSeparator?: string;
+	/**
+	 * Helper to extract test title if the test title is an expression.
+	 * This usually means that the test title is a variable of some sort
+	 * @param expression variable that is used in test title
+	 * @returns
+	 */
+	getTestTitleFromExpression: (expression: Expression) => string;
 };
 
 /**
@@ -211,6 +218,12 @@ export type TsDocTestReporterConfig<CustomTags extends string = AllTagsName> = P
 	 * @default "html"
 	 */
 	outputFileType?: OutputFileType;
+	/**
+	 * Callback that runs right before rendering result
+	 * as UITestResult. Useful if you want to modify
+	 * the information before rendering.
+	 */
+	onBeforeRender?: (results: UITestResult[]) => UITestResult[];
 	/**
 	 * Specifies the name of the generated file. Supports folders.
 	 * @example
@@ -238,10 +251,9 @@ export type TsDocTestReporterConfig<CustomTags extends string = AllTagsName> = P
 
 export type OutputFileType = 'json' | 'html';
 
-export type CoreDefaults<CustomTags extends string = AllTagsName> = {
-	testBlockTagNames: TestBlockName[];
-	tagSeparator: string;
-	applyTags: (AllTagsName | CustomTags)[];
+export type CoreDefaults<CustomTags extends string = AllTagsName> = Required<
+	Pick<CommentTagParserConfig<CustomTags>, 'applyTags' | 'testBlockTagNames' | 'tagSeparator'>
+> & {
 	outputFileType: OutputFileType;
 	outputFileName: string;
 };
@@ -329,12 +341,14 @@ export type UIOptions = {
 export type FileParserConfig<
 	Result extends object,
 	Output extends object,
-	CustomTags extends string = string,
-> = Pick<CommentTagParserConfig<CustomTags>, 'applyTags' | 'testBlockTagNames' | 'tagSeparator'> & {
+	CustomTags extends string = AllTagsName,
+> = Pick<
+	CommentTagParserConfig<CustomTags>,
+	'applyTags' | 'testBlockTagNames' | 'tagSeparator' | 'getTestTitleFromExpression' | 'tsDocParser'
+> & {
 	result: Result[];
-	tsDocParser: TSDocParser;
 	sourceFilesMap: Record<string, SourceFile | undefined>;
-	resultMapper: (result: Result, testBlockDocComments: TestBlockDocComment[]) => Output;
+	resultMapper: (result: Result, testBlockDocComments: TestBlockDocComment<CustomTags>[]) => Output;
 	filePath: keyof Result;
 };
 

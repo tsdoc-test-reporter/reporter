@@ -1,8 +1,9 @@
-import { test, describe, expect } from 'vitest';
+import { test, describe, expect, vi } from 'vitest';
 import {
 	aggregateMeta,
 	aggregateTags,
 	formatTitle,
+	getRenderOutput,
 	getTagsFromTestBlockComments,
 	render,
 } from './index';
@@ -408,4 +409,17 @@ describe('render', () => {
 			expect.stringContaining('<h1>Custom title</h1>'),
 		);
 	});
+});
+
+test('should call onBeforeRender when supplied', () => {
+	type TestData = {
+		name: string;
+	};
+	const testData: TestData[] = [{ name: 'name' }];
+	const onBeforeRender = vi.fn(() => []);
+	const getRenderData = () => [];
+	getRenderOutput(testData, getRenderData, {
+		onBeforeRender,
+	});
+	expect(onBeforeRender).toHaveBeenCalled();
 });

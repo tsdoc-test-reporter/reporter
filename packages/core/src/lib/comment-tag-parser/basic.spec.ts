@@ -5,6 +5,7 @@ import { testFileFactory } from '../test-utils/factory/test-file';
 import { allBlockTags, allModifierTags, testBlockTagNames } from '../defaults';
 import { basicTestDataGenerator, TestData } from '../test-utils/test-data-generator';
 import { TestBlockDocComment, TestBlockTag } from '../types';
+import { mockedGetTestTitleFromExpression } from '../test-utils';
 
 const getTagValues = (testBlockDocComments: TestBlockDocComment[]) =>
 	Object.values(testBlockDocComments[0].testBlockTags ?? {});
@@ -27,6 +28,7 @@ describe('transform all tags in the standard', () => {
 			const { testBlockDocComments } = new CommentTagParser({
 				sourceFile: testFileFactory({ fileName, options }),
 				tsDocParser: new TSDocParser(),
+				getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 				...parserOptions,
 			});
 			expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>(expected);
@@ -54,6 +56,7 @@ describe('transform all tags in the standard for each test block name', () => {
 			const { testBlockDocComments } = new CommentTagParser({
 				sourceFile: testFileFactory({ fileName, options }),
 				tsDocParser: new TSDocParser(),
+				getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 				...parserOptions,
 			});
 			expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>(expected);
@@ -86,6 +89,7 @@ describe('transform with user supplied parserOptions', () => {
 			}),
 			tsDocParser: new TSDocParser(),
 			applyTags: ['@alpha'],
+			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 		});
 		expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
 			{
@@ -117,6 +121,7 @@ describe('transform with user supplied parserOptions', () => {
 			}),
 			tsDocParser: new TSDocParser(),
 			tagSeparator: ';',
+			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 		});
 		expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
 			{
@@ -157,6 +162,7 @@ describe('transform with user supplied parserOptions', () => {
 			}),
 			tsDocParser: new TSDocParser(),
 			testBlockTagNames: ['test'],
+			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 		});
 		expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
 			{

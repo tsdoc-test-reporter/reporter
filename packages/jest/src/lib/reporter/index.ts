@@ -7,8 +7,10 @@ import {
 	getCompilerOptions,
 	getRenderOutput,
 	getSourceFilesMap,
+	getTestTitleFromExpression,
 	getTsDocParserConfig,
 	parseTestFiles,
+	programFactory,
 	writeToFile,
 } from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
@@ -32,18 +34,18 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 	}
 
 	public getTaggedResult(results: AggregatedResult): TaggedAggregatedResult {
+		const program = programFactory(results.testResults, 'testFilePath', this.compilerOptions);
+		const typeChecker = program.getTypeChecker();
 		return {
 			...results,
 			testResults: parseTestFiles({
+				getTestTitleFromExpression: (expression) =>
+					getTestTitleFromExpression(expression, typeChecker),
 				result: results.testResults,
 				filePath: 'testFilePath',
 				resultMapper,
-				sourceFilesMap: getSourceFilesMap(
-					results.testResults,
-					'testFilePath',
-					this.compilerOptions,
-				),
-				applyTags: this.options.applyTags,
+				sourceFilesMap: getSourceFilesMap(results.testResults, 'testFilePath', program),
+				applyTags: this.options.applyTags as AllTagsName[],
 				tagSeparator: this.options.tagSeparator,
 				testBlockTagNames: this.options.testBlockTagNames,
 				tsDocParser: new TSDocParser(getTsDocParserConfig(this.options.customTags)),

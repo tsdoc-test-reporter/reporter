@@ -1,5 +1,12 @@
 import { DocComment, TextRange, TSDocParser } from '@microsoft/tsdoc';
-import { type Node, type SourceFile, type CommentRange, type CallExpression } from 'typescript';
+import {
+	type Node,
+	type SourceFile,
+	type CommentRange,
+	type CallExpression,
+	isStringLiteral,
+	Expression,
+} from 'typescript';
 
 import { allModifierTags, ancestorTagNames, coreDefaults } from '../defaults';
 import type {
@@ -17,13 +24,16 @@ import { getJSDocCommentRanges, getNodeName, isTestBlock } from '../utils/ts.uti
 import { docBlockToDocBlockTags, tagNameToTSDocBlock } from '../utils/tsdoc.utils';
 import { BlockTagName } from '../types';
 
-export class CommentTagParser<CustomTag extends string> implements ICommentTagParser<CustomTag> {
+export class CommentTagParser<CustomTag extends string = AllTagsName>
+	implements ICommentTagParser<CustomTag>
+{
 	private sourceFile: SourceFile;
 	private sourceFileBuffer: string;
 	private tsDocParser: TSDocParser;
-	private testBlockTagNames: string[];
+	private testBlockTagNames: TestBlockName[];
 	private tagSeparator: string;
 	private applyTags: (AllTagsName | CustomTag)[];
+	private getTestTitleFromExpression: (expression: Expression) => string;
 	private _testBlockDocComments: TestBlockDocComment<CustomTag>[] = [];
 
 	constructor({
@@ -32,6 +42,7 @@ export class CommentTagParser<CustomTag extends string> implements ICommentTagPa
 		applyTags = coreDefaults.applyTags as (AllTagsName | CustomTag)[],
 		testBlockTagNames = coreDefaults.testBlockTagNames,
 		tagSeparator = coreDefaults.tagSeparator,
+		getTestTitleFromExpression,
 	}: CommentTagParserConfig<CustomTag>) {
 		this.tsDocParser = tsDocParser;
 		this.sourceFile = sourceFile;
@@ -40,6 +51,7 @@ export class CommentTagParser<CustomTag extends string> implements ICommentTagPa
 		this.applyTags = applyTags;
 		this.sourceFileBuffer = sourceFile.getFullText();
 		this.findTestBlockDocComments(this.sourceFile);
+		this.getTestTitleFromExpression = getTestTitleFromExpression;
 	}
 
 	public get testBlockDocComments(): TestBlockDocComment<CustomTag>[] {
@@ -48,7 +60,10 @@ export class CommentTagParser<CustomTag extends string> implements ICommentTagPa
 
 	private getTestTitle(node: CallExpression): string {
 		const firstArgument = node.arguments[0];
-		return unquoteString(firstArgument.getText(this.sourceFile));
+		if (isStringLiteral(firstArgument)) {
+			return unquoteString(firstArgument.getText(this.sourceFile));
+		}
+		return this.getTestTitleFromExpression(firstArgument);
 	}
 
 	private parseTsDocCommentRange({ pos, end }: CommentRange): DocComment {

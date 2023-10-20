@@ -20,7 +20,7 @@
 <h4>Type Parameters</h4>
 <ul class="tsd-type-parameter-list">
 <li>
-<h4><span class="tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">string</span></h4></li></ul></section> 
+<h4><span class="tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">string</span> = <a href="../types/core_src.AllTagsName.html" class="tsd-signature-type tsd-kind-type-alias">AllTagsName</a></h4></li></ul></section> 
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
@@ -30,7 +30,7 @@
 <ul class="tsd-hierarchy">
 <li><a href="../types/core_src.ICommentTagParser.html" class="tsd-signature-type tsd-kind-type-alias">ICommentTagParser</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L20">packages/core/src/lib/comment-tag-parser/index.ts:20</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L27">packages/core/src/lib/comment-tag-parser/index.ts:27</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -44,6 +44,7 @@
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="core_src.CommentTagParser.html#_testBlockDocComments" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-1024"><rect fill="var(--color-icon-background)" stroke="#FF984D" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="12"></rect><path d="M9.354 16V7.24H12.174C12.99 7.24 13.638 7.476 14.118 7.948C14.606 8.412 14.85 9.036 14.85 9.82C14.85 10.604 14.606 11.232 14.118 11.704C13.638 12.168 12.99 12.4 12.174 12.4H10.434V16H9.354ZM10.434 11.428H12.174C12.646 11.428 13.022 11.284 13.302 10.996C13.59 10.7 13.734 10.308 13.734 9.82C13.734 9.324 13.59 8.932 13.302 8.644C13.022 8.356 12.646 8.212 12.174 8.212H10.434V11.428Z" fill="var(--color-text)"></path></g></svg><span>_test<wbr/>Block<wbr/>Doc<wbr/>Comments</span></a>
 <a href="core_src.CommentTagParser.html#applyTags" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>apply<wbr/>Tags</span></a>
+<a href="core_src.CommentTagParser.html#getTestTitleFromExpression" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>get<wbr/>Test<wbr/>Title<wbr/>From<wbr/>Expression</span></a>
 <a href="core_src.CommentTagParser.html#sourceFile" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source<wbr/>File</span></a>
 <a href="core_src.CommentTagParser.html#sourceFileBuffer" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source<wbr/>File<wbr/>Buffer</span></a>
 <a href="core_src.CommentTagParser.html#tagSeparator" class="tsd-index-link tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>tag<wbr/>Separator</span></a>
@@ -73,7 +74,7 @@
 <h4>Type Parameters</h4>
 <ul class="tsd-type-parameter-list">
 <li>
-<h4><span class="tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">string</span></h4></li></ul></section>
+<h4><span class="tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">string</span> = <a href="../types/core_src.AllTagsName.html" class="tsd-signature-type tsd-kind-type-alias">AllTagsName</a></h4></li></ul></section>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -81,44 +82,62 @@
 <h5><span class="tsd-kind-parameter">__namedParameters</span>: <a href="../types/core_src.CommentTagParserConfig.html" class="tsd-signature-type tsd-kind-type-alias">CommentTagParserConfig</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="core_src.CommentTagParser.html" class="tsd-signature-type tsd-kind-class">CommentTagParser</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L29">packages/core/src/lib/comment-tag-parser/index.ts:29</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L39">packages/core/src/lib/comment-tag-parser/index.ts:39</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="_testBlockDocComments" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>_test<wbr/>Block<wbr/>Doc<wbr/>Comments</span><a href="#_testBlockDocComments" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">_test<wbr/>Block<wbr/>Doc<wbr/>Comments</span><span class="tsd-signature-symbol">:</span> <a href="../types/core_src.TestBlockDocComment.html" class="tsd-signature-type tsd-kind-type-alias">TestBlockDocComment</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L27">packages/core/src/lib/comment-tag-parser/index.ts:27</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L37">packages/core/src/lib/comment-tag-parser/index.ts:37</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="applyTags" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>apply<wbr/>Tags</span><a href="#applyTags" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">apply<wbr/>Tags</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><a href="../types/core_src.AllTagsName.html" class="tsd-signature-type tsd-kind-type-alias">AllTagsName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L26">packages/core/src/lib/comment-tag-parser/index.ts:26</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L35">packages/core/src/lib/comment-tag-parser/index.ts:35</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-is-private"><a id="getTestTitleFromExpression" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>get<wbr/>Test<wbr/>Title<wbr/>From<wbr/>Expression</span><a href="#getTestTitleFromExpression" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">get<wbr/>Test<wbr/>Title<wbr/>From<wbr/>Expression</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">expression</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span></div>
+<div class="tsd-type-declaration">
+<h4>Type declaration</h4>
+<ul class="tsd-parameters">
+<li class="tsd-parameter-signature">
+<ul class="tsd-signatures">
+<li class="tsd-signature" id="getTestTitleFromExpression.__type.__type-1"><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">expression</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5><span class="tsd-kind-parameter">expression</span>: <span class="tsd-signature-type ">Expression</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4></li></ul></li></ul></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L36">packages/core/src/lib/comment-tag-parser/index.ts:36</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="sourceFile" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>source<wbr/>File</span><a href="#sourceFile" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">source<wbr/>File</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">SourceFile</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L21">packages/core/src/lib/comment-tag-parser/index.ts:21</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L30">packages/core/src/lib/comment-tag-parser/index.ts:30</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="sourceFileBuffer" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>source<wbr/>File<wbr/>Buffer</span><a href="#sourceFileBuffer" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">source<wbr/>File<wbr/>Buffer</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L22">packages/core/src/lib/comment-tag-parser/index.ts:22</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L31">packages/core/src/lib/comment-tag-parser/index.ts:31</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="tagSeparator" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>tag<wbr/>Separator</span><a href="#tagSeparator" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">tag<wbr/>Separator</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L25">packages/core/src/lib/comment-tag-parser/index.ts:25</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L34">packages/core/src/lib/comment-tag-parser/index.ts:34</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="testBlockTagNames" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>test<wbr/>Block<wbr/>Tag<wbr/>Names</span><a href="#testBlockTagNames" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">test<wbr/>Block<wbr/>Tag<wbr/>Names</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">test<wbr/>Block<wbr/>Tag<wbr/>Names</span><span class="tsd-signature-symbol">:</span> <a href="../types/core_src.TestBlockName.html" class="tsd-signature-type tsd-kind-type-alias">TestBlockName</a><span class="tsd-signature-symbol">[]</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L24">packages/core/src/lib/comment-tag-parser/index.ts:24</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L33">packages/core/src/lib/comment-tag-parser/index.ts:33</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="tsDocParser" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>ts<wbr/>Doc<wbr/>Parser</span><a href="#tsDocParser" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">ts<wbr/>Doc<wbr/>Parser</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">TSDocParser</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L23">packages/core/src/lib/comment-tag-parser/index.ts:23</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L32">packages/core/src/lib/comment-tag-parser/index.ts:32</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Accessors</h2>
 <section class="tsd-panel tsd-member"><a id="testBlockDocComments" class="tsd-anchor"></a>
@@ -129,7 +148,7 @@
 <h4 class="tsd-returns-title">Returns <a href="../types/core_src.TestBlockDocComment.html" class="tsd-signature-type tsd-kind-type-alias">TestBlockDocComment</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h4><aside class="tsd-sources">
 <p>Implementation of ICommentTagParser.testBlockDocComments</p>
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L45">packages/core/src/lib/comment-tag-parser/index.ts:45</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L57">packages/core/src/lib/comment-tag-parser/index.ts:57</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="commentRangeToTestBlockDocComment" class="tsd-anchor"></a>
@@ -146,7 +165,7 @@
 <ul class="tsd-parameters">
 <li class="tsd-parameter-signature">
 <ul class="tsd-signatures">
-<li class="tsd-signature" id="commentRangeToTestBlockDocComment.commentRangeToTestBlockDocComment-1.__type.__type-1"><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">comment</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/core_src.TestBlockDocComment.html" class="tsd-signature-type tsd-kind-type-alias">TestBlockDocComment</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span></li>
+<li class="tsd-signature" id="commentRangeToTestBlockDocComment.commentRangeToTestBlockDocComment-1.__type-2.__type-3"><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">comment</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/core_src.TestBlockDocComment.html" class="tsd-signature-type tsd-kind-type-alias">TestBlockDocComment</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span></li>
 <li class="tsd-description">
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -155,7 +174,7 @@
 <h5><span class="tsd-kind-parameter">comment</span>: <span class="tsd-signature-type ">CommentRange</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="../types/core_src.TestBlockDocComment.html" class="tsd-signature-type tsd-kind-type-alias">TestBlockDocComment</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span></h4></li></ul></li></ul><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L101">packages/core/src/lib/comment-tag-parser/index.ts:101</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L116">packages/core/src/lib/comment-tag-parser/index.ts:116</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="findTestBlockDocComments" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>find<wbr/>Test<wbr/>Block<wbr/>Doc<wbr/>Comments</span><a href="#findTestBlockDocComments" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-private">
@@ -168,7 +187,7 @@
 <h5><span class="tsd-kind-parameter">node</span>: <span class="tsd-signature-type ">Node</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L119">packages/core/src/lib/comment-tag-parser/index.ts:119</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L134">packages/core/src/lib/comment-tag-parser/index.ts:134</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="getBlockTags" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>get<wbr/>Block<wbr/>Tags</span><a href="#getBlockTags" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-private">
@@ -185,7 +204,7 @@
 <h5><span class="tsd-kind-parameter">testTitle</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type ">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="../types/core_src.AllTagsName.html" class="tsd-signature-type tsd-kind-type-alias">AllTagsName</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">, </span><a href="../types/core_src.TestBlockTag.html" class="tsd-signature-type tsd-kind-type-alias">TestBlockTag</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">CustomTag</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L59">packages/core/src/lib/comment-tag-parser/index.ts:59</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L74">packages/core/src/lib/comment-tag-parser/index.ts:74</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="getTestTitle" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>get<wbr/>Test<wbr/>Title</span><a href="#getTestTitle" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-private">
@@ -198,7 +217,7 @@
 <h5><span class="tsd-kind-parameter">node</span>: <span class="tsd-signature-type ">CallExpression</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L49">packages/core/src/lib/comment-tag-parser/index.ts:49</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L61">packages/core/src/lib/comment-tag-parser/index.ts:61</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-private"><a id="parseTsDocCommentRange" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>parse<wbr/>Ts<wbr/>Doc<wbr/>Comment<wbr/>Range</span><a href="#parseTsDocCommentRange" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-private">
@@ -211,7 +230,7 @@
 <h5><span class="tsd-kind-parameter">__namedParameters</span>: <span class="tsd-signature-type ">CommentRange</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">DocComment</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/b27a3b9/packages/core/src/lib/comment-tag-parser/index.ts#L54">packages/core/src/lib/comment-tag-parser/index.ts:54</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/tsdoc-test-reporter/reporter/blob/e3a6407/packages/core/src/lib/comment-tag-parser/index.ts#L69">packages/core/src/lib/comment-tag-parser/index.ts:69</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -234,6 +253,7 @@
 <li><a href="#constructor" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-512"></use></svg><span>constructor</span></a></li>
 <li><a href="#_testBlockDocComments" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>_test<wbr/>Block<wbr/>Doc<wbr/>Comments</span></a></li>
 <li><a href="#applyTags" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>apply<wbr/>Tags</span></a></li>
+<li><a href="#getTestTitleFromExpression" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>get<wbr/>Test<wbr/>Title<wbr/>From<wbr/>Expression</span></a></li>
 <li><a href="#sourceFile" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source<wbr/>File</span></a></li>
 <li><a href="#sourceFileBuffer" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source<wbr/>File<wbr/>Buffer</span></a></li>
 <li><a href="#tagSeparator" class="tsd-is-private"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>tag<wbr/>Separator</span></a></li>
@@ -280,11 +300,12 @@
 <li><a href="../functions/core_src.getCompilerOptions.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>get<wbr/>Compiler<wbr/>Options</span></a></li>
 <li><a href="../functions/core_src.getCompilerOptionsThatFollowExtends.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>get<wbr/>Compiler<wbr/>Options<wbr/>That<wbr/>Follow<wbr/>Extends</span></a></li>
 <li><a href="../functions/core_src.getRenderOutput.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>get<wbr/>Render<wbr/>Output</span></a></li>
-<li><a href="../functions/core_src.getSourceFileHelper.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>get<wbr/>Source<wbr/>File<wbr/>Helper</span></a></li>
 <li><a href="../functions/core_src.getSourceFilesMap.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>get<wbr/>Source<wbr/>Files<wbr/>Map</span></a></li>
 <li><a href="../functions/core_src.getTagsFromTestBlockComments.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>get<wbr/>Tags<wbr/>From<wbr/>Test<wbr/>Block<wbr/>Comments</span></a></li>
+<li><a href="../functions/core_src.getTestTitleFromExpression.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>get<wbr/>Test<wbr/>Title<wbr/>From<wbr/>Expression</span></a></li>
 <li><a href="../functions/core_src.getTsDocParserConfig.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>get<wbr/>Ts<wbr/>Doc<wbr/>Parser<wbr/>Config</span></a></li>
 <li><a href="../functions/core_src.parseTestFiles.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>parse<wbr/>Test<wbr/>Files</span></a></li>
+<li><a href="../functions/core_src.programFactory.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>program<wbr/>Factory</span></a></li>
 <li><a href="../functions/core_src.render.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>render</span></a></li>
 <li><a href="../functions/core_src.testFileFactory.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>test<wbr/>File<wbr/>Factory</span></a></li>
 <li><a href="../functions/core_src.writeToFile.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>write<wbr/>To<wbr/>File</span></a></li></ul></div></details></li>

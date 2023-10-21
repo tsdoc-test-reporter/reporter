@@ -1,4 +1,4 @@
-import { DocComment, TextRange, TSDocParser } from '@microsoft/tsdoc';
+import { DocComment, Standardization, TextRange, TSDocParser } from '@microsoft/tsdoc';
 import {
 	type Node,
 	type SourceFile,
@@ -6,56 +6,69 @@ import {
 	type CallExpression,
 	isStringLiteral,
 	Expression,
+	JSDoc,
+	isExpressionStatement,
+	isCallExpression,
 } from 'typescript';
 
-import { allModifierTags, ancestorTagNames, coreDefaults } from '../defaults';
+import { coreDefaults } from '../defaults';
 import type {
 	AllTagsName,
 	CommentTagParserConfig,
 	ICommentTagParser,
 	ModifierTagName,
-	TagKind,
-	TagType,
 	TestBlockDocComment,
 	TestBlockName,
 } from '../types';
 import { unquoteString } from '../utils/string.utils';
-import { getJSDocCommentRanges, getNodeName, isTestBlock } from '../utils/ts.utils';
-import { docBlockToDocBlockTags, tagNameToTSDocBlock } from '../utils/tsdoc.utils';
+import { getJSDocCommentRanges, getNodeName } from '../utils/ts.utils';
+import { docBlockToDocBlockTags, getBlockTagType, getModifierTagType, getTestType, tagNameToTSDocBlock } from '../utils/tsdoc.utils';
 import { BlockTagName } from '../types';
 
-export class CommentTagParser<CustomTag extends string = AllTagsName>
-	implements ICommentTagParser<CustomTag>
+export class CommentTagParser<CustomTags extends string = AllTagsName>
+	implements ICommentTagParser<CustomTags>
 {
 	private sourceFile: SourceFile;
 	private sourceFileBuffer: string;
 	private tsDocParser: TSDocParser;
-	private testBlockTagNames: TestBlockName[];
 	private tagSeparator: string;
-	private applyTags: (AllTagsName | CustomTag)[];
+	private excludeTags?: (AllTagsName | CustomTags)[];
+	private testBlockTagNames?: TestBlockName[];
 	private getTestTitleFromExpression: (expression: Expression) => string;
-	private _testBlockDocComments: TestBlockDocComment<CustomTag>[] = [];
+	private _testBlockDocComments: TestBlockDocComment<CustomTags>[] = [];
+	private customTags: CustomTags[];
 
 	constructor({
 		sourceFile,
 		tsDocParser,
-		applyTags = coreDefaults.applyTags as (AllTagsName | CustomTag)[],
-		testBlockTagNames = coreDefaults.testBlockTagNames,
+		excludeTags,
 		tagSeparator = coreDefaults.tagSeparator,
+		testBlockTagNames,
 		getTestTitleFromExpression,
-	}: CommentTagParserConfig<CustomTag>) {
+	}: CommentTagParserConfig<CustomTags>) {
 		this.tsDocParser = tsDocParser;
 		this.sourceFile = sourceFile;
-		this.testBlockTagNames = testBlockTagNames;
 		this.tagSeparator = tagSeparator;
-		this.applyTags = applyTags;
+		this.excludeTags = excludeTags;
+		this.testBlockTagNames = testBlockTagNames;
 		this.sourceFileBuffer = sourceFile.getFullText();
+		this.customTags = tsDocParser.configuration.tagDefinitions
+			.filter(tagDefinition => tagDefinition.standardization === Standardization.None)
+			.map(tagDefinition => tagDefinition.tagName) as CustomTags[];
 		this.findTestBlockDocComments(this.sourceFile);
 		this.getTestTitleFromExpression = getTestTitleFromExpression;
 	}
 
-	public get testBlockDocComments(): TestBlockDocComment<CustomTag>[] {
+	public get testBlockDocComments(): TestBlockDocComment<CustomTags>[] {
 		return this._testBlockDocComments;
+	}
+
+	private apply(tagName: AllTagsName | CustomTags, testBlockTagName: TestBlockName): boolean {
+		const applyTag = this.excludeTags ? !this.excludeTags.includes(tagName) : true;
+		const applyBlockName = this.testBlockTagNames
+			? this.testBlockTagNames.includes(testBlockTagName)
+			: true;
+		return applyTag && applyBlockName;
 	}
 
 	private getTestTitle(node: CallExpression): string {
@@ -71,60 +84,95 @@ export class CommentTagParser<CustomTag extends string = AllTagsName>
 			.docComment;
 	}
 
-	private getBlockTags(
+	private getJSDocComments(node: Node): TestBlockDocComment<CustomTags>['testBlockTags'] {
+		const tags: TestBlockDocComment<CustomTags>['testBlockTags'] = {};
+		if ('jsDoc' in node && node.jsDoc && Array.isArray(node.jsDoc)) {
+			const jsDoc = node.jsDoc[0] as JSDoc;
+			jsDoc.tags?.forEach((tag) => {
+				const tagName = `@${tag.tagName.text}` as AllTagsName | CustomTags;
+				const testBlockName =
+					isExpressionStatement(node) && isCallExpression(node.expression)
+						? (getNodeName(node.expression) as TestBlockName)
+						: 'test';
+				if (this.apply(tagName, testBlockName)) {
+					tags[tagName] = {
+						name: tagName,
+						testTitle:
+							isExpressionStatement(node) && isCallExpression(node.expression)
+								? this.getTestTitle(node.expression)
+								: '',
+						testBlockName,
+						type: 'standard',
+						kind: 'block',
+						tags: Array.isArray(tag.comment)
+							? (tag.comment?.[0].text as string)?.split(this.tagSeparator)
+							: (tag.comment as string)?.split(this.tagSeparator),
+					};
+				}
+			});
+		}
+		return tags;
+	}
+
+	private getCustomTags() {
+		return Object.fromEntries(this.customTags.map(tag => [tag, tag]))
+	}
+
+	private getTagsFromDocComment(
 		docComment: DocComment,
 		testBlockName: TestBlockName,
 		testTitle: string,
-	): TestBlockDocComment<CustomTag>['testBlockTags'] {
-		const tags: TestBlockDocComment<CustomTag>['testBlockTags'] = {};
-		for (const tagName of this.applyTags) {
-			const kind: TagKind = docComment.modifierTagSet.hasTagName(tagName) ? 'modifier' : 'block';
-			if (kind === 'modifier') {
-				const modifierTag = docComment.modifierTagSet.nodes.find(
-					(node) => node.tagName === tagName,
-				);
-				if (modifierTag) {
-					tags[tagName] = {
-						type: allModifierTags.includes(tagName as ModifierTagName) ? 'standard' : 'custom',
-						kind,
-						name: tagName,
-						testBlockName,
-						testTitle,
-					};
-				}
-			} else {
-				const type: TagType = tagName in tagNameToTSDocBlock ? 'standard' : 'custom';
-				const docBlock =
-					type === 'standard'
-						? docComment[tagNameToTSDocBlock[tagName as BlockTagName]]
-						: docComment.customBlocks.find((block) => block.blockTag.tagName === tagName);
-				if (docBlock) {
-					tags[tagName] = {
-						type,
-						tags: docBlockToDocBlockTags(docBlock, this.tagSeparator),
-						kind,
-						name: tagName,
-						testBlockName,
-						testTitle,
-					};
-				}
+	): TestBlockDocComment<CustomTags>['testBlockTags'] {
+		const tags: TestBlockDocComment<CustomTags>['testBlockTags'] = {};
+		docComment.modifierTagSet.nodes.forEach((modifier) => {
+			const tagName = modifier.tagName as ModifierTagName;
+			if (this.apply(tagName, testBlockName)) {
+				tags[tagName] = {
+					type: getModifierTagType(tagName),
+					kind: 'modifier',
+					name: tagName,
+					testBlockName,
+					testTitle,
+				};
 			}
-		}
+		});
+		Object.entries({ ...tagNameToTSDocBlock, ...this.getCustomTags()}).forEach(([tagName, tagBlock]) => {
+			const name = tagName as BlockTagName;
+			const type = getBlockTagType(name);
+			const docBlock =
+				type === 'standard'
+					? docComment[tagBlock]
+					: docComment.customBlocks.find((block) => block.blockTag.tagName === name);
+			if (docBlock && this.apply(name, testBlockName)) {
+				tags[name] = {
+					type,
+					tags: docBlockToDocBlockTags(docBlock, this.tagSeparator),
+					kind: 'block',
+					name: name,
+					testBlockName,
+					testTitle,
+				};
+			}
+		});
 		return tags;
 	}
 
 	private commentRangeToTestBlockDocComment(
 		node: CallExpression,
-	): (comment: CommentRange) => TestBlockDocComment<CustomTag> {
-		return (comment: CommentRange): TestBlockDocComment<CustomTag> => {
-			const nodeName = getNodeName(node.expression) as TestBlockName;
+		jsDocComments?: TestBlockDocComment<CustomTags>['testBlockTags'],
+	): (comment: CommentRange) => TestBlockDocComment<CustomTags> {
+		return (comment: CommentRange): TestBlockDocComment<CustomTags> => {
+			const testBlockName = getNodeName(node.expression) as TestBlockName;
 			const title = this.getTestTitle(node);
 			return {
 				testFilePath: this.sourceFile.fileName,
 				title,
-				type: ancestorTagNames.includes(nodeName) ? 'ancestor' : 'test',
-				testBlockName: nodeName,
-				testBlockTags: this.getBlockTags(this.parseTsDocCommentRange(comment), nodeName, title),
+				type: getTestType(testBlockName),
+				testBlockName,
+				testBlockTags: {
+					...jsDocComments,
+					...this.getTagsFromDocComment(this.parseTsDocCommentRange(comment), testBlockName, title),
+				} as  TestBlockDocComment<CustomTags>['testBlockTags'],
 				commentStartPosition: comment.pos,
 				commentEndPosition: comment.end,
 			};
@@ -132,9 +180,10 @@ export class CommentTagParser<CustomTag extends string = AllTagsName>
 	}
 
 	private findTestBlockDocComments(node: Node): void {
-		if (isTestBlock(node, this.testBlockTagNames)) {
+		if (isExpressionStatement(node) && isCallExpression(node.expression)) {
+			const jsDocComments = this.getJSDocComments(node);
 			const testTags = getJSDocCommentRanges(this.sourceFileBuffer, node)?.map(
-				this.commentRangeToTestBlockDocComment(node),
+				this.commentRangeToTestBlockDocComment(node.expression, jsDocComments),
 			);
 			if (testTags) {
 				this._testBlockDocComments = [...this.testBlockDocComments, ...testTags];

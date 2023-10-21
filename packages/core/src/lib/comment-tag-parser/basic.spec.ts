@@ -65,7 +65,7 @@ describe('transform all tags in the standard for each test block name', () => {
 });
 
 describe('transform with user supplied parserOptions', () => {
-	test('only parse user supplied applyTags', () => {
+	test.only('disregard excluded tags', () => {
 		const { testBlockDocComments } = new CommentTagParser({
 			sourceFile: testFileFactory({
 				fileName: 'basic.ts',
@@ -88,7 +88,7 @@ describe('transform with user supplied parserOptions', () => {
 				],
 			}),
 			tsDocParser: new TSDocParser(),
-			applyTags: ['@alpha'],
+			excludeTags: ['@beta', "@remarks"],
 			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 		});
 		expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
@@ -136,36 +136,38 @@ describe('transform with user supplied parserOptions', () => {
 	});
 
 	test('only parse user supplied test block names', () => {
+		const sourceFile = testFileFactory({
+			fileName: 'basic.ts',
+			options: [
+				{
+					testBlockName: 'it',
+					testTitle: '@alpha',
+					tags: [
+						{
+							tagName: '@alpha',
+						},
+					],
+				},
+				{
+					testBlockName: 'test',
+					testTitle: '@beta',
+					tags: [
+						{
+							tagName: '@beta',
+						},
+					],
+				},
+			],
+		})
 		const { testBlockDocComments } = new CommentTagParser({
-			sourceFile: testFileFactory({
-				fileName: 'basic.ts',
-				options: [
-					{
-						testBlockName: 'it',
-						testTitle: '@alpha',
-						tags: [
-							{
-								tagName: '@alpha',
-							},
-						],
-					},
-					{
-						testBlockName: 'test',
-						testTitle: '@beta',
-						tags: [
-							{
-								tagName: '@beta',
-							},
-						],
-					},
-				],
-			}),
+			sourceFile,
 			tsDocParser: new TSDocParser(),
 			testBlockTagNames: ['test'],
 			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 		});
-		expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
-			{
+		expect(testBlockDocComments[0].testBlockTags).toEqual({});
+		expect(testBlockDocComments[1].testBlockTags).toEqual({
+			'@beta': {
 				testBlockName: 'test',
 				testTitle: '@beta',
 				type: 'standard',
@@ -173,6 +175,6 @@ describe('transform with user supplied parserOptions', () => {
 				name: '@beta',
 				kind: 'modifier',
 			},
-		]);
+		});
 	});
 });

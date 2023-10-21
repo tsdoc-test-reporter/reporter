@@ -1,6 +1,5 @@
 import { test, expect } from 'vitest';
 import { TSDocParser } from '@microsoft/tsdoc';
-import { coreDefaults } from '../defaults';
 import { parseTestFiles } from './index';
 import { testFileFactory } from '../test-utils/factory/test-file';
 import { WithTestDocBlockComments } from '../types';
@@ -16,7 +15,6 @@ test('parses test files', () => {
 	const fileName = 'test-file-parser.ts';
 	expect(
 		parseTestFiles<TestData, TestDataOutput>({
-			...coreDefaults,
 			tsDocParser: new TSDocParser(),
 			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 			sourceFilesMap: {

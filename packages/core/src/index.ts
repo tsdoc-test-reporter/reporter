@@ -18,7 +18,7 @@ export type {
 	TestBlockTagMap,
 } from './lib/types';
 export { CommentTagParser } from './lib/comment-tag-parser';
-export { coreDefaults } from './lib/defaults';
+export { coreDefaults, allBlockTags, allJSDocTags, allModifierTags } from './lib/defaults';
 export {
 	testBlockTagFactory,
 	testDocBlockCommentFactory,

@@ -40,7 +40,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 			getTestTitleFromExpression: (expression) =>
 				getTestTitleFromExpression(expression, typeChecker),
 			sourceFilesMap: getSourceFilesMap(files, 'filepath', program),
-			applyTags: this.options.applyTags as AllTagsName[],
+			excludeTags: this.options.excludeTags as AllTagsName[],
 			tagSeparator: this.options.tagSeparator,
 			testBlockTagNames: this.options.testBlockTagNames,
 			tsDocParser: new TSDocParser(getTsDocParserConfig(this.options.customTags)),

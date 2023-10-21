@@ -43,7 +43,6 @@ test('get correct background color based on text color', () => {
 /** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
 const options = {
 	testBlockTagNames: ['test', 'test.each'],
-	applyTags: ['@remarks'],
 	outputFileName: 'reports/tsdoc-report',
 	tsConfigPath: './tsconfig.json',
 	tagSeparator: ';',
@@ -76,7 +75,6 @@ const { coreDefaults } = require('@tsdoc-test-reporter/jest');
 
 /** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
 const options = {
-	applyTags: [...coreDefaults.applyTags, '@customModifierTag'],
 	customTags: [
 		{
 			tagName: '@customModifierTag',

@@ -61,10 +61,96 @@ export type ModifierTagName =
 	| '@virtual';
 
 /**
+ * All tag names that are specified as block tags in JSDoc
+ * @see {@link https://jsdoc.app/}
+ */
+export type JSDocTagName =
+	| '@abstract'
+	| '@access'
+	| '@alias'
+	| '@async'
+	| '@augments'
+	| '@author'
+	| '@borrows'
+	| '@callback'
+	| '@class'
+	| '@classdesc'
+	| '@constant'
+	| '@constructs'
+	| '@copyright'
+	| '@default'
+	| '@defaultvalue'
+	| '@deprecated'
+	| '@description'
+	| '@enum'
+	| '@event'
+	| '@example'
+	| '@exports'
+	| '@external'
+	| '@host'
+	| '@file'
+	| '@fileoverview'
+	| '@overview'
+	| '@fires'
+	| '@emits'
+	| '@function'
+	| '@func'
+	| '@method'
+	| '@generator'
+	| '@global'
+	| '@hideconstructor'
+	| '@ignore'
+	| '@implements'
+	| '@inheritdoc'
+	| '@inner'
+	| '@instance'
+	| '@interface'
+	| '@kind'
+	| '@lends'
+	| '@license'
+	| '@listens'
+	| '@member'
+	| '@var'
+	| '@memberof'
+	| '@mixes'
+	| '@module'
+	| '@name'
+	| '@namespace'
+	| '@override'
+	| '@package'
+	| '@param'
+	| '@arg'
+	| '@argument'
+	| '@private'
+	| '@property'
+	| '@prop'
+	| '@protected'
+	| '@public'
+	| '@readonly'
+	| '@requires'
+	| '@returns'
+	| '@return'
+	| '@see'
+	| '@since'
+	| '@static'
+	| '@summary'
+	| '@this'
+	| '@throws'
+	| '@exception'
+	| '@todo'
+	| '@tutorial'
+	| '@type'
+	| '@typedef'
+	| '@variation'
+	| '@version'
+	| '@yields'
+	| '@yield';
+
+/**
  * All tag names that are specified as block in TSDoc.
  * @see {@link https://tsdoc.org/pages/spec/tag_kinds/}
  */
-export type BlockTagName = '@privateRemarks' | '@remarks' | '@deprecated';
+export type BlockTagName = '@privateRemarks' | '@remarks' | '@deprecated' | JSDocTagName;
 /**
  * All names of tags: modifiers and blocks.
  */
@@ -163,16 +249,15 @@ export type CommentTagParserConfig<CustomTags extends string = AllTagsName> = {
 	 */
 	tsDocParser: TSDocParser;
 	/**
-	 * Which tags to apply when parsing.
-	 * Use @see {@link CoreDefaults.applyTags} if you want to extend
+	 * Which tags to exclude when parsing.
 	 * @example
 	 * ```ts
 	 *{
-	 * applyTags: [...coreDefaults.applyTags, "@custom"]
+	 * 	excludeTags: ["@author"]
 	 *}
 	 * ```
 	 */
-	applyTags?: (AllTagsName | CustomTags)[];
+	excludeTags?: (AllTagsName | CustomTags)[];
 	/**
 	 * The names of the test block that will be parsed.
 	 * Use @see {@link CoreDefaults.testBlockTagNames} if you want to extend
@@ -211,7 +296,7 @@ export type CommentTagParserConfig<CustomTags extends string = AllTagsName> = {
  */
 export type TsDocTestReporterConfig<CustomTags extends string = AllTagsName> = Pick<
 	CommentTagParserConfig<CustomTags>,
-	'applyTags' | 'testBlockTagNames' | 'tagSeparator'
+	'excludeTags' | 'testBlockTagNames' | 'tagSeparator'
 > & {
 	customTags?: ITSDocTagDefinitionParameters[];
 	/**
@@ -252,7 +337,7 @@ export type TsDocTestReporterConfig<CustomTags extends string = AllTagsName> = P
 export type OutputFileType = 'json' | 'html';
 
 export type CoreDefaults<CustomTags extends string = AllTagsName> = Required<
-	Pick<CommentTagParserConfig<CustomTags>, 'applyTags' | 'testBlockTagNames' | 'tagSeparator'>
+	Pick<CommentTagParserConfig<CustomTags>, 'testBlockTagNames' | 'tagSeparator'>
 > & {
 	outputFileType: OutputFileType;
 	outputFileName: string;
@@ -344,7 +429,11 @@ export type FileParserConfig<
 	CustomTags extends string = AllTagsName,
 > = Pick<
 	CommentTagParserConfig<CustomTags>,
-	'applyTags' | 'testBlockTagNames' | 'tagSeparator' | 'getTestTitleFromExpression' | 'tsDocParser'
+	| 'excludeTags'
+	| 'testBlockTagNames'
+	| 'tagSeparator'
+	| 'getTestTitleFromExpression'
+	| 'tsDocParser'
 > & {
 	result: Result[];
 	sourceFilesMap: Record<string, SourceFile | undefined>;

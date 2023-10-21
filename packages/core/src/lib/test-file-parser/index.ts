@@ -11,7 +11,7 @@ export const parseTestFiles = <
 	testBlockTagNames,
 	tagSeparator,
 	sourceFilesMap,
-	applyTags,
+	excludeTags,
 	resultMapper,
 	filePath,
 	getTestTitleFromExpression,
@@ -22,7 +22,7 @@ export const parseTestFiles = <
 		const { testBlockDocComments } = new CommentTagParser<CustomTags>({
 			sourceFile,
 			tsDocParser,
-			applyTags,
+			excludeTags,
 			testBlockTagNames,
 			tagSeparator,
 			getTestTitleFromExpression,

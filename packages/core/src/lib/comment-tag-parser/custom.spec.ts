@@ -40,7 +40,6 @@ test('transforms custom tag for block', () => {
 	const { testBlockDocComments } = new CommentTagParser<'@custom'>({
 		sourceFile,
 		tsDocParser: new TSDocParser(config),
-		applyTags: ['@custom'],
 		getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 	});
 	expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag<'@custom'>[]>([
@@ -79,7 +78,6 @@ test('transforms custom tag for modifiers', () => {
 	const { testBlockDocComments } = new CommentTagParser<'@customModifier'>({
 		sourceFile,
 		tsDocParser: new TSDocParser(config),
-		applyTags: ['@customModifier'],
 		getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 	});
 	expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag<'@customModifier'>[]>([

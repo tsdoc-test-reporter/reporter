@@ -61,6 +61,5 @@ config.addTagDefinition(customBlockDefinition);
 const { testBlockDocComments } = new CommentTagParser<'@custom'>({
 	sourceFile,
 	tsDocParser: new TSDocParser(config),
-	applyTags: ['@custom'],
 });
 ```

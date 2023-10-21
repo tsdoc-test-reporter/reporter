@@ -1,6 +1,6 @@
 # @tsdoc-test-reporter/jest
 
-TsDocTestReporter for Jest
+TSDoc Test Reporter for Jest
 
 ## Installing
 
@@ -34,57 +34,6 @@ test('get correct background color based on text color', () => {
 
 3. Run tests
 4. Open the newly generated file `tsdoc-test-reporter-report.html` in the browser of your choice
-
-### With config
-
-> See [the documentation for the config](https://tsdoc-test-reporter.github.io/reporter/types/jest_src.TsDocTestReporterConfig.html) for full docs of possible options
-
-```js
-/** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
-const options = {
-	testBlockTagNames: ['test', 'test.each'],
-	outputFileName: 'reports/tsdoc-report',
-	tsConfigPath: './tsconfig.json',
-	tagSeparator: ';',
-	// These are only applied for HTML Report
-	uiOptions: {
-		title: 'Title of HTML Page',
-		hideAncestorTitles: false,
-		hideAncestorTags: false,
-		removeAtSignOnTags: true,
-		showTagNameOnBlockTags: false,
-		statusToIconMap: {
-			passed: '🎉',
-		},
-	},
-};
-
-/** @type {import('@jest/types').Config.InitialOptions} */
-module.exports = {
-	reporters: ['default', ['@tsdoc-test-reporter/jest', options]],
-};
-```
-
-### With Custom User Supplied tags
-
-```js
-const { coreDefaults } = require('@tsdoc-test-reporter/jest');
-
-/** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
-const options = {
-	customTags: [
-		{
-			tagName: '@customModifierTag',
-			syntaxKind: 2,
-		},
-	],
-};
-
-/** @type {import('@jest/types').Config.InitialOptions} */
-module.exports = {
-	reporters: ['default', ['@tsdoc-test-reporter/jest', options]],
-};
-```
 
 ## Testing
 

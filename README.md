@@ -7,8 +7,9 @@
 ## Features
 
 - Supports: **Jest** and **Vitest**
+- Parses _JSDoc_ and extended _TSDoc_ tags
 - Outputs: **JSON** or **HTML**
-- Use multiple tags in same `block` notation
+- `block` and `modifier` tags (no `inline` tag support yet)
 - Specifying which test blocks should be parsed (`it`/`test`/`describe`)
 - Supports using custom [TagDefinitions](https://tsdoc.org/pages/packages/tsdoc-config/)
 
@@ -45,7 +46,8 @@ module.exports = {
 
 ```ts
 /**
- * @remarks WCAG Criteria
+ * @remarks
+ * WCAG Criteria
  */
 test('get correct background color based on text color', () => {
 	expect(true).toBe(true);
@@ -74,7 +76,8 @@ export default defineConfig({
 
 ```ts
 /**
- * @remarks WCAG Criteria
+ * @remarks
+ * WCAG Criteria
  */
 test('get correct background color based on text color', () => {
 	expect(true).toBe(true);
@@ -93,20 +96,9 @@ test('get correct background color based on text color', () => {
 ```js
 /** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
 const options = {
-	testBlockTagNames: ['test', 'test.each'],
 	outputFileName: 'reports/tsdoc-report',
-	tsConfigPath: './tsconfig.json',
-	tagSeparator: ';',
-	// These are only applied for HTML Report
 	uiOptions: {
 		title: 'Title of HTML Page',
-		hideAncestorTitles: false,
-		hideAncestorTags: false,
-		removeAtSignOnTags: true,
-		showTagNameOnBlockTags: false,
-		statusToIconMap: {
-			passed: '🎉',
-		},
 	},
 };
 
@@ -131,20 +123,9 @@ import { File } from 'vitest';
 export default class MyDefaultReporter extends Reporter {
 	async onFinished(files: File[]) {
 		new TSDocTestReporter({
-			testBlockTagNames: ['test', 'test.each'],
 			outputFileName: 'reports/tsdoc-report',
-			tsConfigPath: './tsconfig.json',
-			tagSeparator: ';',
-			// These are only applied for HTML Report
 			uiOptions: {
 				title: 'Title of HTML Page',
-				hideAncestorTitles: false,
-				hideAncestorTags: false,
-				removeAtSignOnTags: true,
-				showTagNameOnBlockTags: false,
-				statusToIconMap: {
-					passed: '🎉',
-				},
 			},
 		}).onFinished(files);
 	}
@@ -169,8 +150,6 @@ export default defineConfig({
 #### Jest
 
 ```js
-const { coreDefaults } = require('@tsdoc-test-reporter/jest');
-
 /** @type {import('@tsdoc-test-reporter/jest').TsDocTestReporterConfig} */
 const options = {
 	customTags: [

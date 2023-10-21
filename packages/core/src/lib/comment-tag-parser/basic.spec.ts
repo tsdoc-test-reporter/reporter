@@ -65,7 +65,7 @@ describe('transform all tags in the standard for each test block name', () => {
 });
 
 describe('transform with user supplied parserOptions', () => {
-	test.only('disregard excluded tags', () => {
+	test('disregard excluded tags', () => {
 		const { testBlockDocComments } = new CommentTagParser({
 			sourceFile: testFileFactory({
 				fileName: 'basic.ts',
@@ -88,7 +88,7 @@ describe('transform with user supplied parserOptions', () => {
 				],
 			}),
 			tsDocParser: new TSDocParser(),
-			excludeTags: ['@beta', "@remarks"],
+			excludeTags: ['@beta', '@remarks'],
 			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
 		});
 		expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
@@ -158,7 +158,7 @@ describe('transform with user supplied parserOptions', () => {
 					],
 				},
 			],
-		})
+		});
 		const { testBlockDocComments } = new CommentTagParser({
 			sourceFile,
 			tsDocParser: new TSDocParser(),

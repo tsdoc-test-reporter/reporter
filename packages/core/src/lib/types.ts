@@ -204,6 +204,11 @@ export type TestBlockTag<CustomTags extends string = AllTagsName> = {
 	 * "should parse email"
 	 */
 	testTitle: string;
+	/**
+	 * If tag belongs to the original JSDoc standard and
+	 * is not an extended TSDoc tag.
+	 */
+	jsDoc?: boolean;
 };
 
 export type TestBlockTagMap<CustomTags extends string = AllTagsName> = Partial<
@@ -359,7 +364,8 @@ export type UIOptions = {
 	 * ```js
 	 * { aggregateTagsToFileHeading: "onlyAncestors" }
 	 * ```
-	 * @default false
+	 * @default
+	 * false
 	 */
 	aggregateTagsToFileHeading?: boolean | 'withoutAncestors' | 'onlyAncestors' | AllTagsName[];
 	/** Overrides specific colors in the error output. The key is
@@ -370,54 +376,81 @@ export type UIOptions = {
 	 */
 	ansiCustomColorMap?: Record<number, string>;
 	/** Hide the breadcrumbs from ancestors on invidual test result
+	 * @default
+	 * false
 	 * @example
 	 * false: `describe > describe > test`
 	 * true: `test`
 	 */
 	hideAncestorTitles?: boolean;
-	/** Hides the tags from ancestors (describe blocks) on individual test result */
+	/** 
+	 * Hides the tags from ancestors (describe blocks) on individual test result
+	 * @default
+	 * false
+   */
 	hideAncestorTags?: boolean;
-	/**
-	 * Custom formatting of test file path shown in accordion summary
-	 * @param title filepath
+	/** Sets the `<title>` in the head of the generated HTML file
+	 * @default
+	 * Test results 
 	 */
-	formatTitle?: (title: string) => string;
-	/** Removes the `@` symbol on tags in the generated output.
+	htmlTitle?: string;
+	/** Removes the `@` symbol on on the tag name in the generated output.
+	 * @default
+	 * false
 	 * @example
+	 * true:
 	 * `@beta` -> `beta`
+	 * false:
+	 * `@beta` -> `@beta`
 	 */
-	removeAtSignOnTags?: boolean;
-	/** Shows the name of the tag on block type tags
+	removeAtSignOnTags?: boolean | TagKind[];
+	/**
+	 * Shows or hides the tag name for block tags
+	 * @default
+	 * true
 	 * @example
-	 * `a tag name` -> `@remarks a tag name`
+	 * true:
+	 * `@remarks: tag content`
+	 * false:
+	 * `tag content`
 	 */
 	showTagNameOnBlockTags?: boolean;
 	/**
-	 * Show text next to the summary for skipped, todo, failing and passing tests
+	 * Show text next to the summary for skipped, todo, failing and passing tests.
+	 * Screen reader text will still read text with number even if hiding text.
+	 * @example
+	 * true:
+	 * `Todo: 2`
+	 * false:
+	 * `2`
 	 */
 	showTextOnTestSummaryMeta?: boolean;
 	/** Maps a specific status to a supplied icon, overrides default.
 	 * @example
+	 * ```ts
 	 * { statusToIconMap: { passed: '🎉' } }
+	 * ```
 	 * */
-	statusToIconMap?: Record<string, string>;
+	statusToIconMap?: Record<UIAssertion['status'], string>;
 	/** Custom CSS styling to pass in, will be placed below any existing styling
 	 * in the script tag in the header
 	 * @example
 	 * { style: ":root { --tag-background-color: #FFF; }" }
 	 * */
 	style?: string;
-	/** Maps a specific tag title to a supplied icon. The supplied key in
-	 * the object passed must match the exact content of a block tag to be applied.
-	 * @example
-	 *  In your test:
-	 *   `@remarks WCAG criteria`
-	 *  In config:
-	 *    { tagTitleToIconMap: { "WCAG criteria": '♿' } }
-	 * */
-	tagTitleToIconMap?: Record<string, string>;
-	/** Sets the `<title>` in the head of the generated HTML file  */
-	title?: string;
+	/**
+	 * Custom formatting of test file path
+	 * @param title filepath of file
+	 */
+	titleFormatter?: (title: string) => string;
+	/**
+	 * Custom formatter for converting text of tag before rendering.
+	 * Add icon property if you want to display an icon instead of the text
+	 * when rendering. When icon is set, text will be screen reader only.
+	 * @param tag current tag being formatted
+	 * @param tagText tag text being formatted, this is the actual text in case when block tag has several tags
+	 */
+	tagTextAndIconFormatter?: (tag: TestBlockTag, tagText: string) => Pick<UITag, 'text' | 'icon'>;
 };
 
 /**

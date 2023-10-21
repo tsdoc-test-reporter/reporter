@@ -29,16 +29,16 @@ export const tagNameToTSDocBlock: Record<
 };
 
 export const getModifierTagType = (tagName: ModifierTagName): TagType => {
-	return allModifierTags.includes(tagName) ? 'standard' : 'custom'
-}
+	return allModifierTags.includes(tagName) ? 'standard' : 'custom';
+};
 
 export const getBlockTagType = (tagName: BlockTagName): TagType => {
 	return tagName in tagNameToTSDocBlock ? 'standard' : 'custom';
-}
+};
 
 export const getTestType = (testBlockName: TestBlockName) => {
-	return  ancestorTagNames.includes(testBlockName) ? 'ancestor' : 'test'
-}
+	return ancestorTagNames.includes(testBlockName) ? 'ancestor' : 'test';
+};
 
 export const isPlainText = (docNode: DocNode): docNode is DocPlainText => {
 	return docNode.kind === DocNodeKind.PlainText;

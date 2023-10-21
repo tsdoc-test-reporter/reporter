@@ -1,7 +1,7 @@
 import {
 	aggregateMeta,
 	aggregateTags,
-	formatTitle,
+	titleFormatter,
 	getTagsFromTestBlockComments,
 	type UIAssertion,
 	type UIOptions,
@@ -33,7 +33,7 @@ export const toUITestResult =
 			? aggregateTags(assertions, options.aggregateTagsToFileHeading)
 			: undefined;
 		return {
-			title: formatTitle(result.testFilePath, options?.formatTitle),
+			title: titleFormatter(result.testFilePath, options?.titleFormatter),
 			meta: aggregateMeta(assertions),
 			aggregatedTags,
 			assertions,

@@ -6,6 +6,6 @@
 		"module": "CommonJS",
 		"types": ["node", "vitest"]
 	},
-	"include": ["**/*.ts"],
+	"include": ["**/*.ts", "../vitest/src/test.spec.ts"],
 	"exclude": ["jest.config.ts", "**/*.spec.ts"]
 }

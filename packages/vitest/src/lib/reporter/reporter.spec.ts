@@ -111,12 +111,12 @@ test('create json report with output as ui results', () => {
 							{
 								type: 'test',
 								name: '@remarks',
-								text: 'unit',
+								text: '@remarks: unit',
 							},
 							{
 								type: 'test',
 								name: '@remarks',
-								text: 'acceptance',
+								text: '@remarks: acceptance',
 							},
 						],
 						status: 'pass',

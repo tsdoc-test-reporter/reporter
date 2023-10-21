@@ -1,6 +1,7 @@
 import type {
 	AllTagsName,
 	TestBlockDocComment,
+	TestBlockTag,
 	TsDocTestReporterConfig,
 	UIAssertion,
 	UIOptions,
@@ -14,6 +15,34 @@ import { formatResults } from './templates/results';
 export * from './templates';
 export * from './defaultValues';
 
+const AT_SIGN = '@';
+
+const removeAtSign = (name: string) => name.replace(AT_SIGN, '');
+
+const formatText = (
+	tag: TestBlockTag,
+	tagText: string,
+	options?: UIOptions,
+): Pick<UITag, 'text'> => {
+	const removeAtSigns = options?.removeAtSignOnTags;
+	if (options?.tagTextAndIconFormatter) {
+		return options.tagTextAndIconFormatter(tag, tagText);
+	}
+	let text =
+	removeAtSigns && typeof removeAtSigns === 'boolean'
+			? removeAtSign(tagText)
+			: tagText;
+	text =
+	removeAtSigns && Array.isArray(removeAtSigns)
+			? removeAtSigns.includes(tag.kind)
+				? removeAtSign(text)
+				: text
+			: text;
+	return {
+		text,
+	};
+};
+
 export const getTagsFromTestBlockComments = (
 	testBlockComments: TestBlockDocComment[] | undefined,
 	options?: UIOptions,
@@ -24,18 +53,21 @@ export const getTagsFromTestBlockComments = (
 				if (!tag) return [];
 				if (options?.hideAncestorTags && t.type === 'ancestor') return [];
 				if (tag.tags?.length) {
+					const showBlockTags = options?.showTagNameOnBlockTags ?? true;
 					return tag.tags.map((blockTag) => ({
 						type: t.type,
 						name: tag.name as AllTagsName,
-						text: options?.showTagNameOnBlockTags ? `${tag.name}: ${blockTag}` : blockTag,
-						icon: options?.tagTitleToIconMap ? options.tagTitleToIconMap[blockTag] : undefined,
+						...formatText(
+							tag,
+							showBlockTags ? `${tag.name}: ${blockTag}` : blockTag,
+							options,
+						),
 					}));
 				}
 				return {
 					type: t.type,
 					name: tag.name as AllTagsName,
-					text: options?.removeAtSignOnTags ? tag.name.replace('@', '') : tag.name,
-					icon: options?.tagTitleToIconMap ? options.tagTitleToIconMap[tag.name] : undefined,
+					...formatText(tag, tag.name, options),
 				};
 			}),
 		) ?? []
@@ -67,7 +99,7 @@ export const aggregateMeta = (assertions: UIAssertion[]) => {
 	return meta;
 };
 
-export const formatTitle = (title: string, customFormatter?: (title: string) => string) => {
+export const titleFormatter = (title: string, customFormatter?: (title: string) => string) => {
 	return customFormatter ? customFormatter(title) : title.replace(process.cwd(), '');
 };
 
@@ -100,7 +132,7 @@ export const aggregateTags = (
 };
 
 export const render = (results: UITestResult[], options?: UIOptions) => {
-	const title = options?.title ?? 'Test Results';
+	const title = options?.htmlTitle ?? 'Test Results';
 	const statusMap = {
 		...statusToIconMap,
 		...(options?.statusToIconMap ? options.statusToIconMap : {}),

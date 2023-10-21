@@ -2,7 +2,7 @@ import { test, describe, expect, vi } from 'vitest';
 import {
 	aggregateMeta,
 	aggregateTags,
-	formatTitle,
+	titleFormatter,
 	getRenderOutput,
 	getTagsFromTestBlockComments,
 	render,
@@ -166,7 +166,7 @@ describe('aggregate tags', () => {
 
 describe('format title', () => {
 	test('format custom title', () => {
-		expect(formatTitle('title', (t) => t + '!')).toEqual('title!');
+		expect(titleFormatter('title', (t) => t + '!')).toEqual('title!');
 	});
 });
 
@@ -266,21 +266,21 @@ describe('get tags from test block comments', () => {
 			]),
 		).toEqual<UITag[]>([
 			{
+				icon: undefined,
 				text: '@alpha',
 				type: 'test',
-				icon: undefined,
 				name: '@alpha',
 			},
 			{
+				icon: undefined,
 				text: '@beta',
 				type: 'ancestor',
-				icon: undefined,
 				name: '@beta',
 			},
 			{
-				text: 'tag',
-				type: 'ancestor',
 				icon: undefined,
+				text: '@remarks: tag',
+				type: 'ancestor',
 				name: '@remarks',
 			},
 		]);
@@ -351,7 +351,7 @@ describe('get tags from test block comments', () => {
 		]);
 	});
 
-	test('map icon to tag text', () => {
+	test('remove @ sign when option is passed as array', () => {
 		expect(
 			getTagsFromTestBlockComments(
 				[
@@ -368,17 +368,69 @@ describe('get tags from test block comments', () => {
 								testBlockName: 'test',
 								testTitle: 'title',
 							},
+							'@remarks': {
+								type: 'standard',
+								kind: 'block',
+								name: '@remarks',
+								testBlockName: 'test',
+								testTitle: 'title',
+							},
 						},
 					}),
 				],
-				{ tagTitleToIconMap: { '@alpha': '🎉' } },
+				{ removeAtSignOnTags: ["block"] },
 			),
 		).toEqual<UITag[]>([
 			{
 				text: '@alpha',
 				type: 'test',
-				icon: '🎉',
+				icon: undefined,
 				name: '@alpha',
+			},
+			{
+				text: 'remarks',
+				type: 'test',
+				icon: undefined,
+				name: '@remarks',
+			},
+		]);
+	});
+
+	test('map to custom text and icon', () => {
+		expect(
+			getTagsFromTestBlockComments([
+				testDocBlockCommentFactory({
+					testBlockName: 'test',
+					testFilePath: 'file-path.ts',
+					type: 'test',
+					title: 'title',
+					testBlockTags: {
+						'@alpha': {
+							type: 'standard',
+							kind: 'modifier',
+							name: '@alpha',
+							testBlockName: 'test',
+							testTitle: 'title',
+						},
+					},
+				}),
+			], {
+				tagTextAndIconFormatter: (_tag, tagText) => {
+					if (tagText.includes("@alpha")) return {
+						text: tagText,
+						icon: "🎉",
+					}
+					return {
+						text: tagText
+					};
+				}
+			}),
+		).toEqual<UITag[]>([
+			{
+				icon: '🎉',
+				text: '@alpha',
+				name: '@alpha',
+				type: 'test',
 			},
 		]);
 	});
@@ -405,7 +457,7 @@ describe('render', () => {
 	});
 
 	test('should render custom title', () => {
-		expect(render([], { title: 'Custom title' })).toEqual(
+		expect(render([], { htmlTitle: 'Custom title' })).toEqual(
 			expect.stringContaining('<h1>Custom title</h1>'),
 		);
 	});

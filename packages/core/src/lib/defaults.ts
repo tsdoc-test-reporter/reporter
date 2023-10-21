@@ -22,6 +22,11 @@ export const allModifierTags: ModifierTagName[] = [
 	'@virtual',
 ];
 
+export const allTsDocTags: (ModifierTagName|BlockTagName)[] = [
+	...allBlockTags,
+	...allModifierTags,
+]
+
 export const allJSDocTags: JSDocTagName[] = [
 	'@abstract',
 	'@access',

@@ -56,9 +56,6 @@ const options = {
 		statusToIconMap: {
 			passed: '🎉',
 		},
-		tagTitleToIconMap: {
-			'WCAG Criteria': '♿',
-		},
 	},
 };
 

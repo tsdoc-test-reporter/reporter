@@ -107,9 +107,6 @@ const options = {
 		statusToIconMap: {
 			passed: '🎉',
 		},
-		tagTitleToIconMap: {
-			'WCAG Criteria': '♿',
-		},
 	},
 };
 
@@ -147,9 +144,6 @@ export default class MyDefaultReporter extends Reporter {
 				showTagNameOnBlockTags: false,
 				statusToIconMap: {
 					passed: '🎉',
-				},
-				tagTitleToIconMap: {
-					'WCAG Criteria': '♿',
 				},
 			},
 		}).onFinished(files);

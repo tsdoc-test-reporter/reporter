@@ -89,7 +89,28 @@ export const formatHead = ({ title, style }: Props): string =>
 				box-sizing: border-box;
 			}
 
+			details summary { 
+				cursor: pointer;
+			}
+
+			details summary::-webkit-details-marker,
+			details summary::marker {
+			 	display: none; 
+			}
+
+			summary:before {
+				position: absolute;
+				top: 12px;
+				content: "►";
+			}
+
+			details[open] summary:before {
+			 	content: "▼";
+			}
+
 			.test-summary {
+				position: relative;
+				cursor: pointer;
 				padding: 0.5rem;
 				border: 1px solid var(--test-summary-border-color);
 			}
@@ -103,6 +124,7 @@ export const formatHead = ({ title, style }: Props): string =>
 				justify-content: center;
 				align-items: center;
 				width: 100%;
+				padding-left: 1.25rem;
 				justify-content: space-between;
 			}
 

@@ -89,6 +89,10 @@ export const formatHead = ({ title, style }: Props): string =>
 				box-sizing: border-box;
 			}
 
+			main {
+				border-bottom: 1px solid var(--test-summary-border-color);
+			}
+
 			details summary { 
 				cursor: pointer;
 			}
@@ -108,11 +112,16 @@ export const formatHead = ({ title, style }: Props): string =>
 			 	content: "▼";
 			}
 
+			details[open] .test-summary {
+				border-bottom-width: 1px;
+			}
+
 			.test-summary {
 				position: relative;
 				cursor: pointer;
 				padding: 0.5rem;
 				border: 1px solid var(--test-summary-border-color);
+				border-bottom-width: 0;
 			}
 
 			.test-summary {
@@ -150,13 +159,11 @@ export const formatHead = ({ title, style }: Props): string =>
 				border-radius: 4px;
 				box-shadow: var(--box-shadow);
 			}
-			.test-summary-status span:first-child {
+			.test-summary-status .meta:first-of-type {
 				border-radius: 4px 0 0 4px;
 				border-left-width: 1px;
 			}
-			.test-summary-status span:last-child {
-				border-radius: 0 4px 4px 0;
-			}
+			
 			.test-summary-passing-tests {
 				border-color: var(--passing-tests-summary-color);
 				background-color:  var(--passing-tests-summary-background-color);
@@ -212,8 +219,10 @@ export const formatHead = ({ title, style }: Props): string =>
 				gap: 0.5rem;
 			}
 			.tag {
-				padding: 0.15rem 0.25rem;
+				display: inline-flex;
+				align-items: center;
 				border-radius: 4px;
+				padding: 4px;
 				border: 1px solid var(--tag-border-color);
 				background-color: var(--tag-background-color);
 			}

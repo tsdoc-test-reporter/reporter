@@ -1,13 +1,13 @@
 {
 	"name": "@tsdoc-test-reporter/vitest",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"peerDependencies": {
 		"typescript": ">= 4.4.x <= 5.2.x",
 		"vitest": ">=0.32.0"
 	},
 	"dependencies": {
 		"@microsoft/tsdoc": "^0.14.2",
-		"@tsdoc-test-reporter/core": "workspace:^0.0.11",
+		"@tsdoc-test-reporter/core": "workspace:^0.0.12",
 		"tslib": "^2.3.0"
 	},
 	"type": "commonjs",

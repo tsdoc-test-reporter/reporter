@@ -18,7 +18,7 @@ test('format meta with passed', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="test-summary-passing-tests"> 1 </span><span class="sr-only">Passing tests: 1, </span>`,
+			`<span aria-hidden="true" class="meta test-summary-passing-tests"> 1 </span><span class="sr-only">Passing tests: 1, </span>`,
 		),
 	);
 });
@@ -33,7 +33,7 @@ test('format meta with skipped', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="test-summary-skipped-tests"> 1 </span><span class="sr-only">Skipped tests: 1, </span>`,
+			`<span aria-hidden="true" class="meta test-summary-skipped-tests"> 1 </span><span class="sr-only">Skipped tests: 1, </span>`,
 		),
 	);
 });
@@ -48,7 +48,7 @@ test('format meta with skipped', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="test-summary-failing-tests"> 1 </span><span class="sr-only">Failing tests: 1, </span>`,
+			`<span aria-hidden="true" class="meta test-summary-failing-tests"> 1 </span><span class="sr-only">Failing tests: 1, </span>`,
 		),
 	);
 });
@@ -63,7 +63,7 @@ test('format meta with todo', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="test-summary-todo-tests"> 1 </span><span class="sr-only">Todo tests: 1, </span>`,
+			`<span aria-hidden="true" class="meta test-summary-todo-tests"> 1 </span><span class="sr-only">Todo tests: 1, </span>`,
 		),
 	);
 });
@@ -79,7 +79,7 @@ test('format meta with text displayed', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="test-summary-todo-tests">Todo: 1 </span><span class="sr-only">Todo tests: 1, </span>`,
+			`<span aria-hidden="true" class="meta test-summary-todo-tests">Todo: 1 </span><span class="sr-only">Todo tests: 1, </span>`,
 		),
 	);
 });

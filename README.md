@@ -4,6 +4,10 @@
 
 **@tsdoc-test-reporter** is a test reporter that attaches [TSDoc](https://tsdoc.org/) comments to your test results. It enables you to attach metadata to your unit tests in the form of comments.
 
+## Output
+
+**[Example output from the reporter](https://tsdoc-test-reporter.github.io/kitchen-sink/)**
+
 ## Features
 
 - Supports: **Jest** and **Vitest**

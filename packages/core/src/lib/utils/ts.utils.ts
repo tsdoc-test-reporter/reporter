@@ -17,8 +17,13 @@ import {
 	TypeChecker,
 	isEnumDeclaration,
 	Program,
+	Declaration,
+	isImportDeclaration,
+	isNamedImports,
+	Type,
 } from 'typescript';
 import { unquoteString } from './string.utils';
+import { DocMemberReference } from '@microsoft/tsdoc';
 
 export const defaultCompilerOptions: CompilerOptions = {
 	target: ScriptTarget.Latest,
@@ -52,6 +57,20 @@ export const isTestBlock = (node: Node, testBlockNames: string[]): node is CallE
 	return isCallExpression(node) && testBlockNames.includes(getNodeName(node.expression));
 };
 
+export const getMemberNameFromDeclaration = (
+	declaration: Declaration | undefined,
+	name: string,
+) => {
+	if (declaration && isEnumDeclaration(declaration)) {
+		const member = declaration.members.find((member) => {
+			return isIdentifier(member.name) ? member.name.escapedText === name : false;
+		});
+		if (!member?.initializer) return '';
+		return unquoteString(member.initializer.getText());
+	}
+	return '';
+};
+
 export const getTestTitleFromExpression = (title: Expression, typeChecker: TypeChecker): string => {
 	if (isIdentifier(title)) {
 		const type = typeChecker.getTypeAtLocation(title);
@@ -61,18 +80,65 @@ export const getTestTitleFromExpression = (title: Expression, typeChecker: TypeC
 	}
 	if (isPropertyAccessExpression(title)) {
 		const type = typeChecker.getTypeAtLocation(title.expression);
-		const name = title.name.escapedText;
+		const name = title.name.escapedText as string;
 		const declaration = type.getSymbol()?.valueDeclaration;
-		if (declaration && isEnumDeclaration(declaration)) {
-			const member = declaration.members.find((member) => {
-				return isIdentifier(member.name) ? member.name.escapedText === name : false;
-			});
-			if (!member?.initializer) return '';
-			return unquoteString(member.initializer.getText());
-		}
+		return getMemberNameFromDeclaration(declaration, name);
 	}
 	return '';
 };
+
+export const findDeclarationsOfNamedImportedVariables = (
+	node: Node,
+	typechecker: TypeChecker,
+): Type[] => {
+	const types: Type[] = [];
+	node.forEachChild((importDeclaration) => {
+		if (isImportDeclaration(importDeclaration)) {
+			importDeclaration.importClause?.forEachChild((namedImport) => {
+				if (isNamedImports(namedImport)) {
+					namedImport.forEachChild((imp) => {
+						types.push(typechecker.getTypeAtLocation(imp));
+					});
+				}
+			});
+		}
+	});
+	return types;
+};
+
+export const lookupValueFromType = (type: Type, name?: string): string | undefined => {
+	if (type.isStringLiteral()) {
+		return type.value;
+	}
+	if (!name) return undefined;
+	return getMemberNameFromDeclaration(type.getSymbol()?.valueDeclaration, name);
+};
+
+export const lookupValueFromSourceFile = (
+	node: Node,
+	name: string | undefined,
+	typeChecker: () => TypeChecker,
+): string | undefined => {
+	const types = findDeclarationsOfNamedImportedVariables(node, typeChecker());
+	return types.map((type) => lookupValueFromType(type, name)).find(Boolean);
+};
+
+export const lookupMemberReferences =
+	(node: Node, typeChecker: () => TypeChecker) =>
+	(memberReferences: readonly DocMemberReference[]): string | undefined => {
+		if (memberReferences.length === 1) {
+			const identifier = memberReferences[0].memberIdentifier?.identifier;
+			if (!identifier) return undefined;
+			return lookupValueFromSourceFile(node, undefined, typeChecker);
+		}
+		if (memberReferences.length === 2) {
+			const identifier = memberReferences[0].memberIdentifier?.identifier;
+			const name = memberReferences[1].memberIdentifier?.identifier;
+			if (!identifier && !name) return undefined;
+			return lookupValueFromSourceFile(node, name, typeChecker);
+		}
+		return undefined;
+	};
 
 export const programFactory = <TestResult extends object, Key extends keyof TestResult>(
 	results: TestResult[],

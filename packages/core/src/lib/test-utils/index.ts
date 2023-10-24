@@ -1,3 +1,4 @@
+import type { TypeChecker } from 'typescript';
 export * from './factory';
 
-export const mockedGetTestTitleFromExpression = () => '';
+export const getTypeChecker = () => ({}) as TypeChecker;

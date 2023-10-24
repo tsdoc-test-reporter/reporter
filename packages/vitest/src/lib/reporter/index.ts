@@ -8,7 +8,6 @@ import {
 	getSourceFilesMap,
 	getRenderOutput,
 	programFactory,
-	getTestTitleFromExpression,
 	AllTagsName,
 } from '@tsdoc-test-reporter/core';
 import type { Reporter, File } from 'vitest';
@@ -32,13 +31,11 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 
 	public getTaggedResult(files: File[]): TaggedFile[] {
 		const program = programFactory(files, 'filepath', this.compilerOptions);
-		const typeChecker = program.getTypeChecker();
 		return parseTestFiles<File, TaggedFile>({
 			result: files,
 			filePath: 'filepath',
 			resultMapper,
-			getTestTitleFromExpression: (expression) =>
-				getTestTitleFromExpression(expression, typeChecker),
+			getTypeChecker: program.getTypeChecker,
 			sourceFilesMap: getSourceFilesMap(files, 'filepath', program),
 			excludeTags: this.options.excludeTags as AllTagsName[],
 			tagSeparator: this.options.tagSeparator,

@@ -5,10 +5,10 @@ import {
 	type CommentRange,
 	type CallExpression,
 	isStringLiteral,
-	Expression,
 	JSDoc,
 	isExpressionStatement,
 	isCallExpression,
+	TypeChecker,
 } from 'typescript';
 
 import { allTsDocTags, coreDefaults } from '../defaults';
@@ -21,7 +21,12 @@ import type {
 	TestBlockName,
 } from '../types';
 import { unquoteString } from '../utils/string.utils';
-import { getJSDocCommentRanges, getNodeName } from '../utils/ts.utils';
+import {
+	getJSDocCommentRanges,
+	getNodeName,
+	getTestTitleFromExpression,
+	lookupMemberReferences,
+} from '../utils/ts.utils';
 import {
 	docBlockToDocBlockTags,
 	getBlockTagType,
@@ -40,7 +45,7 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 	private tagSeparator: string;
 	private excludeTags?: (AllTagsName | CustomTags)[];
 	private testBlockTagNames?: TestBlockName[];
-	private getTestTitleFromExpression: (expression: Expression) => string;
+	private getTypeChecker: () => TypeChecker;
 	private _testBlockDocComments: TestBlockDocComment<CustomTags>[] = [];
 	private customTags: CustomTags[];
 
@@ -50,7 +55,7 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 		excludeTags,
 		tagSeparator = coreDefaults.tagSeparator,
 		testBlockTagNames,
-		getTestTitleFromExpression,
+		getTypeChecker,
 	}: CommentTagParserConfig<CustomTags>) {
 		this.tsDocParser = tsDocParser;
 		this.sourceFile = sourceFile;
@@ -58,11 +63,11 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 		this.excludeTags = excludeTags;
 		this.testBlockTagNames = testBlockTagNames;
 		this.sourceFileBuffer = sourceFile.getFullText();
+		this.getTypeChecker = getTypeChecker;
 		this.customTags = tsDocParser.configuration.tagDefinitions
 			.filter((tagDefinition) => tagDefinition.standardization === Standardization.None)
 			.map((tagDefinition) => tagDefinition.tagName) as CustomTags[];
 		this.findTestBlockDocComments(this.sourceFile);
-		this.getTestTitleFromExpression = getTestTitleFromExpression;
 	}
 
 	public get testBlockDocComments(): TestBlockDocComment<CustomTags>[] {
@@ -82,7 +87,7 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 		if (isStringLiteral(firstArgument)) {
 			return unquoteString(firstArgument.getText(this.sourceFile));
 		}
-		return this.getTestTitleFromExpression(firstArgument);
+		return getTestTitleFromExpression(firstArgument, this.getTypeChecker());
 	}
 
 	private parseTsDocCommentRange({ pos, end }: CommentRange): DocComment {
@@ -101,6 +106,12 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 						? (getNodeName(node.expression.expression) as TestBlockName)
 						: 'test';
 				if (this.apply(tagName, testBlockName)) {
+					const content = Array.isArray(tag.comment)
+						? tag.comment
+								.map((c) => c.text)
+								.join('')
+								?.split(this.tagSeparator)
+						: (tag.comment as string)?.split(this.tagSeparator);
 					tags[tagName] = {
 						name: tagName,
 						testTitle:
@@ -111,9 +122,7 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 						type: 'standard',
 						kind: 'block',
 						jsDoc: !allTsDocTags.includes(tagName as BlockTagName),
-						tags: Array.isArray(tag.comment)
-							? (tag.comment?.[0].text as string)?.split(this.tagSeparator)
-							: (tag.comment as string)?.split(this.tagSeparator),
+						tags: content,
 					};
 				}
 			});
@@ -152,14 +161,21 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 						? docComment[tagBlock]
 						: docComment.customBlocks.find((block) => block.blockTag.tagName === name);
 				if (docBlock && this.apply(name, testBlockName)) {
-					tags[name] = {
-						type,
-						tags: docBlockToDocBlockTags(docBlock, this.tagSeparator),
-						kind: 'block',
-						name: name,
-						testBlockName,
-						testTitle,
-					};
+					const content = docBlockToDocBlockTags(
+						docBlock,
+						this.tagSeparator,
+						lookupMemberReferences(this.sourceFile, this.getTypeChecker),
+					);
+					if (content.length) {
+						tags[name] = {
+							type,
+							tags: content,
+							kind: 'block',
+							name: name,
+							testBlockName,
+							testTitle,
+						};
+					}
 				}
 			},
 		);

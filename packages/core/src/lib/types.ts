@@ -1,5 +1,5 @@
 import type { ITSDocTagDefinitionParameters, TSDocParser } from '@microsoft/tsdoc';
-import type { Expression, SourceFile } from 'typescript';
+import type { SourceFile, TypeChecker } from 'typescript';
 
 /**
  * Describes if the tag is part of the specification or if it
@@ -287,13 +287,7 @@ export type CommentTagParserConfig<CustomTags extends string = AllTagsName> = {
 	 * @default ","
 	 */
 	tagSeparator?: string;
-	/**
-	 * Helper to extract test title if the test title is an expression.
-	 * This usually means that the test title is a variable of some sort
-	 * @param expression variable that is used in test title
-	 * @returns
-	 */
-	getTestTitleFromExpression: (expression: Expression) => string;
+	getTypeChecker: () => TypeChecker;
 };
 
 /**
@@ -383,15 +377,15 @@ export type UIOptions = {
 	 * true: `test`
 	 */
 	hideAncestorTitles?: boolean;
-	/** 
+	/**
 	 * Hides the tags from ancestors (describe blocks) on individual test result
 	 * @default
 	 * false
-   */
+	 */
 	hideAncestorTags?: boolean;
 	/** Sets the `<title>` in the head of the generated HTML file
 	 * @default
-	 * Test results 
+	 * Test results
 	 */
 	htmlTitle?: string;
 	/** Removes the `@` symbol on on the tag name in the generated output.
@@ -462,11 +456,7 @@ export type FileParserConfig<
 	CustomTags extends string = AllTagsName,
 > = Pick<
 	CommentTagParserConfig<CustomTags>,
-	| 'excludeTags'
-	| 'testBlockTagNames'
-	| 'tagSeparator'
-	| 'getTestTitleFromExpression'
-	| 'tsDocParser'
+	'excludeTags' | 'testBlockTagNames' | 'tagSeparator' | 'getTypeChecker' | 'tsDocParser'
 > & {
 	result: Result[];
 	sourceFilesMap: Record<string, SourceFile | undefined>;

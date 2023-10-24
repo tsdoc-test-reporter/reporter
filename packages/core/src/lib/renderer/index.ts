@@ -28,12 +28,9 @@ const formatText = (
 	if (options?.tagTextAndIconFormatter) {
 		return options.tagTextAndIconFormatter(tag, tagText);
 	}
-	let text =
-	removeAtSigns && typeof removeAtSigns === 'boolean'
-			? removeAtSign(tagText)
-			: tagText;
+	let text = removeAtSigns && typeof removeAtSigns === 'boolean' ? removeAtSign(tagText) : tagText;
 	text =
-	removeAtSigns && Array.isArray(removeAtSigns)
+		removeAtSigns && Array.isArray(removeAtSigns)
 			? removeAtSigns.includes(tag.kind)
 				? removeAtSign(text)
 				: text
@@ -57,11 +54,7 @@ export const getTagsFromTestBlockComments = (
 					return tag.tags.map((blockTag) => ({
 						type: t.type,
 						name: tag.name as AllTagsName,
-						...formatText(
-							tag,
-							showBlockTags ? `${tag.name}: ${blockTag}` : blockTag,
-							options,
-						),
+						...formatText(tag, showBlockTags ? `${tag.name}: ${blockTag}` : blockTag, options),
 					}));
 				}
 				return {

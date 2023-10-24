@@ -3,7 +3,7 @@ import { TSDocParser } from '@microsoft/tsdoc';
 import { parseTestFiles } from './index';
 import { testFileFactory } from '../test-utils/factory/test-file';
 import { WithTestDocBlockComments } from '../types';
-import { mockedGetTestTitleFromExpression } from '../test-utils';
+import { getTypeChecker } from '../test-utils';
 
 type TestData = {
 	filePath: string;
@@ -16,7 +16,7 @@ test('parses test files', () => {
 	expect(
 		parseTestFiles<TestData, TestDataOutput>({
 			tsDocParser: new TSDocParser(),
-			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
+			getTypeChecker: getTypeChecker,
 			sourceFilesMap: {
 				[fileName]: testFileFactory({
 					fileName,

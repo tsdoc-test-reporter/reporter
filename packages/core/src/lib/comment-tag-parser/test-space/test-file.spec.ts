@@ -8,9 +8,8 @@ import {
 	TSDocTagDefinition,
 	TSDocTagSyntaxKind,
 } from '@microsoft/tsdoc';
-import { mockedGetTestTitleFromExpression } from '../../test-utils';
 
-test.skip('test file', () => {
+test('test file', () => {
 	const program = createProgram([`${__dirname}/test-file.ts`], defaultCompilerOptions);
 	const sourceFile = program.getSourceFile(`${__dirname}/test-file.ts`);
 	const config = new TSDocConfiguration();
@@ -23,7 +22,7 @@ test.skip('test file', () => {
 		const { testBlockDocComments } = new CommentTagParser({
 			tsDocParser: new TSDocParser(config),
 			sourceFile,
-			getTestTitleFromExpression: mockedGetTestTitleFromExpression,
+			getTypeChecker: program.getTypeChecker,
 		});
 		expect(testBlockDocComments).toBeDefined();
 	}

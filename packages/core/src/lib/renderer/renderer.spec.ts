@@ -378,7 +378,7 @@ describe('get tags from test block comments', () => {
 						},
 					}),
 				],
-				{ removeAtSignOnTags: ["block"] },
+				{ removeAtSignOnTags: ['block'] },
 			),
 		).toEqual<UITag[]>([
 			{
@@ -398,33 +398,37 @@ describe('get tags from test block comments', () => {
 
 	test('map to custom text and icon', () => {
 		expect(
-			getTagsFromTestBlockComments([
-				testDocBlockCommentFactory({
-					testBlockName: 'test',
-					testFilePath: 'file-path.ts',
-					type: 'test',
-					title: 'title',
-					testBlockTags: {
-						'@alpha': {
-							type: 'standard',
-							kind: 'modifier',
-							name: '@alpha',
-							testBlockName: 'test',
-							testTitle: 'title',
+			getTagsFromTestBlockComments(
+				[
+					testDocBlockCommentFactory({
+						testBlockName: 'test',
+						testFilePath: 'file-path.ts',
+						type: 'test',
+						title: 'title',
+						testBlockTags: {
+							'@alpha': {
+								type: 'standard',
+								kind: 'modifier',
+								name: '@alpha',
+								testBlockName: 'test',
+								testTitle: 'title',
+							},
 						},
+					}),
+				],
+				{
+					tagTextAndIconFormatter: (_tag, tagText) => {
+						if (tagText.includes('@alpha'))
+							return {
+								text: tagText,
+								icon: '🎉',
+							};
+						return {
+							text: tagText,
+						};
 					},
-				}),
-			], {
-				tagTextAndIconFormatter: (_tag, tagText) => {
-					if (tagText.includes("@alpha")) return {
-						text: tagText,
-						icon: "🎉",
-					}
-					return {
-						text: tagText
-					};
-				}
-			}),
+				},
+			),
 		).toEqual<UITag[]>([
 			{
 				icon: '🎉',

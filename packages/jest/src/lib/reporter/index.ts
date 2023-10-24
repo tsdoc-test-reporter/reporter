@@ -7,7 +7,6 @@ import {
 	getCompilerOptions,
 	getRenderOutput,
 	getSourceFilesMap,
-	getTestTitleFromExpression,
 	getTsDocParserConfig,
 	parseTestFiles,
 	programFactory,
@@ -35,12 +34,10 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 
 	public getTaggedResult(results: AggregatedResult): TaggedAggregatedResult {
 		const program = programFactory(results.testResults, 'testFilePath', this.compilerOptions);
-		const typeChecker = program.getTypeChecker();
 		return {
 			...results,
 			testResults: parseTestFiles({
-				getTestTitleFromExpression: (expression) =>
-					getTestTitleFromExpression(expression, typeChecker),
+				getTypeChecker: program.getTypeChecker,
 				result: results.testResults,
 				filePath: 'testFilePath',
 				resultMapper,

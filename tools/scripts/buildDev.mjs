@@ -23,7 +23,7 @@ try {
 	json.version = '13.3.7';
 	fs.writeFileSync(`package.json`, JSON.stringify(json, null, 2));
 } catch (e) {
-	console.log(e);
+	console.error(e);
 }
 
 execSync('npm install');

@@ -14,7 +14,7 @@ export const parseTestFiles = <
 	excludeTags,
 	resultMapper,
 	filePath,
-	getTestTitleFromExpression,
+	getTypeChecker,
 }: FileParserConfig<Result, Output, CustomTags>): Output[] => {
 	return result.flatMap((result) => {
 		const sourceFile = sourceFilesMap[result[filePath] as string];
@@ -25,7 +25,7 @@ export const parseTestFiles = <
 			excludeTags,
 			testBlockTagNames,
 			tagSeparator,
-			getTestTitleFromExpression,
+			getTypeChecker,
 		});
 		if (!testBlockDocComments.length) return result as unknown as Output;
 		return resultMapper(result, testBlockDocComments);

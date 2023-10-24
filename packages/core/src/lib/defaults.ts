@@ -110,6 +110,11 @@ export const allJSDocTags: JSDocTagName[] = [
 	'@yield',
 ];
 
+export const jsDocTagsMap = Object.fromEntries(allJSDocTags.map((key) => [key, true])) as Record<
+	JSDocTagName,
+	boolean
+>;
+
 export const testTagNames: TestBlockName[] = [
 	'test',
 	'test.skip',
@@ -163,6 +168,14 @@ export const ancestorTagNames: TestBlockName[] = [
 ];
 
 export const testBlockTagNames: TestBlockName[] = [...testTagNames, ...ancestorTagNames];
+export const baseTestBlockNames: Record<
+	Extract<TestBlockName, 'test' | 'it' | 'describe'>,
+	boolean
+> = {
+	test: true,
+	it: true,
+	describe: true,
+};
 
 export const defaultOutputFileName = 'tsdoc-test-reporter-report';
 

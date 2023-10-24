@@ -6,9 +6,10 @@ type Props = {
 	results: UITestResult[];
 	statusMap: Record<string, string>;
 	showTextOnMeta?: boolean;
+	toHTML?: (content: string) => string;
 };
 
-export const formatResults = ({ results, statusMap, showTextOnMeta }: Props): string =>
+export const formatResults = ({ results, statusMap, showTextOnMeta, toHTML }: Props): string =>
 	`${results
 		.map(
 			(result) =>
@@ -19,7 +20,7 @@ export const formatResults = ({ results, statusMap, showTextOnMeta }: Props): st
 					tags: result.aggregatedTags,
 					showTextOnMeta,
 				})}
-				${formatContent({ assertions: result.assertions, statusMap })}
+				${formatContent({ assertions: result.assertions, statusMap, toHTML })}
 			</details>`,
 		)
 		.join('')}`;

@@ -28,12 +28,21 @@ export const aggregateAssertions = (
 				options,
 			);
 		}
+		const status = task.result?.state ?? task.mode ?? 'run';
+		const errors = task.result?.errors?.map((error) => ({
+			name: error.name,
+			message: error.message,
+			expected: error.expected,
+			actual: error.actual,
+			diff: error.showDiff ? error.diff : undefined,
+		}));
 		return [
 			{
 				title: task.name,
 				ancestorTitles,
 				tags: getTagsFromTestBlockComments(task.testBlockComments, options).concat(ancestorTags),
-				status: task.result?.state ?? task.mode ?? 'run',
+				status,
+				errors: (errors?.length ?? 0) > 0 ? errors : undefined,
 			},
 		];
 	});

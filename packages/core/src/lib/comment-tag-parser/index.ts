@@ -11,7 +11,7 @@ import {
 	TypeChecker,
 } from 'typescript';
 
-import { allTsDocTags, coreDefaults } from '../defaults';
+import { baseTestBlockNames, coreDefaults, jsDocTagsMap } from '../defaults';
 import type {
 	AllTagsName,
 	CommentTagParserConfig,
@@ -23,8 +23,12 @@ import type {
 import { unquoteString } from '../utils/string.utils';
 import {
 	getJSDocCommentRanges,
-	getNodeName,
+	getJSDocContent,
+	getJSDocs,
+	getTestBlockBaseName,
+	getTestBlockName,
 	getTestTitleFromExpression,
+	hasJSDoc,
 	lookupMemberReferences,
 } from '../utils/ts.utils';
 import {
@@ -95,38 +99,28 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 			.docComment;
 	}
 
-	private getJSDocComments(node: Node): TestBlockDocComment<CustomTags>['testBlockTags'] {
+	private getJSDocComments(
+		title: string,
+		testBlockName: TestBlockName,
+		jsDocs: JSDoc[],
+	): TestBlockDocComment<CustomTags>['testBlockTags'] {
 		const tags: TestBlockDocComment<CustomTags>['testBlockTags'] = {};
-		if ('jsDoc' in node && node.jsDoc && Array.isArray(node.jsDoc)) {
-			const jsDoc = node.jsDoc[0] as JSDoc;
-			jsDoc.tags?.forEach((tag) => {
+		jsDocs
+			.flatMap((jsDoc) => jsDoc.tags ?? [])
+			.forEach((tag) => {
 				const tagName = `@${tag.tagName.text}` as AllTagsName | CustomTags;
-				const testBlockName =
-					isExpressionStatement(node) && isCallExpression(node.expression)
-						? (getNodeName(node.expression.expression) as TestBlockName)
-						: 'test';
-				if (this.apply(tagName, testBlockName)) {
-					const content = Array.isArray(tag.comment)
-						? tag.comment
-								.map((c) => c.text)
-								.join('')
-								?.split(this.tagSeparator)
-						: (tag.comment as string)?.split(this.tagSeparator);
+				if (this.apply(tagName, testBlockName) && tagName in jsDocTagsMap) {
 					tags[tagName] = {
 						name: tagName,
-						testTitle:
-							isExpressionStatement(node) && isCallExpression(node.expression)
-								? this.getTestTitle(node.expression)
-								: '',
+						testTitle: title,
 						testBlockName,
 						type: 'standard',
 						kind: 'block',
-						jsDoc: !allTsDocTags.includes(tagName as BlockTagName),
-						tags: content,
+						jsDoc: true,
+						tags: getJSDocContent(tag, this.tagSeparator),
 					};
 				}
 			});
-		}
 		return tags;
 	}
 
@@ -182,20 +176,16 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 		return tags;
 	}
 
-	private commentRangeToTestBlockDocComment(
-		node: CallExpression,
-		jsDocComments?: TestBlockDocComment<CustomTags>['testBlockTags'],
-	): (comment: CommentRange) => TestBlockDocComment<CustomTags> {
+	private commentRangeToTestBlockDocComment(node: CallExpression, title: string, jsDocs?: JSDoc[]) {
 		return (comment: CommentRange): TestBlockDocComment<CustomTags> => {
-			const testBlockName = getNodeName(node.expression) as TestBlockName;
-			const title = this.getTestTitle(node);
+			const testBlockName = getTestBlockName(node.expression);
 			return {
 				testFilePath: this.sourceFile.fileName,
 				title,
 				type: getTestType(testBlockName),
 				testBlockName,
 				testBlockTags: {
-					...jsDocComments,
+					...(jsDocs ? this.getJSDocComments(title, testBlockName, jsDocs) : {}),
 					...this.getTagsFromDocComment(this.parseTsDocCommentRange(comment), testBlockName, title),
 				} as TestBlockDocComment<CustomTags>['testBlockTags'],
 				commentStartPosition: comment.pos,
@@ -205,13 +195,22 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 	}
 
 	private findTestBlockDocComments(node: Node): void {
-		if (isExpressionStatement(node) && isCallExpression(node.expression)) {
-			const jsDocComments = this.getJSDocComments(node);
-			const testTags = getJSDocCommentRanges(this.sourceFileBuffer, node)?.map(
-				this.commentRangeToTestBlockDocComment(node.expression, jsDocComments),
-			);
-			if (testTags) {
-				this._testBlockDocComments = [...this.testBlockDocComments, ...testTags];
+		if (isExpressionStatement(node) && isCallExpression(node.expression) && hasJSDoc(node)) {
+			const baseTestBlockName = getTestBlockBaseName(node.expression);
+			if (baseTestBlockName && baseTestBlockName in baseTestBlockNames) {
+				const jsDocs = getJSDocs(node);
+				if (jsDocs && jsDocs.length > 0) {
+					const expressionToParse = isCallExpression(node.expression.expression)
+						? node.expression.expression
+						: node.expression;
+					const testTitle = this.getTestTitle(node.expression);
+					const testTags = getJSDocCommentRanges(this.sourceFileBuffer, node)?.map(
+						this.commentRangeToTestBlockDocComment(expressionToParse, testTitle, jsDocs),
+					);
+					if (testTags) {
+						this._testBlockDocComments = [...this.testBlockDocComments, ...testTags];
+					}
+				}
 			}
 		}
 		return node.forEachChild((child) => this.findTestBlockDocComments(child));

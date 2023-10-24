@@ -1,10 +1,16 @@
 import type { AggregatedResult, AssertionResult, TestResult } from '@jest/test-result';
 import type { TestDataFactory } from '@tsdoc-test-reporter/core';
+import type { FailureDetails } from '../../types';
+
+export const failureDetailsFactory: TestDataFactory<FailureDetails> = (overrides = {}) => ({
+	matcherResult: {
+		message: overrides.matcherResult?.message,
+		pass: overrides.matcherResult?.pass ?? true,
+	},
+});
 
 export const assertionResultFactory: TestDataFactory<AssertionResult> = (overrides = {}) => ({
 	duration: null,
-	failureDetails: [],
-	failureMessages: [],
 	fullName: 'test',
 	invocations: undefined,
 	numPassingAsserts: 0,
@@ -12,6 +18,8 @@ export const assertionResultFactory: TestDataFactory<AssertionResult> = (overrid
 	title: 'test',
 	...overrides,
 	location: undefined,
+	failureDetails: overrides.failureDetails?.map(failureDetailsFactory) ?? [],
+	failureMessages: overrides.failureMessages ?? [],
 	ancestorTitles: overrides.ancestorTitles ?? [],
 	retryReasons: (overrides.retryReasons as string[]) ?? [],
 });

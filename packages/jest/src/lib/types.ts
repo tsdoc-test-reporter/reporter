@@ -1,6 +1,13 @@
 import type { AggregatedResult, AssertionResult, TestResult } from '@jest/test-result';
 import type { WithTestDocBlockComments } from '@tsdoc-test-reporter/core';
 
+export type FailureDetails = {
+	matcherResult: {
+		message?: string;
+		pass: boolean;
+	};
+};
+
 /**
  * @see {@link AssertionResult} from Jest with TestDockBlockComments
  * from the parser

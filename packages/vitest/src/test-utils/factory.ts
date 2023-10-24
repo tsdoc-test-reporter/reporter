@@ -3,13 +3,20 @@ import {
 	type DeepPartial,
 	type TestDataFactory,
 } from '@tsdoc-test-reporter/core';
-import type { File, Suite, Task, TaskResult, Test } from 'vitest';
+import type { ErrorWithDiff, File, Suite, Task, TaskResult, Test } from 'vitest';
 import { TaggedFile, TaggedSuite, TaggedTest } from '../types';
+
+export const errorFactory: TestDataFactory<ErrorWithDiff> = (props = {}) => ({
+	message: 'message',
+	name: 'name',
+	...props,
+	stacks: [],
+});
 
 export const taskResultFactory: TestDataFactory<TaskResult> = (overrides = {}) => ({
 	state: 'pass',
 	...overrides,
-	errors: [],
+	errors: overrides.errors?.map(errorFactory) ?? [],
 	benchmark: undefined,
 	hooks: undefined,
 	retryCount: undefined,

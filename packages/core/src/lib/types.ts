@@ -471,11 +471,20 @@ export type UITag = {
 	name: AllTagsName;
 };
 
+export type UITestError = {
+	name: string;
+	message: string;
+	actual?: string;
+	expected?: string;
+	diff?: string;
+};
+
 export type UIAssertion = {
 	title: string;
 	ancestorTitles?: string[];
 	status: 'pass' | 'fail' | 'skip' | 'todo' | 'run' | 'only';
 	tags: UITag[];
+	errors?: UITestError[];
 };
 
 export type UITestResultMeta = {

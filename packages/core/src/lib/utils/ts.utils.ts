@@ -21,9 +21,12 @@ import {
 	isImportDeclaration,
 	isNamedImports,
 	Type,
+	JSDoc,
+	JSDocTag,
 } from 'typescript';
 import { unquoteString } from './string.utils';
 import { DocMemberReference } from '@microsoft/tsdoc';
+import { TestBlockName } from '../types';
 
 export const defaultCompilerOptions: CompilerOptions = {
 	target: ScriptTarget.Latest,
@@ -39,6 +42,24 @@ export const isJSDocComment = (buffer: string) => (comment: CommentRange) =>
 	buffer.charCodeAt(comment.pos + 2) === CharCodes.Asterisk &&
 	buffer.charCodeAt(comment.pos + 3) !== CharCodes.Slash;
 
+export const hasJSDoc = (node: Node) =>
+	Boolean('jsDoc' in node && node.jsDoc && Array.isArray(node.jsDoc));
+
+export const getJSDocs = (node: Node): JSDoc[] | undefined => {
+	if (hasJSDoc(node)) {
+		return (node as unknown as { jsDoc: JSDoc[] }).jsDoc;
+	}
+	return undefined;
+};
+
+export const getJSDocContent = (tag: JSDocTag, tagSeparator: string) =>
+	Array.isArray(tag.comment)
+		? tag.comment
+				.map((c) => c.text)
+				.join('')
+				?.split(tagSeparator)
+		: (tag.comment as string)?.split(tagSeparator);
+
 export const getJSDocCommentRanges = (buffer: string, node: Node): CommentRange[] | undefined => {
 	return getLeadingCommentRanges(buffer, node.pos)?.filter(isJSDocComment(buffer));
 };
@@ -51,6 +72,53 @@ export const getNodeName = (expression: Expression, prefix = ''): string => {
 		return getNodeName(expression.name, getNodeName(expression.expression, prefix) + '.');
 	}
 	return '';
+};
+
+export const getTestBlockName = (expression: Expression): TestBlockName =>
+	getNodeName(expression) as TestBlockName;
+
+export const getTestBlockBaseName = (expression: CallExpression): TestBlockName | undefined => {
+	// wow thats a nice function you got there 👀 👨🏼‍🍳 🤡
+	if (isIdentifier(expression.expression)) {
+		return expression.expression.escapedText as TestBlockName;
+	}
+	if (
+		isPropertyAccessExpression(expression.expression) &&
+		isIdentifier(expression.expression.expression)
+	) {
+		return expression.expression.expression.escapedText as TestBlockName;
+	}
+	if (
+		isPropertyAccessExpression(expression.expression) &&
+		isPropertyAccessExpression(expression.expression.expression) &&
+		isIdentifier(expression.expression.expression.expression)
+	) {
+		return expression.expression.expression.expression.escapedText as TestBlockName;
+	}
+	if (
+		isPropertyAccessExpression(expression.expression) &&
+		isPropertyAccessExpression(expression.expression.expression) &&
+		isPropertyAccessExpression(expression.expression.expression.expression) &&
+		isIdentifier(expression.expression.expression.expression.expression)
+	) {
+		return expression.expression.expression.expression.expression.escapedText as TestBlockName;
+	}
+	if (
+		isCallExpression(expression.expression) &&
+		isPropertyAccessExpression(expression.expression.expression) &&
+		isIdentifier(expression.expression.expression.expression)
+	) {
+		return expression.expression.expression.expression.escapedText as TestBlockName;
+	}
+	if (
+		isCallExpression(expression.expression) &&
+		isPropertyAccessExpression(expression.expression.expression) &&
+		isPropertyAccessExpression(expression.expression.expression.expression) &&
+		isIdentifier(expression.expression.expression.expression.expression)
+	) {
+		return expression.expression.expression.expression.expression.escapedText as TestBlockName;
+	}
+	return undefined;
 };
 
 export const isTestBlock = (node: Node, testBlockNames: string[]): node is CallExpression => {

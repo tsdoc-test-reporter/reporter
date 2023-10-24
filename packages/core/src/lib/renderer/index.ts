@@ -9,7 +9,9 @@ import type {
 	UITestResult,
 	UITestResultMeta,
 } from '../types';
-import { statusToIconMap } from './defaultValues';
+import { AnsiToHtmlConverter } from '../utils/ansi-to-html';
+import { escapeHtml } from '../utils/ansi-to-html/escapeHTML';
+import { customColorMap, statusToIconMap } from './defaultValues';
 import { formatHead, formatHeader } from './templates';
 import { formatResults } from './templates/results';
 export * from './templates';
@@ -130,6 +132,14 @@ export const render = (results: UITestResult[], options?: UIOptions) => {
 		...statusToIconMap,
 		...(options?.statusToIconMap ? options.statusToIconMap : {}),
 	};
+	const ansiToHtmlConverter = new AnsiToHtmlConverter({
+		newline: true,
+		colors: {
+			...customColorMap,
+			...options?.ansiCustomColorMap,
+		},
+	});
+	const toHTML = (content: string) => ansiToHtmlConverter.toHtml(escapeHtml(content));
 	return `<!doctype html>
 			<html lang="en">
 				${formatHead({ title, style: options?.style ?? '' })}
@@ -138,6 +148,7 @@ export const render = (results: UITestResult[], options?: UIOptions) => {
 						results,
 						statusMap,
 						showTextOnMeta: options?.showTextOnTestSummaryMeta,
+						toHTML,
 					})}</main>
 				</body>
 			</html>`;

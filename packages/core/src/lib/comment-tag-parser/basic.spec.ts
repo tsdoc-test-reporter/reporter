@@ -5,7 +5,7 @@ import { testFileFactory } from '../test-utils/factory/test-file';
 import { allBlockTags, allModifierTags, testBlockTagNames } from '../defaults';
 import { basicTestDataGenerator, TestData } from '../test-utils/test-data-generator';
 import { TestBlockDocComment, TestBlockTag } from '../types';
-import { getTypeChecker } from '../test-utils';
+import { getTypeChecker, sourceFileFactory } from '../test-utils';
 
 const getTagValues = (testBlockDocComments: TestBlockDocComment[]) =>
 	Object.values(testBlockDocComments[0].testBlockTags ?? {});
@@ -177,4 +177,33 @@ describe('transform with user supplied parserOptions', () => {
 			},
 		});
 	});
+});
+
+test('parse nested call expression, such as test.each with data', () => {
+	const sourceFile = sourceFileFactory('test.each.ts')(`
+/**
+ * @remarks unit
+ */
+ test.skip.each(testData)(
+	 "form validation: $name",
+		() => {
+			expect(true).tobeTruthy();
+		}
+	);	
+`);
+	const { testBlockDocComments } = new CommentTagParser({
+		sourceFile,
+		tsDocParser: new TSDocParser(),
+		getTypeChecker: getTypeChecker,
+	});
+	expect(getTagValues(testBlockDocComments)).toEqual<TestBlockTag[]>([
+		{
+			kind: 'block',
+			name: '@remarks',
+			tags: ['unit'],
+			testBlockName: 'test.skip.each',
+			testTitle: 'form validation: $name',
+			type: 'standard',
+		},
+	]);
 });

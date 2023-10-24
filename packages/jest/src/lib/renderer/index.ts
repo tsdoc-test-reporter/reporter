@@ -6,10 +6,10 @@ import {
 	type UIAssertion,
 	type UIOptions,
 	type UITestResult,
+	type UITestError,
 } from '@tsdoc-test-reporter/core';
 import type { FailureDetails, TaggedTestResult } from '../types';
 import type { AssertionResult } from '@jest/test-result';
-import { UITestError } from 'packages/core/src/lib/types';
 
 const jestStatusToUiStatus: Record<AssertionResult['status'], UIAssertion['status']> = {
 	passed: 'pass',

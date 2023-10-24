@@ -16,6 +16,7 @@ export type {
 	UITestResultMeta,
 	TsDocTestReporterConfig,
 	TestBlockTagMap,
+	UITestError,
 } from './lib/types';
 export { CommentTagParser } from './lib/comment-tag-parser';
 export { coreDefaults, allBlockTags, allJSDocTags, allModifierTags } from './lib/defaults';

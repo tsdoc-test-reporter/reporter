@@ -121,10 +121,6 @@ export const getTestBlockBaseName = (expression: CallExpression): TestBlockName 
 	return undefined;
 };
 
-export const isTestBlock = (node: Node, testBlockNames: string[]): node is CallExpression => {
-	return isCallExpression(node) && testBlockNames.includes(getNodeName(node.expression));
-};
-
 export const getMemberNameFromDeclaration = (
 	declaration: Declaration | undefined,
 	name: string,
@@ -231,7 +227,7 @@ export const getCompilerOptionsThatFollowExtends = (filename: string): CompilerO
 	let compositeOptions = {};
 	const config = readConfigFile(filename, sys.readFile).config;
 	if (config.extends) {
-		const path = require.resolve(config.extends);
+		const path = resolve(config.extends);
 		compositeOptions = getCompilerOptionsThatFollowExtends(path);
 	}
 	const options = {

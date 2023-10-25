@@ -40,6 +40,12 @@ import {
 } from '../utils/tsdoc.utils';
 import { BlockTagName } from '../types';
 
+/**
+ * Parser for extracting JSDoc and TSDoc tags from comments.
+ * Will extract all valid JSDoc tags and TSDoc tags that is able
+ * to parse. If a tag exists in both standard and TSDoc extends it:
+ * the TSDoc tag will be used.
+ */
 export class CommentTagParser<CustomTags extends string = AllTagsName>
 	implements ICommentTagParser<CustomTags>
 {

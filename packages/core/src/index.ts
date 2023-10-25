@@ -37,7 +37,6 @@ export {
 } from './lib/utils/ts.utils';
 export { getTsDocParserConfig } from './lib/utils/tsdoc.utils';
 export { writeToFile } from './lib/utils/io.utils';
-export { AnsiToHtmlConverter } from './lib/utils/ansi-to-html';
 export { parseTestFiles } from './lib/test-file-parser';
 export {
 	getTagsFromTestBlockComments,

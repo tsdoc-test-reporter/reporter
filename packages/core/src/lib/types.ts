@@ -7,6 +7,9 @@ import type { SourceFile, TypeChecker } from 'typescript';
  */
 export type TagType = 'standard' | 'custom';
 
+/**
+ * If the test block belongs to a 'test' or 'describe' block
+ */
 export type TestBlockType = 'test' | 'ancestor';
 
 /**

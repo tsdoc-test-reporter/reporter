@@ -102,7 +102,7 @@ test('get correct background color based on text color', () => {
 const options = {
 	outputFileName: 'reports/tsdoc-report',
 	uiOptions: {
-		title: 'Title of HTML Page',
+		htmlTitle: 'Title of HTML Page',
 	},
 };
 
@@ -129,7 +129,7 @@ export default class MyDefaultReporter extends Reporter {
 		new TSDocTestReporter({
 			outputFileName: 'reports/tsdoc-report',
 			uiOptions: {
-				title: 'Title of HTML Page',
+				htmlTitle: 'Title of HTML Page',
 			},
 		}).onFinished(files);
 	}

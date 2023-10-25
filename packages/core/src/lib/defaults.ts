@@ -110,6 +110,9 @@ export const allJSDocTags: JSDocTagName[] = [
 	'@yield',
 ];
 
+/**
+ * @hidden
+ */
 export const jsDocTagsMap = Object.fromEntries(allJSDocTags.map((key) => [key, true])) as Record<
 	JSDocTagName,
 	boolean
@@ -168,6 +171,9 @@ export const ancestorTagNames: TestBlockName[] = [
 ];
 
 export const testBlockTagNames: TestBlockName[] = [...testTagNames, ...ancestorTagNames];
+/**
+ * @hidden
+ */
 export const baseTestBlockNames: Record<
 	Extract<TestBlockName, 'test' | 'it' | 'describe'>,
 	boolean

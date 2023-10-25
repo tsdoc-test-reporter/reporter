@@ -17,10 +17,17 @@ import type { TaggedFile } from '../../types';
 import { toUITestResults } from '../renderer';
 import { resultMapper } from './reporter.utils';
 
+/**
+ * The reporter class
+ */
 export class TSDocTestReporter<CustomTags extends string = AllTagsName> implements Reporter {
 	private readonly compilerOptions: CompilerOptions;
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
 
+	/**
+	 * 
+	 * @param options Options passed from consumer
+	 */
 	constructor(options?: TsDocTestReporterConfig<CustomTags>) {
 		this.options = {
 			...coreDefaults,
@@ -29,6 +36,11 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 		this.compilerOptions = getCompilerOptions(options?.tsConfigPath);
 	}
 
+	/**
+	 * Attached tags to test results
+	 * @param results Test result without attached tags
+	 * @returns Test Results with attached tags
+	 */
 	public getTaggedResult(files: File[]): TaggedFile[] {
 		const program = programFactory(files, 'filepath', this.compilerOptions);
 		return parseTestFiles<File, TaggedFile>({
@@ -44,6 +56,10 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 		});
 	}
 
+	/**
+	 * Runs when all tests are finished and outputs result
+	 * to specified output file
+	 */
 	onFinished(files?: File[]) {
 		writeToFile({
 			outputFileType: this.options.outputFileType ?? coreDefaults.outputFileType,

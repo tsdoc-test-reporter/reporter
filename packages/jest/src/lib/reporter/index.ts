@@ -18,12 +18,21 @@ import type { TaggedAggregatedResult } from '../types';
 import { toUITestResults } from '../renderer';
 import { resultMapper } from './reporter.utils';
 
+/**
+ * The reporter class being called by Jest when supplied
+ * as a argument to 'reporters' config option.
+ */
 export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 	implements Pick<Reporter, 'onRunComplete'>
 {
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
 	private readonly compilerOptions: CompilerOptions;
 
+	/**
+	 * 
+	 * @param _globalConfig Config options from Jest, not used by this reporter
+	 * @param options Options passed from consumer
+	 */
 	constructor(_globalConfig: Config.GlobalConfig, options: TsDocTestReporterConfig<CustomTags>) {
 		this.options = {
 			...coreDefaults,
@@ -32,6 +41,11 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 		this.compilerOptions = getCompilerOptions(options.tsConfigPath);
 	}
 
+	/**
+	 * Attached tags to test results
+	 * @param results Test result without attached tags
+	 * @returns Test Results with attached tags
+	 */
 	public getTaggedResult(results: AggregatedResult): TaggedAggregatedResult {
 		const program = programFactory(results.testResults, 'testFilePath', this.compilerOptions);
 		return {
@@ -50,6 +64,12 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 		};
 	}
 
+	/**
+	 * Runs when all tests are finished and outputs result
+	 * to specified output file
+	 * @param _testContexts Internals from Jest, not used for this reporter
+	 * @param results Test Results
+	 */
 	public onRunComplete(
 		_testContexts: Set<TestContext>,
 		results: AggregatedResult,

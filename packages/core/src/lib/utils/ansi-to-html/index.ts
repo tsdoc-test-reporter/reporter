@@ -382,6 +382,11 @@ function tokenize(
 	return results1;
 }
 
+/**
+ * Converts ANSI code to HTML Tags. This is a typed version of
+ * https://github.com/rburns/ansi-to-html/blob/master/lib/ansi_to_html.js
+ * @hidden
+ */
 export class AnsiToHtmlConverter {
 	private readonly options: ConverterOptions;
 	private readonly stack: string[];

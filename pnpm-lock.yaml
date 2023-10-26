@@ -81,7 +81,7 @@ importers:
       '@jest/reporters': ^29.7.0
       '@jest/test-result': ^29.7.0
       '@microsoft/tsdoc': ^0.14.2
-      '@tsdoc-test-reporter/core': workspace:^0.0.3
+      '@tsdoc-test-reporter/core': workspace:^0.0.17
       typescript: '>= 4.4.x <= 5.2.x'
     dependencies:
       '@jest/reporters': 29.7.0
@@ -93,7 +93,7 @@ importers:
   packages/vitest:
     specifiers:
       '@microsoft/tsdoc': ^0.14.2
-      '@tsdoc-test-reporter/core': workspace:^0.0.3
+      '@tsdoc-test-reporter/core': workspace:^0.0.17
       tslib: ^2.3.0
       typescript: '>= 4.4.x <= 5.2.x'
       vitest: '>=0.32.0'

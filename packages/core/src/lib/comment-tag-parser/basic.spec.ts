@@ -4,7 +4,7 @@ import { CommentTagParser } from './index';
 import { testFileFactory } from '../test-utils/factory/test-file';
 import { allBlockTags, allModifierTags, testBlockTagNames } from '../defaults';
 import { basicTestDataGenerator, TestData } from '../test-utils/test-data-generator';
-import { TestBlockDocComment, TestBlockTag } from '../types';
+import { TestBlockDocComment, TestBlockTag, TestBlockTagMap } from '../types';
 import { getTypeChecker, sourceFileFactory } from '../test-utils';
 
 const getTagValues = (testBlockDocComments: TestBlockDocComment[]) =>
@@ -98,6 +98,7 @@ describe('transform with user supplied parserOptions', () => {
 				testBlockName: 'test',
 				type: 'standard',
 				testTitle: '@alpha',
+				testFilePath: 'basic.ts',
 			},
 		]);
 	});
@@ -131,6 +132,7 @@ describe('transform with user supplied parserOptions', () => {
 				type: 'standard',
 				testTitle: '@alpha',
 				tags: ['unit', 'acceptance'],
+				testFilePath: 'basic.ts',
 			},
 		]);
 	});
@@ -166,8 +168,9 @@ describe('transform with user supplied parserOptions', () => {
 			getTypeChecker: getTypeChecker,
 		});
 		expect(testBlockDocComments[0].testBlockTags).toEqual({});
-		expect(testBlockDocComments[1].testBlockTags).toEqual({
+		expect(testBlockDocComments[1].testBlockTags).toEqual<TestBlockTagMap>({
 			'@beta': {
+				testFilePath: 'basic.ts',
 				testBlockName: 'test',
 				testTitle: '@beta',
 				type: 'standard',
@@ -181,15 +184,16 @@ describe('transform with user supplied parserOptions', () => {
 
 test('parse nested call expression, such as test.each with data', () => {
 	const sourceFile = sourceFileFactory('test.each.ts')(`
-/**
- * @remarks unit
- */
- test.skip.each(testData)(
-	 "form validation: $name",
-		() => {
-			expect(true).tobeTruthy();
+	/**
+	 * @remarks
+	 * unit
+	 */
+	test.each(formTestData)(
+		"form validation",
+		({ expected, input, rules }) => {
+			expect(validationFunction(input)).toMatchObject(expected);
 		}
-	);	
+	);
 `);
 	const { testBlockDocComments } = new CommentTagParser({
 		sourceFile,
@@ -201,9 +205,10 @@ test('parse nested call expression, such as test.each with data', () => {
 			kind: 'block',
 			name: '@remarks',
 			tags: ['unit'],
-			testBlockName: 'test.skip.each',
-			testTitle: 'form validation: $name',
+			testBlockName: 'test.each',
+			testTitle: 'form validation',
 			type: 'standard',
+			testFilePath: 'test.each.ts',
 		},
 	]);
 });

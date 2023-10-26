@@ -22,6 +22,7 @@ export const testBlockTagFactory: TestDataFactory<TestBlockTag> = (overrides = {
 	name: '@remarks',
 	testBlockName: 'test',
 	testTitle: 'default test title',
+	testFilePath: 'test-file-path.ts',
 	kind: 'block',
 	...overrides,
 	tags: (overrides.tags as string[]) ?? [],

@@ -119,6 +119,7 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 					tags[tagName] = {
 						name: tagName,
 						testTitle: title,
+						testFilePath: this.sourceFile.fileName,
 						testBlockName,
 						type: 'standard',
 						kind: 'block',
@@ -149,6 +150,7 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 					name: tagName,
 					testBlockName,
 					testTitle,
+					testFilePath: this.sourceFile.fileName,
 				};
 			}
 		});
@@ -174,6 +176,7 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 							name: name,
 							testBlockName,
 							testTitle,
+							testFilePath: this.sourceFile.fileName,
 						};
 					}
 				}

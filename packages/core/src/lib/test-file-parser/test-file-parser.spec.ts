@@ -63,6 +63,7 @@ test('parses test files', () => {
 							name: '@alpha',
 							testBlockName: 'test',
 							testTitle: 'test title',
+							testFilePath: 'test-file-parser.ts',
 							type: 'standard',
 						},
 					},

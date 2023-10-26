@@ -19,11 +19,11 @@ export const formatAssertion = ({ assertion, statusMap, toHTML }: Props): string
 ${
 	(assertion.errors?.length ?? 0) > 0
 		? `<details class="assertion-error-details">
- <summary>Error details</summary>
+ <summary><p>Error details</p></summary>
 ${assertion.errors
 	?.map(
 		(error) => `<div class="assertion-error-content">
-${toHTML ? toHTML(error.diff ?? error.message ?? error.name) : error.name}
+${toHTML ? toHTML(error?.diff ?? error?.message ?? error?.name ?? '') : error?.name}
 </div>`,
 	)
 	.join('')}

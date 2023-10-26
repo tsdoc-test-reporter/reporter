@@ -8,7 +8,7 @@ import type { UITestError } from '../../types';
  * Factory function for creating a {@link UIe}
  */
 export const uiTestErrorFactory: TestDataFactory<UITestError> = (overrides = {}) => ({
-  message: "message",
-  name: "name",
-  ...overrides,
+	message: 'message',
+	name: 'name',
+	...overrides,
 });

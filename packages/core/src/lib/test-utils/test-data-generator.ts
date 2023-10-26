@@ -45,6 +45,7 @@ export const basicTestDataGenerator = ({
 			{
 				kind: allModifierTags.includes(tag as ModifierTagName) ? 'modifier' : 'block',
 				name: tag,
+				testFilePath: fileName,
 				tags: allModifierTags.includes(tag as ModifierTagName) ? undefined : tagContent,
 				testBlockName,
 				testTitle: tag,

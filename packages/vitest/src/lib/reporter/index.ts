@@ -25,7 +25,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
 
 	/**
-	 * 
+	 *
 	 * @param options Options passed from consumer
 	 */
 	constructor(options?: TsDocTestReporterConfig<CustomTags>) {

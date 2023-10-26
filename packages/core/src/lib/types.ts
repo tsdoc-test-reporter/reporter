@@ -208,6 +208,10 @@ export type TestBlockTag<CustomTags extends string = AllTagsName> = {
 	 */
 	testTitle: string;
 	/**
+	 * File path for test this tag originates from
+	 */
+	testFilePath: string;
+	/**
 	 * If tag belongs to the original JSDoc standard and
 	 * is not an extended TSDoc tag.
 	 */

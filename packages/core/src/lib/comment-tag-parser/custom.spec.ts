@@ -50,6 +50,7 @@ test('transforms custom tag for block', () => {
 			type: 'custom',
 			kind: 'block',
 			name: '@custom',
+			testFilePath: 'custom.ts',
 		},
 	]);
 });
@@ -88,6 +89,7 @@ test('transforms custom tag for modifiers', () => {
 			type: 'custom',
 			kind: 'modifier',
 			name: '@customModifier',
+			testFilePath: 'custom.ts',
 		},
 	]);
 });

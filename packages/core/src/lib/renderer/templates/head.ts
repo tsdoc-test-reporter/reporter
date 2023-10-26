@@ -95,6 +95,7 @@ export const formatHead = ({ title, style }: Props): string =>
 
 			details summary { 
 				cursor: pointer;
+				list-style: none;
 			}
 
 			details summary::-webkit-details-marker,
@@ -104,11 +105,10 @@ export const formatHead = ({ title, style }: Props): string =>
 
 			summary:before {
 				position: absolute;
-				top: 12px;
 				content: "►";
 			}
 
-			details[open] summary:before {
+			details[open] > summary:before {
 			 	content: "▼";
 			}
 
@@ -124,8 +124,8 @@ export const formatHead = ({ title, style }: Props): string =>
 				border-bottom-width: 0;
 			}
 
-			.test-summary {
-				list-style: none;
+			.test-summary:before {
+				margin-top: 2px;
 			}
 
 			.test-summary-inner {
@@ -237,7 +237,18 @@ export const formatHead = ({ title, style }: Props): string =>
 			.assertion-error-details {
 				grid-column: 1/3;
 				width: 100%;
+				position: relative;
 			}
+
+			.assertion-error-details summary:before {
+				margin-top: -2px;
+			}
+
+			.assertion-error-details summary p {
+				padding-left: 1.25rem;
+				margin: 0;
+			}
+
 			.assertion-error-content p {
 				margin: 0;
 				margin-bottom: 1rem;

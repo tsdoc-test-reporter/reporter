@@ -29,7 +29,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 	private readonly compilerOptions: CompilerOptions;
 
 	/**
-	 * 
+	 *
 	 * @param _globalConfig Config options from Jest, not used by this reporter
 	 * @param options Options passed from consumer
 	 */

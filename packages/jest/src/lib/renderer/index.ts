@@ -28,10 +28,10 @@ export const toUITestResult =
 			const errors = assertion.failureDetails
 				?.map((failureDetails) => {
 					const details = failureDetails as FailureDetails | undefined;
-					if (!details?.matcherResult.message) return undefined;
+					if (!details?.matcherResult?.message) return undefined;
 					const error: UITestError = {
-						name: details?.matcherResult.message,
-						message: details?.matcherResult.message,
+						name: details?.matcherResult?.message ?? '',
+						message: details?.matcherResult?.message ?? '',
 					};
 					return error;
 				})

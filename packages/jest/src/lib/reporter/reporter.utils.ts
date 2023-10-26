@@ -9,6 +9,8 @@ export const resultMapper = (
 	...result,
 	testResults: result.testResults.map((testResult) => ({
 		...testResult,
-		testBlockComments: testDocBlockComments.filter((t) => t.title === testResult.title),
+		testBlockComments: testDocBlockComments.filter(
+			(t) => t.title === testResult.title || testResult.ancestorTitles.includes(t.title),
+		),
 	})),
 });

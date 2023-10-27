@@ -1,37 +1,56 @@
-/**
- * This is a minimal script to publish your package to "npm".
- * This is meant to be used as-is or customize as you see fit.
- *
- * This script is executed on "dist/path/to/library" as "cwd" by default.
- *
- * You might need to authenticate with NPM before running this script.
- */
-
 import devKit from '@nx/devkit';
+import packageJsonFetcher from 'package-json';
+import semver from 'semver';
 import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
+import path from 'path';
 import chalk from 'chalk';
 
 function invariant(condition, message) {
 	if (!condition) {
-		console.error(chalk.bold.red(message));
+		console.error(chalk.red.bold(message));
 		process.exit(1);
 	}
 }
 
-// Executing publish script: node path/to/publish.mjs {name} --version {version} --tag {tag}
-// Default "tag" to "next" so we won't publish the "latest" tag by accident.
-const [, , name, tag = 'next', version] = process.argv;
+const [, , name, tagFromCLI] = process.argv;
 
-// A simple SemVer validation to validate the version
-const validVersion = /^\d+\.\d+\.\d+(-\w+\.\d+)?/;
+const tag = !tagFromCLI || tagFromCLI === 'undefined' ? 'latest' : tagFromCLI;
+
 invariant(
-	version && validVersion.test(version),
-	`No version provided or version did not match Semantic Versioning, expected: #.#.#-tag.# or #.#.#, got ${version}.`,
+	tag,
+	`No valid tag supplied, got: ${tag}`,
 );
+
+let npmPackageJsonVersion;
+
+try {
+	const npmPackageJson = await packageJsonFetcher(`@tsdoc-test-reporter/${name}`, {
+		version: tag,
+	});
+	npmPackageJsonVersion = npmPackageJson.version;
+} catch (error) {
+	if(error.name === "VersionNotFoundError") {
+		npmPackageJsonVersion = "0.0.0";
+	} else {
+		console.error(chalk.red.bold(error));
+		process.exit(1);
+	}
+}
 
 const graph = devKit.readCachedProjectGraph();
 const project = graph.nodes[name];
+
+const localPackageJson = JSON.parse(
+	readFileSync(path.resolve(project.data.root, 'package.json')).toString(),
+);
+
+invariant(
+	semver.valid(localPackageJson.version) &&
+	semver.valid(npmPackageJsonVersion) &&
+	semver.gt(localPackageJson.version, npmPackageJsonVersion),
+	`Expected version to be higher than:${npmPackageJsonVersion}, is: ${localPackageJson.version}. Bump version in local package.json`,
+);
 
 invariant(
 	project,
@@ -41,22 +60,19 @@ invariant(
 const outputPath = project.data?.targets?.build?.options?.outputPath;
 invariant(
 	outputPath,
-	`Could not find "build.options.outputPath" of project "${name}". Is project.json configured  correctly?`,
+	`Could not find "build.options.outputPath" of project "${name}". Is project.json configured correctly?`,
 );
 
 execSync(`nx run ${name}:build`);
 
 process.chdir(outputPath);
 
-// Updating the version in "package.json" before publishing
 try {
 	const jsonRaw = readFileSync(`package.json`).toString().replace('workspace:', '');
 	const json = JSON.parse(jsonRaw);
-	json.version = version;
 	writeFileSync(`package.json`, JSON.stringify(json, null, 2));
 } catch (e) {
 	console.error(chalk.bold.red(`Error reading package.json file from library build output.`));
 }
 
-// Execute "npm publish" to publish
 execSync(`npm publish --access public --tag ${tag}`);

@@ -5,7 +5,7 @@
 	"projectType": "library",
 	"targets": {
 		"publish": {
-			"command": "node tools/scripts/publish.mjs core {args.tag} {args.version}",
+			"command": "node tools/scripts/publish.mjs core {args.tag}",
 			"dependsOn": ["lint", "test", "build"]
 		},
 		"build": {

@@ -385,6 +385,12 @@ export type UIOptions = {
 	 */
 	hideAncestorTitles?: boolean;
 	/**
+	 * Expands the error details element if there is an error on the assertion
+	 * @default
+	 * false
+	 */
+	expandErrorDetails?: boolean;
+	/**
 	 * Hides the tags from ancestors (describe blocks) on individual test result
 	 * @default
 	 * false

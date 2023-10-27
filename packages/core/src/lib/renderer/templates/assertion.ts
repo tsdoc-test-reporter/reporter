@@ -5,9 +5,15 @@ type Props = {
 	assertion: UIAssertion;
 	statusMap: Record<string, string>;
 	toHTML?: (content: string) => string;
+	expandErrorDetails?: boolean;
 };
 
-export const formatAssertion = ({ assertion, statusMap, toHTML }: Props): string =>
+export const formatAssertion = ({
+	assertion,
+	statusMap,
+	toHTML,
+	expandErrorDetails,
+}: Props): string =>
 	`<li class="assertion status-${assertion.status}">
 		<span class="assertion-title">
 			${assertion.ancestorTitles?.length ? `${assertion.ancestorTitles.join('»')} » ` : ''}
@@ -18,7 +24,7 @@ export const formatAssertion = ({ assertion, statusMap, toHTML }: Props): string
 		<span class="sr-only">${assertion.status}</span>
 ${
 	(assertion.errors?.length ?? 0) > 0
-		? `<details class="assertion-error-details">
+		? `<details ${expandErrorDetails ? 'open' : ''} class="assertion-error-details">
  <summary><p>Error details</p></summary>
 ${assertion.errors
 	?.map(

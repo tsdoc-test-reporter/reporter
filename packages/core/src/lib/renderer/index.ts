@@ -149,6 +149,7 @@ export const render = (results: UITestResult[], options?: UIOptions) => {
 						statusMap,
 						showTextOnMeta: options?.showTextOnTestSummaryMeta,
 						toHTML,
+						expandErrorDetails: options?.expandErrorDetails,
 					})}</main>
 				</body>
 			</html>`;

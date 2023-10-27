@@ -7,9 +7,16 @@ type Props = {
 	statusMap: Record<string, string>;
 	showTextOnMeta?: boolean;
 	toHTML?: (content: string) => string;
+	expandErrorDetails?: boolean;
 };
 
-export const formatResults = ({ results, statusMap, showTextOnMeta, toHTML }: Props): string =>
+export const formatResults = ({
+	results,
+	statusMap,
+	showTextOnMeta,
+	toHTML,
+	expandErrorDetails,
+}: Props): string =>
 	`${results
 		.map(
 			(result) =>
@@ -20,7 +27,7 @@ export const formatResults = ({ results, statusMap, showTextOnMeta, toHTML }: Pr
 					tags: result.aggregatedTags,
 					showTextOnMeta,
 				})}
-				${formatContent({ assertions: result.assertions, statusMap, toHTML })}
+				${formatContent({ assertions: result.assertions, statusMap, toHTML, expandErrorDetails })}
 			</details>`,
 		)
 		.join('')}`;

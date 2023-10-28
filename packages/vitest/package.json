@@ -1,6 +1,6 @@
 {
 	"name": "@tsdoc-test-reporter/vitest",
-	"version": "0.0.20",
+	"version": "0.0.21",
 	"peerDependencies": {
 		"typescript": ">= 4.4.x <= 5.2.x",
 		"vitest": ">=0.32.0"

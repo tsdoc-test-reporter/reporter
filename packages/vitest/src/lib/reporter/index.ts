@@ -82,7 +82,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 						...this.options.uiOptions,
 					}),
 				this.options,
-				this.options.repoUrl ? addRootDir(`${this.options.repoUrl}${this.packageDir}`) : undefined,
+				this.options.repoUrl ? addRootDir(`${this.options.repoUrl}${this.packageDir ?? ''}`) : undefined,
 			),
 		});
 	}

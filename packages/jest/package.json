@@ -1,6 +1,6 @@
 {
 	"name": "@tsdoc-test-reporter/jest",
-	"version": "0.0.20",
+	"version": "0.0.21",
 	"peerDependencies": {
 		"typescript": ">= 4.4.x <= 5.2.x"
 	},

@@ -2,7 +2,6 @@ import { test, describe, expect, vi } from 'vitest';
 import {
 	aggregateMeta,
 	aggregateTags,
-	titleFormatter,
 	getRenderOutput,
 	getTagsFromTestBlockComments,
 	render,
@@ -161,12 +160,6 @@ describe('aggregate tags', () => {
 				name: '@alpha',
 			},
 		]);
-	});
-});
-
-describe('format title', () => {
-	test('format custom title', () => {
-		expect(titleFormatter('title', (t) => t + '!')).toEqual('title!');
 	});
 });
 

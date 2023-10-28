@@ -329,6 +329,12 @@ export type TsDocTestReporterConfig<CustomTags extends string = AllTagsName> = P
 	 * @default 'raw'
 	 */
 	outputJsonAs?: 'raw' | 'ui';
+	/**
+	 * Set this to add link to origin remote
+	 * @example
+	 * { repoUrl: "https://github.com/tsdoc-test-reporter/reporter/blob/main" }
+	 */
+	repoUrl?: string;
 	/** Options to configure the output of `outputFileType: "html"` */
 	uiOptions?: UIOptions;
 	/**
@@ -347,6 +353,12 @@ export type CoreDefaults<CustomTags extends string = AllTagsName> = Required<
 > & {
 	outputFileType: OutputFileType;
 	outputFileName: string;
+};
+
+export type BuildInfo = {
+	text: string;
+	url: string;
+	position?: 'right' | 'bottom';
 };
 
 /**
@@ -384,6 +396,10 @@ export type UIOptions = {
 	 * true: `test`
 	 */
 	hideAncestorTitles?: boolean;
+	/**
+	 * Displays build link close to heading
+	 */
+	buildInfo?: BuildInfo;
 	/**
 	 * Expands the error details element if there is an error on the assertion
 	 * @default

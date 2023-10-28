@@ -6,7 +6,6 @@ import {
 	getTagsFromTestBlockComments,
 	aggregateMeta,
 	aggregateTags,
-	titleFormatter,
 } from '@tsdoc-test-reporter/core';
 import type { TaggedFile, TaggedSuite, TaggedTask } from '../../types';
 import { isSuite } from '../utils/vitest.utils';
@@ -56,7 +55,7 @@ export const toUITestResult =
 			? aggregateTags(assertions, options.aggregateTagsToFileHeading)
 			: undefined;
 		return {
-			title: titleFormatter(file.filepath, options?.titleFormatter),
+			title: options?.titleFormatter ? options.titleFormatter(file.filepath) : file.filepath,
 			meta: aggregateMeta(assertions),
 			aggregatedTags,
 			assertions,

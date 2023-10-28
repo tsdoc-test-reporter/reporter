@@ -17,6 +17,7 @@ export type {
 	TsDocTestReporterConfig,
 	TestBlockTagMap,
 	UITestError,
+	BuildInfo,
 } from './lib/types';
 export { CommentTagParser } from './lib/comment-tag-parser';
 export { coreDefaults, allBlockTags, allJSDocTags, allModifierTags } from './lib/defaults';
@@ -44,6 +45,6 @@ export {
 	aggregateMeta,
 	aggregateTags,
 	defaultOutputFileName,
-	titleFormatter,
 	getRenderOutput,
 } from './lib/renderer';
+export { addRootDir } from './lib/utils/string.utils';

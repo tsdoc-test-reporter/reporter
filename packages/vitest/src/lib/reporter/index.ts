@@ -9,8 +9,9 @@ import {
 	getRenderOutput,
 	programFactory,
 	AllTagsName,
+	addRootDir,
 } from '@tsdoc-test-reporter/core';
-import type { Reporter, File } from 'vitest';
+import type { Reporter, File, Vitest } from 'vitest';
 import { TSDocParser } from '@microsoft/tsdoc';
 import type { CompilerOptions } from 'typescript';
 import type { TaggedFile } from '../../types';
@@ -23,6 +24,8 @@ import { resultMapper } from './reporter.utils';
 export class TSDocTestReporter<CustomTags extends string = AllTagsName> implements Reporter {
 	private readonly compilerOptions: CompilerOptions;
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
+	private rootDir: string | undefined;
+	private packageDir: string | undefined;
 
 	/**
 	 *
@@ -34,6 +37,11 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 			...options,
 		};
 		this.compilerOptions = getCompilerOptions(options?.tsConfigPath);
+	}
+
+	onInit(ctx: Vitest): void {
+		this.rootDir = ctx.config.root;
+		this.packageDir = this.rootDir.replace(process.cwd(), '');
 	}
 
 	/**
@@ -66,8 +74,15 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 			outputFileName: this.options.outputFileName ?? coreDefaults.outputFileName,
 			buffer: getRenderOutput<TaggedFile[]>(
 				this.getTaggedResult(files ?? []),
-				(result) => toUITestResults(result, this.options.uiOptions),
+				(result) =>
+					toUITestResults(result, {
+						titleFormatter: (title) => this.rootDir && this.rootDir !== "."
+							? title.replace(this.rootDir, '')
+							: title,
+						...this.options.uiOptions,
+					}),
 				this.options,
+				this.options.repoUrl ? addRootDir(`${this.options.repoUrl}${this.packageDir}`) : undefined,
 			),
 		});
 	}

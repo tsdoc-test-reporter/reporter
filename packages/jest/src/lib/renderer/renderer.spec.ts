@@ -225,24 +225,36 @@ describe('ui result', () => {
 	});
 });
 
-describe("get test errors", () => {
-	test("with matcher results", () => {
-		expect(toUIErrors(taggedAssertionResultFactory({
-			failureDetails: [{
-				matcherResult: {
-					message: "message",
-				}
-			}]
-		}))).toEqual<UITestError[]>([{ message: "message", name: "message" }])
-	})
+describe('get test errors', () => {
+	test('with matcher results', () => {
+		expect(
+			toUIErrors(
+				taggedAssertionResultFactory({
+					failureDetails: [
+						{
+							matcherResult: {
+								message: 'message',
+							},
+						},
+					],
+				}),
+			),
+		).toEqual<UITestError[]>([{ message: 'message', name: 'message' }]);
+	});
 
-	test("with named result", () => {
-		expect(toUIErrors(taggedAssertionResultFactory({
-			failureDetails: [{
-				name: "fail name",
-				matcherResult: undefined,
-			}],
-			failureMessages: ["details"]
-		}))).toEqual<UITestError[]>([{ message: "details", name: "fail name" }])
-	})
-})
+	test('with named result', () => {
+		expect(
+			toUIErrors(
+				taggedAssertionResultFactory({
+					failureDetails: [
+						{
+							name: 'fail name',
+							matcherResult: undefined,
+						},
+					],
+					failureMessages: ['details'],
+				}),
+			),
+		).toEqual<UITestError[]>([{ message: 'details', name: 'fail name' }]);
+	});
+});

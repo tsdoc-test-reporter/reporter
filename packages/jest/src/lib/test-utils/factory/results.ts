@@ -3,13 +3,15 @@ import type { TestDataFactory } from '@tsdoc-test-reporter/core';
 import type { FailureDetails } from '../../types';
 
 export const failureDetailsFactory: TestDataFactory<FailureDetails> = (overrides = {}) => {
-	return ({
+	return {
 		name: overrides.name,
-		matcherResult: overrides.matcherResult ? {
-			message: overrides.matcherResult?.message,
-			pass: overrides.matcherResult?.pass ?? true,
-		} : undefined,
-	});
+		matcherResult: overrides.matcherResult
+			? {
+					message: overrides.matcherResult?.message,
+					pass: overrides.matcherResult?.pass ?? true,
+			  }
+			: undefined,
+	};
 };
 
 export const assertionResultFactory: TestDataFactory<AssertionResult> = (overrides = {}) => ({

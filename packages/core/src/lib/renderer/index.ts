@@ -94,10 +94,6 @@ export const aggregateMeta = (assertions: UIAssertion[]) => {
 	return meta;
 };
 
-export const titleFormatter = (title: string, customFormatter?: (title: string) => string) => {
-	return customFormatter ? customFormatter(title) : title.replace(process.cwd(), '');
-};
-
 /**
  * Extracts all tags from assertions and remove duplicates
  */
@@ -126,7 +122,11 @@ export const aggregateTags = (
 	];
 };
 
-export const render = (results: UITestResult[], options?: UIOptions) => {
+export const render = (
+	results: UITestResult[],
+	options?: UIOptions,
+	rootDirReplacer?: (string: string) => string,
+) => {
 	const title = options?.htmlTitle ?? 'Test Results';
 	const statusMap = {
 		...statusToIconMap,
@@ -144,12 +144,13 @@ export const render = (results: UITestResult[], options?: UIOptions) => {
 			<html lang="en">
 				${formatHead({ title, style: options?.style ?? '' })}
 				<body>
-					<main>${formatHeader({ title })} ${formatResults({
+					<main>${formatHeader({ title, buildInfo: options?.buildInfo })} ${formatResults({
 						results,
 						statusMap,
 						showTextOnMeta: options?.showTextOnTestSummaryMeta,
 						toHTML,
 						expandErrorDetails: options?.expandErrorDetails,
+						rootDirReplacer,
 					})}</main>
 				</body>
 			</html>`;
@@ -159,6 +160,7 @@ export const getRenderOutput = <Type>(
 	results: Type,
 	getRenderData: (results: Type) => UITestResult[],
 	options: TsDocTestReporterConfig<string>,
+	rootDirReplacer?: (filePath: string) => string,
 ): string => {
 	const onBeforeRender = options.onBeforeRender
 		? options.onBeforeRender
@@ -170,6 +172,6 @@ export const getRenderOutput = <Type>(
 			});
 		case 'html':
 		default:
-			return render(onBeforeRender(getRenderData(results)), options.uiOptions);
+			return render(onBeforeRender(getRenderData(results)), options.uiOptions, rootDirReplacer);
 	}
 };

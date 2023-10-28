@@ -75,8 +75,19 @@ export const formatHead = ({ title, style }: Props): string =>
 				box-sizing: border-box;
 			}
 
-			h1, h2, h3, h4, h5, h6 {
+			h1 {
+				margin: 0;
+			}
+
+			h2, h3, h4, h5, h6 {
 				margin: var(--heading-margin);
+			}
+
+			a {
+				color: var(--text-color);
+				text-decoration: none;
+				padding-bottom: 1px;
+				border-bottom: 2px solid var(--text-color);
 			}
 
 			ul {
@@ -87,6 +98,27 @@ export const formatHead = ({ title, style }: Props): string =>
 
 			* {
 				box-sizing: border-box;
+			}
+
+			header {
+				display: flex;
+				align-items: flex-end;
+				gap: 0.5rem;
+				margin-bottom: 1rem;
+			}
+
+			.build-info {
+				display: inline-flex;
+				align-items: center;
+				border-radius: 4px;
+				padding: 4px;
+				background-color: #eee;
+				margin-bottom: 4px;
+			}
+
+			.column {
+				flex-direction: column;
+				align-items: flex-start;
 			}
 
 			main {

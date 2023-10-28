@@ -10,6 +10,7 @@ import {
 	getTsDocParserConfig,
 	parseTestFiles,
 	programFactory,
+	addRootDir,
 	writeToFile,
 } from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
@@ -27,18 +28,22 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 {
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
 	private readonly compilerOptions: CompilerOptions;
+	private rootDir: string;
+	private packageDir: string;
 
 	/**
 	 *
-	 * @param _globalConfig Config options from Jest, not used by this reporter
+	 * @param globalConfig Config options from Jest
 	 * @param options Options passed from consumer
 	 */
-	constructor(_globalConfig: Config.GlobalConfig, options: TsDocTestReporterConfig<CustomTags>) {
+	constructor(globalConfig: Config.GlobalConfig, options: TsDocTestReporterConfig<CustomTags>) {
 		this.options = {
 			...coreDefaults,
 			...options,
 		};
+		this.rootDir = globalConfig.rootDir;
 		this.compilerOptions = getCompilerOptions(options.tsConfigPath);
+		this.packageDir = this.rootDir.replace(process.cwd(), '');
 	}
 
 	/**
@@ -79,8 +84,15 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 			outputFileName: this.options.outputFileName ?? coreDefaults.outputFileName,
 			buffer: getRenderOutput<TaggedAggregatedResult>(
 				this.getTaggedResult(results),
-				(result) => toUITestResults(result.testResults, this.options.uiOptions),
+				(result) =>
+					toUITestResults(result.testResults, {
+						titleFormatter: (title) => this.rootDir && this.rootDir !== "."
+							? title.replace(this.rootDir, '')
+							: title,
+						...this.options.uiOptions,
+					}),
 				this.options,
+				this.options.repoUrl ? addRootDir(`${this.options.repoUrl}${this.packageDir}`) : undefined,
 			),
 		});
 	}

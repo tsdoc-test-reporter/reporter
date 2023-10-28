@@ -17,10 +17,7 @@ const [, , name, tagFromCLI] = process.argv;
 
 const tag = !tagFromCLI || tagFromCLI === 'undefined' ? 'latest' : tagFromCLI;
 
-invariant(
-	tag,
-	`No valid tag supplied, got: ${tag}`,
-);
+invariant(tag, `No valid tag supplied, got: ${tag}`);
 
 let npmPackageJsonVersion;
 
@@ -30,8 +27,8 @@ try {
 	});
 	npmPackageJsonVersion = npmPackageJson.version;
 } catch (error) {
-	if(error.name === "VersionNotFoundError") {
-		npmPackageJsonVersion = "0.0.0";
+	if (error.name === 'VersionNotFoundError') {
+		npmPackageJsonVersion = '0.0.0';
 	} else {
 		console.error(chalk.red.bold(error));
 		process.exit(1);
@@ -47,8 +44,8 @@ const localPackageJson = JSON.parse(
 
 invariant(
 	semver.valid(localPackageJson.version) &&
-	semver.valid(npmPackageJsonVersion) &&
-	semver.gt(localPackageJson.version, npmPackageJsonVersion),
+		semver.valid(npmPackageJsonVersion) &&
+		semver.gt(localPackageJson.version, npmPackageJsonVersion),
 	`Expected version to be higher than:${npmPackageJsonVersion}, is: ${localPackageJson.version}. Bump version in local package.json`,
 );
 

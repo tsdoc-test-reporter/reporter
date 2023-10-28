@@ -8,6 +8,7 @@ type Props = {
 	showTextOnMeta?: boolean;
 	toHTML?: (content: string) => string;
 	expandErrorDetails?: boolean;
+	rootDirReplacer?: (fileName: string) => string;
 };
 
 export const formatResults = ({
@@ -16,6 +17,7 @@ export const formatResults = ({
 	showTextOnMeta,
 	toHTML,
 	expandErrorDetails,
+	rootDirReplacer,
 }: Props): string =>
 	`${results
 		.map(
@@ -26,6 +28,7 @@ export const formatResults = ({
 					meta: result.meta,
 					tags: result.aggregatedTags,
 					showTextOnMeta,
+					rootDirReplacer,
 				})}
 				${formatContent({ assertions: result.assertions, statusMap, toHTML, expandErrorDetails })}
 			</details>`,

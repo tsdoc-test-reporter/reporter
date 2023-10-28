@@ -1,7 +1,6 @@
 import {
 	aggregateMeta,
 	aggregateTags,
-	titleFormatter,
 	getTagsFromTestBlockComments,
 	type UIAssertion,
 	type UIOptions,
@@ -29,7 +28,7 @@ export const toUIErrors = (assertion: TaggedAssertionResult): UITestError[] => {
 				return {
 					name: details.name,
 					message: assertion.failureMessages[index],
-				}
+				};
 			}
 			return {
 				name: details?.matcherResult?.message ?? '',
@@ -37,31 +36,33 @@ export const toUIErrors = (assertion: TaggedAssertionResult): UITestError[] => {
 			};
 		})
 		.filter(Boolean) as UITestError[];
-}
+};
 
 export const toUITestResult =
-	(options?: UIOptions) =>
-		(result: TaggedTestResult): UITestResult => {
-			const assertions: UIAssertion[] = result.testResults.map((assertion) => {
-				const errors = toUIErrors(assertion);
-				return {
-					title: assertion.title,
-					ancestorTitles: options?.hideAncestorTitles ? undefined : assertion.ancestorTitles,
-					status: jestStatusToUiStatus[assertion.status],
-					tags: getTagsFromTestBlockComments(assertion.testBlockComments, options),
-					errors: errors && errors.length > 0 ? errors : undefined,
-				};
-			});
-			const aggregatedTags = options?.aggregateTagsToFileHeading
-				? aggregateTags(assertions, options.aggregateTagsToFileHeading)
-				: undefined;
+	(options: UIOptions | undefined) =>
+	(result: TaggedTestResult): UITestResult => {
+		const assertions: UIAssertion[] = result.testResults.map((assertion) => {
+			const errors = toUIErrors(assertion);
 			return {
-				title: titleFormatter(result.testFilePath, options?.titleFormatter),
-				meta: aggregateMeta(assertions),
-				aggregatedTags,
-				assertions,
+				title: assertion.title,
+				ancestorTitles: options?.hideAncestorTitles ? undefined : assertion.ancestorTitles,
+				status: jestStatusToUiStatus[assertion.status],
+				tags: getTagsFromTestBlockComments(assertion.testBlockComments, options),
+				errors: errors && errors.length > 0 ? errors : undefined,
 			};
+		});
+		const aggregatedTags = options?.aggregateTagsToFileHeading
+			? aggregateTags(assertions, options.aggregateTagsToFileHeading)
+			: undefined;
+		return {
+			title: options?.titleFormatter
+				? options.titleFormatter(result.testFilePath)
+				: result.testFilePath,
+			meta: aggregateMeta(assertions),
+			aggregatedTags,
+			assertions,
 		};
+	};
 
 export const toUITestResults = (results: TaggedTestResult[], options?: UIOptions) =>
 	results.map(toUITestResult(options));

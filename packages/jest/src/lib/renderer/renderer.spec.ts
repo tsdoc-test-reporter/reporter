@@ -1,7 +1,7 @@
 import { test, expect, describe } from 'vitest';
-import { UITestResult } from '@tsdoc-test-reporter/core';
-import { toUITestResult } from './index';
-import { taggedTestResultFactory } from '../test-utils/factory';
+import { UITestError, UITestResult } from '@tsdoc-test-reporter/core';
+import { toUITestResult, toUIErrors } from './index';
+import { taggedAssertionResultFactory, taggedTestResultFactory } from '../test-utils/factory';
 
 describe('ui result', () => {
 	test('convert to ui result', () => {
@@ -224,3 +224,25 @@ describe('ui result', () => {
 		});
 	});
 });
+
+describe("get test errors", () => {
+	test("with matcher results", () => {
+		expect(toUIErrors(taggedAssertionResultFactory({
+			failureDetails: [{
+				matcherResult: {
+					message: "message",
+				}
+			}]
+		}))).toEqual<UITestError[]>([{ message: "message", name: "message" }])
+	})
+
+	test("with named result", () => {
+		expect(toUIErrors(taggedAssertionResultFactory({
+			failureDetails: [{
+				name: "fail name",
+				matcherResult: undefined,
+			}],
+			failureMessages: ["details"]
+		}))).toEqual<UITestError[]>([{ message: "details", name: "fail name" }])
+	})
+})

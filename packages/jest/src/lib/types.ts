@@ -2,7 +2,8 @@ import type { AggregatedResult, AssertionResult, TestResult } from '@jest/test-r
 import type { WithTestDocBlockComments } from '@tsdoc-test-reporter/core';
 
 export type FailureDetails = {
-	matcherResult: {
+	name?: string;
+	matcherResult?: {
 		message?: string;
 		pass: boolean;
 	};

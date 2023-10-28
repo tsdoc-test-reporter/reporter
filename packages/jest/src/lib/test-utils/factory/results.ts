@@ -2,12 +2,15 @@ import type { AggregatedResult, AssertionResult, TestResult } from '@jest/test-r
 import type { TestDataFactory } from '@tsdoc-test-reporter/core';
 import type { FailureDetails } from '../../types';
 
-export const failureDetailsFactory: TestDataFactory<FailureDetails> = (overrides = {}) => ({
-	matcherResult: {
-		message: overrides.matcherResult?.message,
-		pass: overrides.matcherResult?.pass ?? true,
-	},
-});
+export const failureDetailsFactory: TestDataFactory<FailureDetails> = (overrides = {}) => {
+	return ({
+		name: overrides.name,
+		matcherResult: overrides.matcherResult ? {
+			message: overrides.matcherResult?.message,
+			pass: overrides.matcherResult?.pass ?? true,
+		} : undefined,
+	});
+};
 
 export const assertionResultFactory: TestDataFactory<AssertionResult> = (overrides = {}) => ({
 	duration: null,

@@ -114,6 +114,8 @@ export const formatHead = ({ title, style }: Props): string =>
 				padding: 4px;
 				background-color: #eee;
 				margin-bottom: 4px;
+				border-bottom: none;
+				text-decoration: underline;
 			}
 
 			.column {

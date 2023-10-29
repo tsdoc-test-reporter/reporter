@@ -76,13 +76,14 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 				this.getTaggedResult(files ?? []),
 				(result) =>
 					toUITestResults(result, {
-						titleFormatter: (title) => this.rootDir && this.rootDir !== "."
-							? title.replace(this.rootDir, '')
-							: title,
+						titleFormatter: (title) =>
+							this.rootDir && this.rootDir !== '.' ? title.replace(this.rootDir, '') : title,
 						...this.options.uiOptions,
 					}),
 				this.options,
-				this.options.repoUrl ? addRootDir(`${this.options.repoUrl}${this.packageDir ?? ''}`) : undefined,
+				this.options.repoUrl
+					? addRootDir(`${this.options.repoUrl}${this.packageDir ?? ''}`)
+					: undefined,
 			),
 		});
 	}

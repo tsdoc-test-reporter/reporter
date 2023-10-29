@@ -123,6 +123,10 @@ export const formatHead = ({ title, style }: Props): string =>
 				text-decoration: none;
 			}
 
+			.build-info {
+				border-bottom: none;
+			}
+
 			.open-file a {
 				text-decoration: none;
 				border-bottom: 1px solid var(--text-color);
@@ -187,6 +191,7 @@ export const formatHead = ({ title, style }: Props): string =>
 				width: 100%;
 				padding-left: 1.25rem;
 				justify-content: space-between;
+				flex-wrap: wrap;
 			}
 
 			.test-summary h2  {

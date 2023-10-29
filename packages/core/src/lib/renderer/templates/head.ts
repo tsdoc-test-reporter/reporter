@@ -6,6 +6,7 @@ type Props = {
 export const formatHead = ({ title, style }: Props): string =>
 	`<head>
 		<title>${title}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
 			:root {
 				--light-red: hsl(357, 100%, 92%);
@@ -52,7 +53,7 @@ export const formatHead = ({ title, style }: Props): string =>
 				--tag-border-color: var(--pale-gray);
 
 				--background-color: var(--white);
-				--text-color: var(--black);
+				--text-color: var(--light-black);
 
 				--font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
 					'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -107,24 +108,34 @@ export const formatHead = ({ title, style }: Props): string =>
 				margin-bottom: 1rem;
 			}
 
-			.build-info {
+			.build-info, .open-file {
 				display: inline-flex;
 				align-items: center;
 				border-radius: 4px;
 				padding: 4px;
 				background-color: #eee;
 				margin-bottom: 4px;
-				border-bottom: none;
 				text-decoration: underline;
+			}
+
+			.open-file {
+				margin: 0 0.25rem 0 auto;
+				text-decoration: none;
+			}
+
+			.open-file a {
+				text-decoration: none;
+				border-bottom: 1px solid var(--text-color);
+				padding-bottom: 1px;
+			}
+
+			.open-file svg {
+				margin: 0 0 4px 4px;
 			}
 
 			.column {
 				flex-direction: column;
 				align-items: flex-start;
-			}
-
-			main {
-				border-bottom: 1px solid var(--test-summary-border-color);
 			}
 
 			details summary { 
@@ -140,6 +151,8 @@ export const formatHead = ({ title, style }: Props): string =>
 			summary:before {
 				position: absolute;
 				content: "►";
+				margin-top: 4px;
+				font-size: 0.85rem;
 			}
 
 			details[open] > summary:before {
@@ -150,16 +163,21 @@ export const formatHead = ({ title, style }: Props): string =>
 				border-bottom-width: 1px;
 			}
 
+			.test-details:first-of-type .test-summary {
+				border-radius: 4px 4px 0 0;
+			}
+
+			.test-details:last-of-type .test-summary {
+				border-radius: 0 0 4px 4px;
+				border-bottom-width: 1px;
+			}
+
 			.test-summary {
 				position: relative;
 				cursor: pointer;
 				padding: 0.5rem;
 				border: 1px solid var(--test-summary-border-color);
 				border-bottom-width: 0;
-			}
-
-			.test-summary:before {
-				margin-top: 2px;
 			}
 
 			.test-summary-inner {
@@ -304,6 +322,30 @@ export const formatHead = ({ title, style }: Props): string =>
 				position: absolute !important;
 				width: 1px !important;
 				white-space: nowrap !important;
+			}
+
+			@media only screen and (max-width: 600px) {
+				.test-summary-inner {
+					flex-direction: column;
+					justify-content: flex-start;
+					align-items: flex-start;
+				}
+
+				.test-summary-inner > * {
+					margin-top: 0.25rem;
+				}
+
+				.open-file {
+					margin-left: 0;
+				}
+
+				.assertion {
+					grid-template-columns: 1fr;
+				}
+
+				.assertion-tags {
+					justify-content: flex-start;
+				}
 			}
 			${style}
 		</style>

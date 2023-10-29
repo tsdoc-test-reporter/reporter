@@ -20,13 +20,15 @@ export const formatSummary = ({
 }: Props): string =>
 	`<summary class="test-summary">
 		<div class="test-summary-inner">
+			<h2>${title}</h2>
 ${
 	rootDirReplacer
-		? `<h2><a href="${rootDirReplacer(
+		? `<span class="open-file"><a href="${rootDirReplacer(
 				title,
-		  )}" rel="noreferrer" target="_blank">${title}</a>${openInNewTabIcon}</h2>`
-		: `<h2>${title}</h2>`
-}	<div>
+		  )}" rel="noreferrer" target="_blank">Open file</a> ${openInNewTabIcon}</span>`
+		: ''
+}
+			<div>
 				${
 					tags?.length
 						? `<div class="assertion-tags">${tags.map((tag) => formatTag({ tag })).join('')}`

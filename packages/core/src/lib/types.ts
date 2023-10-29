@@ -446,6 +446,8 @@ export type UIOptions = {
 	 * `Todo: 2`
 	 * false:
 	 * `2`
+	 * @default
+	 * true
 	 */
 	showTextOnTestSummaryMeta?: boolean;
 	/** Maps a specific status to a supplied icon, overrides default.
@@ -454,7 +456,7 @@ export type UIOptions = {
 	 * { statusToIconMap: { passed: '🎉' } }
 	 * ```
 	 * */
-	statusToIconMap?: Record<UIAssertion['status'], string>;
+	statusToIconMap?: Partial<Record<UIAssertion['status'], string>>;
 	/** Custom CSS styling to pass in, will be placed below any existing styling
 	 * in the script tag in the header
 	 * @example

@@ -4,7 +4,7 @@ import { formatHeader } from './header';
 
 test('format header', () => {
 	const result = stripTabsAndNewlines(formatHeader({ title: 'title' }));
-	expect(result).toEqual(expect.stringContaining(`<header><h1>title</h1></header>`));
+	expect(result).toEqual(expect.stringContaining(`<header class=""><h1>title</h1></header>`));
 });
 
 test('format header with build info', () => {
@@ -19,7 +19,12 @@ test('format header with build info', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<header><h1>title</h1><a class="build-info" href="https://example.com" rel="noreferrer" target="_blank">text</a></header>`,
+			`<header class=""><h1>title</h1><a class="build-info" href="https://example.com" rel="noreferrer" target="_blank">`,
+		),
+	);
+	expect(result).toEqual(
+		expect.stringContaining(
+			`text`,
 		),
 	);
 });

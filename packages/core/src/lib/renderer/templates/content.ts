@@ -1,5 +1,6 @@
 import { UIAssertion } from '../../types';
 import { formatAssertion } from './assertion';
+import { html } from './html';
 
 type Props = {
 	assertions: UIAssertion[];
@@ -14,7 +15,7 @@ export const formatContent = ({
 	toHTML,
 	expandErrorDetails,
 }: Props): string =>
-	`<div class="test-assertions">
+	html`<div class="test-assertions">
 		<ul>
 			${assertions
 				.map((assertion) => formatAssertion({ assertion, statusMap, toHTML, expandErrorDetails }))

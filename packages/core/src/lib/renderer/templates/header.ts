@@ -1,4 +1,6 @@
 import { BuildInfo } from '../../types';
+import { html } from './html';
+import { openInNewTabIcon } from './openInNewTabIcon';
 
 type Props = {
 	title: string;
@@ -6,16 +8,11 @@ type Props = {
 };
 
 const formatBuildInfo = (buildInfo?: BuildInfo) =>
-	`${
-		buildInfo
-			? `
-		<a class="build-info" href="${buildInfo.url}" rel="noreferrer" target="_blank">
-			${buildInfo.text}
-		</a>`
-			: ''
-	}`;
+	buildInfo
+		? html`<a class="build-info" href="${buildInfo.url}" rel="noreferrer" target="_blank">${buildInfo.text}${openInNewTabIcon}</a>`
+		: '';
 
 export const formatHeader = ({ title, buildInfo }: Props) =>
-	`<header${buildInfo?.position === 'bottom' ? ' class="column"' : ''}>
+	html`<header class="${buildInfo?.position === 'bottom' ? 'column' : ''}">
 		<h1>${title}</h1>${formatBuildInfo(buildInfo)}
 	</header>`;

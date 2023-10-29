@@ -38,7 +38,7 @@ export const aggregateAssertions = (
 		return [
 			{
 				title: task.name,
-				ancestorTitles,
+				ancestorTitles: options?.hideAncestorTitles ? [] : ancestorTitles,
 				tags: getTagsFromTestBlockComments(task.testBlockComments, options).concat(ancestorTags),
 				status,
 				errors: (errors?.length ?? 0) > 0 ? errors : undefined,

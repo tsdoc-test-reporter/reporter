@@ -1,6 +1,7 @@
 import { UITestResult } from '../../types';
 import { formatSummary } from './summary';
 import { formatContent } from './content';
+import { html } from './html';
 
 type Props = {
 	results: UITestResult[];
@@ -22,15 +23,15 @@ export const formatResults = ({
 	`${results
 		.map(
 			(result) =>
-				` <details class="test-details">
-				${formatSummary({
-					title: result.title,
-					meta: result.meta,
-					tags: result.aggregatedTags,
-					showTextOnMeta,
-					rootDirReplacer,
-				})}
-				${formatContent({ assertions: result.assertions, statusMap, toHTML, expandErrorDetails })}
-			</details>`,
+				html` <details class="test-details">
+					${formatSummary({
+						title: result.title,
+						meta: result.meta,
+						tags: result.aggregatedTags,
+						showTextOnMeta,
+						rootDirReplacer,
+					})}
+					${formatContent({ assertions: result.assertions, statusMap, toHTML, expandErrorDetails })}
+				</details>`,
 		)
 		.join('')}`;

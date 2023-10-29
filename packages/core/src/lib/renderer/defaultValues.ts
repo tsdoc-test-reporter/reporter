@@ -1,8 +1,8 @@
 export const statusToIconMap: Record<string, string> = {
-	pass: '✅',
-	fail: '❌',
-	skip: '⏭️',
-	todo: '🔖',
+	pass: 'pass',
+	fail: 'fail',
+	skip: 'skip',
+	todo: 'todo',
 };
 
 export const customColorMap: Record<number, string> = {

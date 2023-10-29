@@ -18,7 +18,7 @@ test('format meta with passed', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="meta test-summary-passing-tests"> 1 </span><span class="sr-only">Passing tests: 1, </span>`,
+			`<span aria-hidden="true">Pass: 1</span><span class="sr-only">Passing tests: 1, </span>`,
 		),
 	);
 });
@@ -33,12 +33,12 @@ test('format meta with skipped', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="meta test-summary-skipped-tests"> 1 </span><span class="sr-only">Skipped tests: 1, </span>`,
+			`<span aria-hidden="true">Skip: 1</span><span class="sr-only">Skipped tests: 1, </span>`,
 		),
 	);
 });
 
-test('format meta with skipped', () => {
+test('format meta with failed', () => {
 	const result = stripTabsAndNewlines(
 		formatMeta({
 			meta: uiTestResultMetaFactory({
@@ -48,7 +48,7 @@ test('format meta with skipped', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="meta test-summary-failing-tests"> 1 </span><span class="sr-only">Failing tests: 1, </span>`,
+			`<span aria-hidden="true">Fail: 1</span><span class="sr-only">Failing tests: 1, </span>`,
 		),
 	);
 });
@@ -63,23 +63,7 @@ test('format meta with todo', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true" class="meta test-summary-todo-tests"> 1 </span><span class="sr-only">Todo tests: 1, </span>`,
-		),
-	);
-});
-
-test('format meta with text displayed', () => {
-	const result = stripTabsAndNewlines(
-		formatMeta({
-			meta: uiTestResultMetaFactory({
-				todo: 1,
-			}),
-			showText: true,
-		}),
-	);
-	expect(result).toEqual(
-		expect.stringContaining(
-			`<span aria-hidden="true" class="meta test-summary-todo-tests">Todo: 1 </span><span class="sr-only">Todo tests: 1, </span>`,
+			`<span aria-hidden="true">Todo: 1</span><span class="sr-only">Todo tests: 1, </span>`,
 		),
 	);
 });

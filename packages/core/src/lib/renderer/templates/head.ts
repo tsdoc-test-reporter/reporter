@@ -1,12 +1,14 @@
+import { html } from './html';
+
 type Props = {
 	title: string;
 	style?: string;
 };
 
-export const formatHead = ({ title, style }: Props): string =>
-	`<head>
+export const formatHead = ({ title, style }: Props) =>
+	html`<head>
 		<title>${title}</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<style>
 			:root {
 				--light-red: hsl(357, 100%, 92%);
@@ -16,8 +18,9 @@ export const formatHead = ({ title, style }: Props): string =>
 				--light-green: hsl(114, 31%, 80%);
 				--dark-green: hsl(138, 89%, 10%);
 
-				--light-blue: hsl(222, 100%, 98%);
-				--dark-blue: hsl(202, 32%, 15%);
+				--light-blue: hsl(208, 100%, 97%);
+				--dark-blue:  hsl(207, 46%, 32%);
+				--darker-blue: hsl(202, 32%, 15%);
 
 				--dark-purple: hsl(300, 79%, 26%);
 				--light-purple: hsl(299, 100%, 92%);
@@ -28,29 +31,29 @@ export const formatHead = ({ title, style }: Props): string =>
 				--black: hsl(0, 0%, 25%);
 				--light-black: hsl(0, 0%, 33%);
 				--lighter-black: hsl(0, 0%, 40%);
+				--light-gray: hsl(0, 0%, 98%);
 				--pale-gray: hsl(0, 0%, 83%);
+				--gray:	hsl(0, 0%, 93%);
 				--white: hsl(0, 100%, 100%);
 
 				--test-summary-border-color: var(--pale-gray);
-				--list-even-odd-background-color: var(--light-blue);
-				--list-border-color: var(--light-blue);
+				--list-border-color: var(--pale-gray);
 				--list-text-color: var(--light-black);
-				--list-ancestor-text-color: var(--lighter-black);
 
-				--passing-tests-summary-color: var(--dark-green);
-				--passing-tests-summary-background-color: var(--light-green);
-				--failing-tests-summary-color: var(--dark-red);
-				--failing-tests-summary-background-color: var(--light-red);
-				--todo-tests-summary-color: var(--dark-purple);
-				--todo-tests-summary-background-color: var(--light-purple);
-				--skipped-tests-summary-color: var(--dark-yellow);
-				--skipped-tests-summary-background-color: var(--light-yellow);
+				--pass-color: var(--dark-green);
+				--pass-background: var(--light-green);
+				--fail-color: var(--dark-red);
+				--fail-background: var(--light-red);
+				--todo-color: var(--dark-purple);
+				--todo-background: var(--light-purple);
+				--skip-color: var(--dark-yellow);
+				--skip-background: var(--light-yellow);
 
-				--code-background-color: var(--dark-blue);
+				--code-background-color: var(--darker-blue);
 
-				--tag-background-color: var(--white);
-				--tag-text-color: var(--black);
-				--tag-border-color: var(--pale-gray);
+				--tag-background-color: var(--light-blue);
+				--tag-text-color: var(--dark-blue);
+				--tag-border-color: var(--dark-blue);
 
 				--background-color: var(--white);
 				--text-color: var(--light-black);
@@ -113,18 +116,22 @@ export const formatHead = ({ title, style }: Props): string =>
 				align-items: center;
 				border-radius: 4px;
 				padding: 4px;
-				background-color: #eee;
+				background-color: var(--gray);
 				margin-bottom: 4px;
 				text-decoration: underline;
 			}
 
 			.open-file {
-				margin: 0 0.25rem 0 auto;
 				text-decoration: none;
 			}
 
 			.build-info {
 				border-bottom: none;
+			}
+
+			.build-info svg {
+				margin-left: 4px;
+				margin-bottom: 2px;
 			}
 
 			.open-file a {
@@ -142,14 +149,14 @@ export const formatHead = ({ title, style }: Props): string =>
 				align-items: flex-start;
 			}
 
-			details summary { 
+			details summary {
 				cursor: pointer;
 				list-style: none;
 			}
 
 			details summary::-webkit-details-marker,
 			details summary::marker {
-			 	display: none; 
+			 	display: none;
 			}
 
 			summary:before {
@@ -157,14 +164,11 @@ export const formatHead = ({ title, style }: Props): string =>
 				content: "►";
 				margin-top: 4px;
 				font-size: 0.85rem;
+				transition: all 250ms;
 			}
 
 			details[open] > summary:before {
-			 	content: "▼";
-			}
-
-			details[open] .test-summary {
-				border-bottom-width: 1px;
+				transform: rotate(90deg);
 			}
 
 			.test-details:first-of-type .test-summary {
@@ -174,6 +178,11 @@ export const formatHead = ({ title, style }: Props): string =>
 			.test-details:last-of-type .test-summary {
 				border-radius: 0 0 4px 4px;
 				border-bottom-width: 1px;
+			}
+
+			details[open].test-details .test-summary {
+				border-bottom-width: 1px;
+				border-bottom-left-radius: 4px;
 			}
 
 			.test-summary {
@@ -186,18 +195,38 @@ export const formatHead = ({ title, style }: Props): string =>
 
 			.test-summary-inner {
 				display: inline-flex;
-				justify-content: center;
 				align-items: center;
 				width: 100%;
 				padding-left: 1.25rem;
 				justify-content: space-between;
+				gap: 0.5rem;
 				flex-wrap: wrap;
+			}
+
+			.test-summary-primary {
+				display: flex;
+				flex-direction: column;
+				gap: 0.25rem;
+			}
+
+			.test-summary-title {
+				display: flex;
+				gap: 0.25rem;
+				align-items: baseline;
+				flex-wrap: wrap;
+			}
+
+			.test-summary-secondary {
+				display: flex;
+				flex-direction: row;
+				gap: 0.25rem;
 			}
 
 			.test-summary h2  {
 				display: inline;
 				margin: 0;
-				font-size: 1rem;
+				font-size: 1.1rem;
+				word-break: break-word;
 			}
 			.aggregated-tags {
 				margin-left: auto;
@@ -205,64 +234,77 @@ export const formatHead = ({ title, style }: Props): string =>
 				display: inline-flex;
 				justify-content: flex-end;
 				gap: 0.5rem;
-			}
-			.test-summary-status span {
-				padding: 0.25rem 0.5rem;
-				border-style: solid;
-				border-width: 1px 1px 1px 0;
+				margin-right: 0.5rem;
 			}
 			.test-summary-status {
 				display: flex;
 				border-radius: 4px;
 				box-shadow: var(--box-shadow);
 			}
-			.test-summary-status .meta:first-of-type {
+			.meta {
+				padding: 0.25rem 0.5rem;
+				border-style: solid;
+				border-width: 1px 1px 1px 0;
+			}
+			.test-summary .meta:first-of-type {
 				border-radius: 4px 0 0 4px;
 				border-left-width: 1px;
 			}
-			
-			.test-summary-passing-tests {
-				border-color: var(--passing-tests-summary-color);
-				background-color:  var(--passing-tests-summary-background-color);
-				color: var(--passing-tests-summary-color);
+			.test-summary .meta:last-of-type {
+				border-radius: 0 4px 4px 0;
+			}
+			.test-summary .meta:only-of-type {
+				border-radius: 4px;
 			}
 
-			.test-summary-failing-tests {
-				border-color: var(--failing-tests-summary-color);
-				background-color:  var(--failing-tests-summary-background-color);
-				color: var(--failing-tests-summary-color);
+			.assertion-secondary .meta {
+				border-left-width: 1px;
+				border-radius: 4px;
 			}
 
-			.test-summary-todo-tests {
-				border-color: var(--todo-tests-summary-color);
-				background-color:  var(--todo-tests-summary-background-color);
-				color: var(--todo-tests-summary-color);
+			.pass-tests {
+				border-color: var(--pass-color);
+				background-color:  var(--pass-background);
+				color: var(--pass-color);
 			}
 
-			.test-summary-skipped-tests {
-				border-color: var(--skipped-tests-summary-color);
-				background-color:  var(--skipped-tests-summary-background-color);
-				color: var(--skipped-tests-summary-color);
+			.fail-tests {
+				border-color: var(--fail-color);
+				background-color:  var(--fail-background);
+				color: var(--fail-color);
+			}
+
+			.todo-tests {
+				border-color: var(--todo-color);
+				background-color:  var(--todo-background);
+				color: var(--todo-color);
+			}
+
+			.skip-tests {
+				border-color: var(--skip-color);
+				background-color:  var(--skip-background);
+				color: var(--skip-color);
 			}
 			.assertion {
 				padding: 0.5rem;
 				padding-left: 1.5rem;
-				display: grid;
-				align-items: center;
-				grid-template-columns: 3fr 1fr 1.15rem;
-				gap: 0.5rem;
 				color: var(--list-text-color);
 				border-left: 1px solid var(--list-border-color);
 				border-right: 1px solid var(--list-border-color);
+				margin-left: 0.25rem;
+				background-color: var(--light-gray)
 			}
-			.assertion-ancestor {
-				color: var(--list-ancestor-text-color);
+			.assertion-details {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
 			}
-			.assertion.status-failed .assertion-ancestor {
-				color: var(--list-text-color);
-			}
-			.assertion:nth-of-type(odd) {
-				background-color: var(--list-even-odd-background-color);
+			.assertion-primary {
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				align-items: center;
 			}
 			.assertion:not(:last-child) {
 				border-bottom: 1px solid var(--list-border-color);
@@ -272,7 +314,6 @@ export const formatHead = ({ title, style }: Props): string =>
 			}
 			.assertion-tags {
 				display: inline-flex;
-				justify-content: flex-end;
 				gap: 0.5rem;
 			}
 			.tag {
@@ -282,6 +323,7 @@ export const formatHead = ({ title, style }: Props): string =>
 				padding: 4px;
 				border: 1px solid var(--tag-border-color);
 				background-color: var(--tag-background-color);
+				color: var(--tag-text-color);
 			}
 			.assertion-error-content {
 				padding: 0.5rem;
@@ -292,9 +334,9 @@ export const formatHead = ({ title, style }: Props): string =>
 				border-radius: 4px;
 			}
 			.assertion-error-details {
-				grid-column: 1/3;
 				width: 100%;
 				position: relative;
+				margin-top: 0.5rem;
 			}
 
 			.assertion-error-details summary:before {
@@ -327,30 +369,6 @@ export const formatHead = ({ title, style }: Props): string =>
 				position: absolute !important;
 				width: 1px !important;
 				white-space: nowrap !important;
-			}
-
-			@media only screen and (max-width: 600px) {
-				.test-summary-inner {
-					flex-direction: column;
-					justify-content: flex-start;
-					align-items: flex-start;
-				}
-
-				.test-summary-inner > * {
-					margin-top: 0.25rem;
-				}
-
-				.open-file {
-					margin-left: 0;
-				}
-
-				.assertion {
-					grid-template-columns: 1fr;
-				}
-
-				.assertion-tags {
-					justify-content: flex-start;
-				}
 			}
 			${style}
 		</style>

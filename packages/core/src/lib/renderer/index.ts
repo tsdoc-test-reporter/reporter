@@ -13,6 +13,7 @@ import { AnsiToHtmlConverter } from '../utils/ansi-to-html';
 import { escapeHtml } from '../utils/ansi-to-html/escapeHTML';
 import { customColorMap, statusToIconMap } from './defaultValues';
 import { formatHead, formatHeader } from './templates';
+import { html } from './templates/html';
 import { formatResults } from './templates/results';
 export * from './templates';
 export * from './defaultValues';
@@ -140,20 +141,23 @@ export const render = (
 		},
 	});
 	const toHTML = (content: string) => ansiToHtmlConverter.toHtml(escapeHtml(content));
-	return `<!doctype html>
-			<html lang="en">
-				${formatHead({ title, style: options?.style ?? '' })}
-				<body>
-					<main>${formatHeader({ title, buildInfo: options?.buildInfo })} ${formatResults({
+	return html`<!doctype html>
+		<html lang="en">
+			${formatHead({ title, style: options?.style ?? '' })}
+			<body>
+				<main>
+					${formatHeader({ title, buildInfo: options?.buildInfo })}
+					${formatResults({
 						results,
 						statusMap,
 						showTextOnMeta: options?.showTextOnTestSummaryMeta,
 						toHTML,
 						expandErrorDetails: options?.expandErrorDetails,
 						rootDirReplacer,
-					})}</main>
-				</body>
-			</html>`;
+					})}
+				</main>
+			</body>
+		</html>`;
 };
 
 export const getRenderOutput = <Type>(

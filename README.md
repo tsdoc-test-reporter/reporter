@@ -122,16 +122,23 @@ module.exports = {
 // reporter.ts
 import TSDocTestReporter from '@tsdoc-test-reporter/vitest';
 import { Reporter } from 'vitest/reporters';
-import { File } from 'vitest';
+import type { File, Vitest } from 'vitest';
 
 export default class MyDefaultReporter extends Reporter {
-	async onFinished(files: File[]) {
-		new TSDocTestReporter({
+	private reporter: TSDocTestReporter;
+	constructor() {
+		this.reporter = new TSDocTestReporter({
 			outputFileName: 'reports/tsdoc-report',
 			uiOptions: {
 				htmlTitle: 'Title of HTML Page',
 			},
-		}).onFinished(files);
+		});
+	}
+	onInit(ctx: Vitest) {
+		this.reporter.onInit(ctx);
+	}
+	onFinished(files: File[]) {
+		this.reporter.onFinished(files);
 	}
 }
 ```
@@ -174,20 +181,28 @@ module.exports = {
 
 ```ts
 // reporter.ts
-import TSDocTestReporter, { coreDefaults } from '@tsdoc-test-reporter/vitest';
+import TSDocTestReporter from '@tsdoc-test-reporter/vitest';
 import { Reporter } from 'vitest/reporters';
-import { File } from 'vitest';
+import type { File, Vitest } from 'vitest';
 
 export default class MyDefaultReporter extends Reporter {
-	async onFinished(files: File[]) {
-		new TSDocTestReporter({
+	private reporter: TSDocTestReporter;
+
+	constructor() {
+		this.reporter = new TSDocTestReporter({
 			customTags: [
 				{
 					tagName: '@customModifierTag',
 					syntaxKind: 2,
 				},
 			],
-		}).onFinished(files);
+		})
+	}
+	onInit(ctx: Vitest) {
+		this.reporter.onInit(ctx);
+	}
+	onFinished(files: File[]) {
+		this.reporter.onFinished(files);
 	}
 }
 ```

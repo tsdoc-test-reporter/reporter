@@ -58,6 +58,7 @@ export const toUITestResult =
 			title: options?.titleFormatter
 				? options.titleFormatter(result.testFilePath)
 				: result.testFilePath,
+			filePath: result.testFilePath,
 			meta: aggregateMeta(assertions),
 			aggregatedTags,
 			assertions,

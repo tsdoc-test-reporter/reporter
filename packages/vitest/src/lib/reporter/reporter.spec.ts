@@ -97,6 +97,7 @@ test('create json report with output as ui results', () => {
 		results: [
 			{
 				title: 'reporter.spec.ts',
+				filePath: 'reporter.spec.ts',
 				meta: {
 					failed: 0,
 					passed: 1,

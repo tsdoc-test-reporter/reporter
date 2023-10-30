@@ -527,6 +527,7 @@ export type UITestResultMeta = {
 
 export type UITestResult = {
 	title: string;
+	filePath?: string;
 	meta: UITestResultMeta;
 	aggregatedTags?: UITag[];
 	assertions: UIAssertion[];

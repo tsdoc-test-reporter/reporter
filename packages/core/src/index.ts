@@ -47,4 +47,4 @@ export {
 	defaultOutputFileName,
 	getRenderOutput,
 } from './lib/renderer';
-export { addRootDir } from './lib/utils/string.utils';
+export { rootDirReplacer } from './lib/utils/string.utils';

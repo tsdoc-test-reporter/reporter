@@ -8,6 +8,7 @@ test('format summary', () => {
 		formatSummary({
 			title: 'title',
 			meta: uiTestResultMetaFactory(),
+			filePath: "title",
 		}),
 	);
 	expect(result).toEqual(expect.stringContaining(`<summary class="test-summary">`));
@@ -19,6 +20,7 @@ test('format summary with aggregated tags', () => {
 	const result = stripTabsAndNewlines(
 		formatSummary({
 			title: 'title',
+			filePath: "title",
 			meta: uiTestResultMetaFactory(),
 			tags: [
 				uiTagFactory({

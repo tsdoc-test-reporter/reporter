@@ -10,7 +10,7 @@ import {
 	getTsDocParserConfig,
 	parseTestFiles,
 	programFactory,
-	addRootDir,
+	rootDirReplacer,
 	writeToFile,
 } from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
@@ -29,7 +29,6 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
 	private readonly compilerOptions: CompilerOptions;
 	private rootDir: string;
-	private packageDir: string;
 
 	/**
 	 *
@@ -43,7 +42,6 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 		};
 		this.rootDir = globalConfig.rootDir;
 		this.compilerOptions = getCompilerOptions(options.tsConfigPath);
-		this.packageDir = this.rootDir.replace(process.cwd(), '');
 	}
 
 	/**
@@ -92,7 +90,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 					}),
 				this.options,
 				this.options.repoUrl
-					? addRootDir(`${this.options.repoUrl}${this.packageDir ?? ''}`)
+					? rootDirReplacer(this.rootDir, this.options.repoUrl)
 					: undefined,
 			),
 		});

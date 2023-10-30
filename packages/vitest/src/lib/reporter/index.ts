@@ -9,7 +9,7 @@ import {
 	getRenderOutput,
 	programFactory,
 	AllTagsName,
-	addRootDir,
+	rootDirReplacer,
 } from '@tsdoc-test-reporter/core';
 import type { Reporter, File, Vitest } from 'vitest';
 import { TSDocParser } from '@microsoft/tsdoc';
@@ -25,7 +25,6 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 	private readonly compilerOptions: CompilerOptions;
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
 	private rootDir: string | undefined;
-	private packageDir: string | undefined;
 
 	/**
 	 *
@@ -41,7 +40,6 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 
 	onInit(ctx: Vitest): void {
 		this.rootDir = ctx.config.root;
-		this.packageDir = this.rootDir.replace(process.cwd(), '');
 	}
 
 	/**
@@ -82,7 +80,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 					}),
 				this.options,
 				this.options.repoUrl
-					? addRootDir(`${this.options.repoUrl}${this.packageDir ?? ''}`)
+					? rootDirReplacer(this.rootDir, this.options.repoUrl)
 					: undefined,
 			),
 		});

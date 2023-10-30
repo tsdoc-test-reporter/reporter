@@ -8,9 +8,9 @@ export const stripTabsAndNewlines = (s: string): string => {
 	return s.replace(/\t/g, '').replace(/\r/g, '').replace(/\n/g, '');
 };
 
-export const addRootDir = (root: string | undefined) => (filepath: string) => {
-	if (!root) {
+export const rootDirReplacer = (root: string | undefined, replacer: string | undefined) => (filepath: string) => {
+	if (!root || !replacer) {
 		return filepath;
 	}
-	return `${root}${filepath}`;
+	return filepath.replace(root, replacer);
 };

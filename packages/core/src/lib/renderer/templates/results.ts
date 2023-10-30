@@ -28,6 +28,7 @@ export const formatResults = ({
 						title: result.title,
 						meta: result.meta,
 						tags: result.aggregatedTags,
+						filePath: result.filePath ?? result.title,
 						showTextOnMeta,
 						rootDirReplacer,
 					})}

@@ -315,6 +315,7 @@ describe('ui result', () => {
 				todo: 0,
 			},
 			title: 'test-file-path.ts',
+			filePath: 'test-file-path.ts'
 		});
 	});
 
@@ -414,6 +415,7 @@ describe('ui result', () => {
 				todo: 0,
 			},
 			title: 'test-file-path.ts',
+			filePath: 'test-file-path.ts'
 		});
 	});
 });

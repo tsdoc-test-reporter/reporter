@@ -6,6 +6,7 @@ import { html } from './html';
 
 type Props = {
 	title: string;
+	filePath: string;
 	meta: UITestResultMeta;
 	tags?: UITag[];
 	showTextOnMeta?: boolean;
@@ -18,6 +19,7 @@ export const formatSummary = ({
 	tags,
 	showTextOnMeta,
 	rootDirReplacer,
+	filePath
 }: Props): string =>
 	html`<summary class="test-summary">
 		<div class="test-summary-inner">
@@ -26,7 +28,7 @@ export const formatSummary = ({
 				<h2>${title}</h2>
 				${rootDirReplacer
 					? html`<span class="open-file"
-							><a href="${rootDirReplacer(title)}" rel="noreferrer" target="_blank">Open file</a>
+							><a href="${rootDirReplacer(filePath)}" rel="noreferrer" target="_blank">Open file</a>
 							${openInNewTabIcon}</span
 						>`
 					: ''}

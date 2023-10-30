@@ -56,6 +56,7 @@ export const toUITestResult =
 			: undefined;
 		return {
 			title: options?.titleFormatter ? options.titleFormatter(file.filepath) : file.filepath,
+			filePath: file.filepath,
 			meta: aggregateMeta(assertions),
 			aggregatedTags,
 			assertions,

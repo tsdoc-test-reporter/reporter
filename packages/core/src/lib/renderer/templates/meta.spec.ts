@@ -18,7 +18,7 @@ test('format meta with passed', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true">Pass: 1</span><span class="sr-only">Passing tests: 1, </span>`,
+			`<span aria-hidden="true">Pass: 1 </span><span class="sr-only">Passing tests: 1, </span>`,
 		),
 	);
 });
@@ -33,7 +33,7 @@ test('format meta with skipped', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true">Skip: 1</span><span class="sr-only">Skipped tests: 1, </span>`,
+			`<span aria-hidden="true">Skip: 1 </span><span class="sr-only">Skipped tests: 1, </span>`,
 		),
 	);
 });
@@ -48,7 +48,7 @@ test('format meta with failed', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true">Fail: 1</span><span class="sr-only">Failing tests: 1, </span>`,
+			`<span aria-hidden="true">Fail: 1 </span><span class="sr-only">Failing tests: 1, </span>`,
 		),
 	);
 });
@@ -63,7 +63,7 @@ test('format meta with todo', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<span aria-hidden="true">Todo: 1</span><span class="sr-only">Todo tests: 1, </span>`,
+			`<span aria-hidden="true">Todo: 1 </span><span class="sr-only">Todo tests: 1, </span>`,
 		),
 	);
 });

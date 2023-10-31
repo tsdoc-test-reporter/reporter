@@ -19,19 +19,21 @@ export const formatSummary = ({
 	tags,
 	showTextOnMeta,
 	rootDirReplacer,
-	filePath
+	filePath,
 }: Props): string =>
 	html`<summary class="test-summary">
 		<div class="test-summary-inner">
 			<div class="test-summary-primary">
 				<div class="test-summary-title">
-				<h2>${title}</h2>
-				${rootDirReplacer
-					? html`<span class="open-file"
-							><a href="${rootDirReplacer(filePath)}" rel="noreferrer" target="_blank">Open file</a>
-							${openInNewTabIcon}</span
-						>`
-					: ''}
+					<h2>${title}</h2>
+					${rootDirReplacer
+						? html`<span class="open-file"
+								><a href="${rootDirReplacer(filePath)}" rel="noreferrer" target="_blank"
+									>Open file</a
+								>
+								${openInNewTabIcon}</span
+						  >`
+						: ''}
 				</div>
 				${tags?.length
 					? html`<div class="assertion-tags">
@@ -39,9 +41,6 @@ export const formatSummary = ({
 					  </div>`
 					: ''}
 			</div>
-			<div class="test-summary-secondary">
-
-			${formatMeta({ meta, showText: showTextOnMeta })}
-			</div>
+			<div class="test-summary-secondary">${formatMeta({ meta, showText: showTextOnMeta })}</div>
 		</div>
 	</summary>`;

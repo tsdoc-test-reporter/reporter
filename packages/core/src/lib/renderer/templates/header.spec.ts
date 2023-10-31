@@ -22,9 +22,5 @@ test('format header with build info', () => {
 			`<header class=""><h1>title</h1><a class="build-info" href="https://example.com" rel="noreferrer" target="_blank">`,
 		),
 	);
-	expect(result).toEqual(
-		expect.stringContaining(
-			`text`,
-		),
-	);
+	expect(result).toEqual(expect.stringContaining(`text`));
 });

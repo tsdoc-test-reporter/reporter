@@ -13,8 +13,6 @@
 - Supports: **Jest** and **Vitest**
 - Parses _JSDoc_ and extended _TSDoc_ tags
 - Outputs: **JSON** or **HTML**
-- `block` and `modifier` tags (no `inline` tag support yet)
-- Specifying which test blocks should be parsed (`it`/`test`/`describe`)
 - Supports using custom [TagDefinitions](https://tsdoc.org/pages/packages/tsdoc-config/)
 
 ## Installing
@@ -196,7 +194,7 @@ export default class MyDefaultReporter extends Reporter {
 					syntaxKind: 2,
 				},
 			],
-		})
+		});
 	}
 	onInit(ctx: Vitest) {
 		this.reporter.onInit(ctx);

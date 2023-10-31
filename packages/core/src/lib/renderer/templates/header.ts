@@ -9,10 +9,13 @@ type Props = {
 
 const formatBuildInfo = (buildInfo?: BuildInfo) =>
 	buildInfo
-		? html`<a class="build-info" href="${buildInfo.url}" rel="noreferrer" target="_blank">${buildInfo.text}${openInNewTabIcon}</a>`
+		? html`<a class="build-info" href="${buildInfo.url}" rel="noreferrer" target="_blank"
+				>${buildInfo.text}${openInNewTabIcon}</a
+		  >`
 		: '';
 
 export const formatHeader = ({ title, buildInfo }: Props) =>
 	html`<header class="${buildInfo?.position === 'bottom' ? 'column' : ''}">
-		<h1>${title}</h1>${formatBuildInfo(buildInfo)}
+		<h1>${title}</h1>
+		${formatBuildInfo(buildInfo)}
 	</header>`;

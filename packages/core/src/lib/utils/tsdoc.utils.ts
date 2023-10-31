@@ -9,7 +9,6 @@ import {
 	TSDocConfiguration,
 	TSDocTagDefinition,
 	DocLinkTag,
-	DocMemberReference,
 } from '@microsoft/tsdoc';
 
 import type { BlockTagName, ModifierTagName, TagType, TestBlockName } from '../types';
@@ -67,24 +66,27 @@ export const getPlainTextContentFromNodes = (docNode: DocBlock, tagSeparator: st
 			.find(isDocParagraph)
 			?.nodes.find(isPlainText)
 			?.text.split(tagSeparator)
-			.map(trim) ?? []
+			.map(trim)
+			.filter(Boolean) ?? []
 	);
+};
+
+export const getIdentifiersFromLinkTags = (docNode: DocBlock): string[] => {
+	const memberReferences = docNode.content.nodes.find(isDocParagraph)?.nodes.find(isDocLinkTag)
+		?.codeDestination?.memberReferences;
+	return memberReferences?.map((m) => m.memberIdentifier?.identifier).filter(Boolean) as string[] ?? [];
 };
 
 export const docBlockToDocBlockTags = (
 	docBlock: DocBlock | readonly DocBlock[],
 	tagSeparator: string,
-	lookupMemberReferences: (memberReferences: readonly DocMemberReference[]) => string | undefined,
+	lookupIdentifiers: (identifiers: string[]) => string | undefined,
 ): string[] => {
 	const blocks = isArrayOfDocBlocks(docBlock) ? docBlock : [docBlock];
 	return blocks.flatMap((block) => {
-		if (block.blockTag.tagName === '@see') {
-			const memberReferences = block.content.nodes.find(isDocParagraph)?.nodes.find(isDocLinkTag)
-				?.codeDestination?.memberReferences;
-			const referenceName = memberReferences ? lookupMemberReferences(memberReferences) : undefined;
-			return referenceName ?? getPlainTextContentFromNodes(block, tagSeparator);
-		}
-		return getPlainTextContentFromNodes(block, tagSeparator);
+		const identifiers = getIdentifiersFromLinkTags(block);
+		const referenceName = identifiers.length > 0 ? lookupIdentifiers(identifiers) : undefined;
+		return referenceName ? referenceName : getPlainTextContentFromNodes(block, tagSeparator);
 	});
 };
 

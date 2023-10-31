@@ -1,3 +1,3 @@
-export const enum TestTag {
-	UnitTest = 'A nice tag',
-}
+export const TestTag = {
+	UnitTest: 'A nice tag',
+};

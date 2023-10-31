@@ -9,7 +9,7 @@ import {
 import { UITag, UITestResultMeta } from '../types';
 import { testDocBlockCommentFactory } from '../test-utils/factory';
 import { writeToFile } from '../utils/io.utils';
-import { exampleTestResult  } from "./test-data/example-test-result";
+import { exampleTestResult } from './test-data/example-test-result';
 
 describe('aggregate tags', () => {
 	test('should remove duplicates', () => {
@@ -477,13 +477,17 @@ test('should call onBeforeRender when supplied', () => {
 
 test('render example data', () => {
 	writeToFile({
-		outputFileName: "packages/core/src/lib/renderer/example",
-		outputFileType: "html",
-		buffer: render(exampleTestResult, {
-			buildInfo: {
-				text: "Build",
-				url: "URL"
-			}
-		}, (string) => string)
-	})
-})
+		outputFileName: 'packages/core/src/lib/renderer/example',
+		outputFileType: 'html',
+		buffer: render(
+			exampleTestResult,
+			{
+				buildInfo: {
+					text: 'Build',
+					url: 'URL',
+				},
+			},
+			(string) => string,
+		),
+	});
+});

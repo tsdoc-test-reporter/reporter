@@ -21,6 +21,8 @@ test('format assertions', () => {
 		expect.stringContaining(`<span class="assertion-title">assertion title</span>`),
 	);
 	expect(result).toEqual(expect.stringContaining(`<span class="tag">tag</span>`));
-	expect(result).toEqual(expect.stringContaining(`<span aria-hidden="true" class="meta pass-tests">pass</span>`));
+	expect(result).toEqual(
+		expect.stringContaining(`<span aria-hidden="true" class="meta pass-tests">pass</span>`),
+	);
 	expect(result).toEqual(expect.stringContaining(`<span class="sr-only">pass</span>`));
 });

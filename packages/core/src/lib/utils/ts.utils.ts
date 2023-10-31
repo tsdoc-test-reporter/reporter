@@ -23,9 +23,21 @@ import {
 	Type,
 	JSDoc,
 	JSDocTag,
+	SourceFile,
+	isVariableStatement,
+	isTypeAliasDeclaration,
+	isInterfaceDeclaration,
+	isObjectLiteralExpression,
+	isStringLiteral,
+	isPropertyAssignment,
+	isImportSpecifier,
+	isLiteralTypeNode,
+	isPropertySignature,
+	isTypeLiteralNode,
+	NodeArray,
+	TypeElement,
+	EnumMember,
 } from 'typescript';
-import { unquoteString } from './string.utils';
-import { DocMemberReference } from '@microsoft/tsdoc';
 import { TestBlockName } from '../types';
 
 export const defaultCompilerOptions: CompilerOptions = {
@@ -78,7 +90,6 @@ export const getTestBlockName = (expression: Expression): TestBlockName =>
 	getNodeName(expression) as TestBlockName;
 
 export const getTestBlockBaseName = (expression: CallExpression): TestBlockName | undefined => {
-	// wow thats a nice function you got there 👀 👨🏼‍🍳 🤡
 	if (isIdentifier(expression.expression)) {
 		return expression.expression.escapedText as TestBlockName;
 	}
@@ -121,20 +132,6 @@ export const getTestBlockBaseName = (expression: CallExpression): TestBlockName 
 	return undefined;
 };
 
-export const getMemberNameFromDeclaration = (
-	declaration: Declaration | undefined,
-	name: string,
-) => {
-	if (declaration && isEnumDeclaration(declaration)) {
-		const member = declaration.members.find((member) => {
-			return isIdentifier(member.name) ? member.name.escapedText === name : false;
-		});
-		if (!member?.initializer) return '';
-		return unquoteString(member.initializer.getText());
-	}
-	return '';
-};
-
 export const getTestTitleFromExpression = (title: Expression, typeChecker: TypeChecker): string => {
 	if (isIdentifier(title)) {
 		const type = typeChecker.getTypeAtLocation(title);
@@ -151,23 +148,31 @@ export const getTestTitleFromExpression = (title: Expression, typeChecker: TypeC
 	return '';
 };
 
-export const findDeclarationsOfNamedImportedVariables = (
-	node: Node,
-	typechecker: TypeChecker,
-): Type[] => {
-	const types: Type[] = [];
-	node.forEachChild((importDeclaration) => {
-		if (isImportDeclaration(importDeclaration)) {
-			importDeclaration.importClause?.forEachChild((namedImport) => {
-				if (isNamedImports(namedImport)) {
-					namedImport.forEachChild((imp) => {
-						types.push(typechecker.getTypeAtLocation(imp));
-					});
-				}
-			});
-		}
-	});
-	return types;
+export const getMemberNameFromDeclaration = (
+	declaration: Declaration | undefined,
+	name: string,
+) => {
+	if (!declaration) return '';
+	if (isEnumDeclaration(declaration)) {
+		const member = declaration.members.find((member) => {
+			return isIdentifier(member.name) ? member.name.escapedText === name : false;
+		});
+		if (!member?.initializer) return '';
+		return isIdentifier(member.initializer) ? member.initializer.text : '';
+	}
+	if (isObjectLiteralExpression(declaration)) {
+		const property = declaration.properties.find(
+			(member) =>
+				member &&
+				isPropertyAssignment(member) &&
+				isIdentifier(member.name) &&
+				member.name.text === name,
+		);
+		return property && isPropertyAssignment(property) && isStringLiteral(property.initializer)
+			? property.initializer.text
+			: '';
+	}
+	return '';
 };
 
 export const lookupValueFromType = (type: Type, name?: string): string | undefined => {
@@ -178,28 +183,102 @@ export const lookupValueFromType = (type: Type, name?: string): string | undefin
 	return getMemberNameFromDeclaration(type.getSymbol()?.valueDeclaration, name);
 };
 
-export const lookupValueFromSourceFile = (
-	node: Node,
-	name: string | undefined,
-	typeChecker: () => TypeChecker,
-): string | undefined => {
-	const types = findDeclarationsOfNamedImportedVariables(node, typeChecker());
-	return types.map((type) => lookupValueFromType(type, name)).find(Boolean);
+export const findMemberByName = (
+	members: NodeArray<TypeElement | EnumMember>,
+	memberName: string,
+) => {
+	const member = members.find((m) => m.name && isIdentifier(m.name) && m.name.text === memberName);
+	return member &&
+		isPropertySignature(member) &&
+		member.type &&
+		isLiteralTypeNode(member.type) &&
+		isStringLiteral(member.type.literal)
+		? member.type.literal.text
+		: '';
 };
 
-export const lookupMemberReferences =
-	(node: Node, typeChecker: () => TypeChecker) =>
-	(memberReferences: readonly DocMemberReference[]): string | undefined => {
-		if (memberReferences.length === 1) {
-			const identifier = memberReferences[0].memberIdentifier?.identifier;
-			if (!identifier) return undefined;
-			return lookupValueFromSourceFile(node, undefined, typeChecker);
+export const lookupValuesFromStatementsInSourceFile = (
+	sourceFile: SourceFile,
+	typechecker: TypeChecker,
+	name: string,
+	members?: string[],
+): string => {
+	let resolvedName = '';
+	sourceFile.statements.forEach((statement) => {
+		if (isImportDeclaration(statement)) {
+			statement.importClause?.forEachChild((importClauseImport) => {
+				if (isNamedImports(importClauseImport)) {
+					importClauseImport.forEachChild((imp) => {
+						if (isImportSpecifier(imp)) {
+							if (imp.name.text === name) {
+								resolvedName =
+									lookupValueFromType(
+										typechecker.getTypeAtLocation(imp),
+										members ? members[0] : undefined,
+									) ?? '';
+							}
+						}
+					});
+				}
+			});
 		}
-		if (memberReferences.length === 2) {
-			const identifier = memberReferences[0].memberIdentifier?.identifier;
-			const name = memberReferences[1].memberIdentifier?.identifier;
-			if (!identifier && !name) return undefined;
-			return lookupValueFromSourceFile(node, name, typeChecker);
+		if (isVariableStatement(statement)) {
+			const declaration = statement.declarationList.declarations[0];
+			if (isIdentifier(declaration.name) && declaration.name.escapedText === name) {
+				if (
+					members &&
+					declaration.initializer &&
+					isObjectLiteralExpression(declaration.initializer)
+				) {
+					const property = declaration.initializer.properties.find(
+						(p) => p.name && isIdentifier(p.name) && p.name.escapedText === members[0],
+					);
+					if (property && isPropertyAssignment(property) && isStringLiteral(property.initializer)) {
+						resolvedName = property.initializer.text;
+					}
+				} else if (declaration.initializer && isIdentifier(declaration.initializer)) {
+					resolvedName = declaration.initializer.text;
+				}
+			}
+		}
+		if (isEnumDeclaration(statement) && members) {
+			if (statement.name.escapedText === name) {
+				resolvedName = findMemberByName(statement.members, members[0]);
+			}
+		}
+		if (isTypeAliasDeclaration(statement)) {
+			if (statement.name.escapedText === name) {
+				if (isLiteralTypeNode(statement.type)) {
+					if (isStringLiteral(statement.type.literal)) {
+						resolvedName = statement.type.literal.text;
+					}
+				}
+				if (isTypeLiteralNode(statement.type) && members) {
+					resolvedName = findMemberByName(statement.type.members, members[0]);
+				}
+			}
+		}
+		if (isInterfaceDeclaration(statement) && members) {
+			if (statement.name.escapedText === name) {
+				resolvedName = findMemberByName(statement.members, members[0]);
+			}
+		}
+	});
+	return resolvedName;
+};
+
+export const lookupIdentifiers =
+	(node: SourceFile, typeChecker: () => TypeChecker) =>
+	(identifiers: string[]): string | undefined => {
+		if (identifiers.length > 0) {
+			const [name, ...members] = identifiers;
+			if (!name) return undefined;
+			return lookupValuesFromStatementsInSourceFile(
+				node,
+				typeChecker(),
+				name,
+				members && members.length ? members : undefined,
+			);
 		}
 		return undefined;
 	};

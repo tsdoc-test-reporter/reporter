@@ -29,7 +29,7 @@ import {
 	getTestBlockName,
 	getTestTitleFromExpression,
 	hasJSDoc,
-	lookupMemberReferences,
+	lookupIdentifiers,
 } from '../utils/ts.utils';
 import {
 	docBlockToDocBlockTags,
@@ -166,9 +166,9 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 					const content = docBlockToDocBlockTags(
 						docBlock,
 						this.tagSeparator,
-						lookupMemberReferences(this.sourceFile, this.getTypeChecker),
-					);
-					if (content.length) {
+						lookupIdentifiers(this.sourceFile, this.getTypeChecker),
+					)
+					if (content.length > 0) {
 						tags[name] = {
 							type,
 							tags: content,

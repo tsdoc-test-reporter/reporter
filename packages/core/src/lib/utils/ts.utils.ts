@@ -159,7 +159,11 @@ export const getMemberNameFromDeclaration = (
 			return isIdentifier(member.name) ? member.name.escapedText === name : false;
 		});
 		if (!member?.initializer) return '';
-		return isIdentifier(member.initializer) || isBigIntLiteral(member.initializer) ? member.initializer.text : '';
+		return isIdentifier(member.initializer) ||
+			isBigIntLiteral(member.initializer) ||
+			isStringLiteral(member.initializer)
+			? member.initializer.text
+			: '';
 	}
 	if (isObjectLiteralExpression(declaration)) {
 		const property = declaration.properties.find(

@@ -210,10 +210,10 @@ export default class MyDefaultReporter extends Reporter {
 }
 ```
 
-
 ## Limitations
 
 - Does not parse more than regular text in block comments as of writing. This is being worked on. You can create multiple tags when using a block tag. See example below. If you want a custom tagseparator that is not `,` you can supply it as an option.
+
 ```ts
 /**
  * @remarks
@@ -223,11 +223,12 @@ test('get correct background color based on text color', () => {
 	expect(true).toBe(true);
 });
 ```
+
 - Has limited support of inline tags. As of writing the supported case is using `@see {@link variableName}`. If the linked reference is a variable it will be resolved to a value if it is in scope of the source file (in the source file or imported by the source file). This is limited to string literals and object properties that are string literals (or enums). The example below works, and works if the enum is imported as a named import.
 
 ```ts
 const enum MyEnum {
-  Key = "Value"
+	Key = 'Value',
 }
 
 /**
@@ -237,13 +238,15 @@ test('get correct background color based on text color', () => {
 	expect(true).toBe(true);
 });
 ```
+
 - Can not parse test titles that has parameters. If you are using `test.each` or similar where you are using placeholders in the test title, this test will not be able to match the JSDoc to the test assertion. You will have to wrap that each block with a `describe` and add a JSDoc to the `describe` block. If you are not using parameters in the title, `test.each` will work.
+
 ```ts
 /**
  * @remarks
  * unit,acceptance
  */
-test.each([{ name: "value" }])('this will fail: $name', () => {
+test.each([{ name: 'value' }])('this will fail: $name', () => {
 	expect(true).toBe(true);
 });
 ```

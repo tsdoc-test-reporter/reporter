@@ -167,7 +167,7 @@ export class CommentTagParser<CustomTags extends string = AllTagsName>
 						docBlock,
 						this.tagSeparator,
 						lookupIdentifiers(this.sourceFile, this.getTypeChecker),
-					)
+					);
 					if (content.length > 0) {
 						tags[name] = {
 							type,

@@ -74,7 +74,9 @@ export const getPlainTextContentFromNodes = (docNode: DocBlock, tagSeparator: st
 export const getIdentifiersFromLinkTags = (docNode: DocBlock): string[] => {
 	const memberReferences = docNode.content.nodes.find(isDocParagraph)?.nodes.find(isDocLinkTag)
 		?.codeDestination?.memberReferences;
-	return memberReferences?.map((m) => m.memberIdentifier?.identifier).filter(Boolean) as string[] ?? [];
+	return (
+		(memberReferences?.map((m) => m.memberIdentifier?.identifier).filter(Boolean) as string[]) ?? []
+	);
 };
 
 export const docBlockToDocBlockTags = (

@@ -37,6 +37,7 @@ import {
 	NodeArray,
 	TypeElement,
 	EnumMember,
+	isBigIntLiteral,
 } from 'typescript';
 import { TestBlockName } from '../types';
 
@@ -158,7 +159,7 @@ export const getMemberNameFromDeclaration = (
 			return isIdentifier(member.name) ? member.name.escapedText === name : false;
 		});
 		if (!member?.initializer) return '';
-		return isIdentifier(member.initializer) ? member.initializer.text : '';
+		return isIdentifier(member.initializer) || isBigIntLiteral(member.initializer) ? member.initializer.text : '';
 	}
 	if (isObjectLiteralExpression(declaration)) {
 		const property = declaration.properties.find(

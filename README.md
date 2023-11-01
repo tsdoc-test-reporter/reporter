@@ -13,7 +13,12 @@
 - Supports: **Jest** and **Vitest**
 - Parses _JSDoc_ and extended _TSDoc_ tags
 - Outputs: **JSON** or **HTML**
-- Supports using custom [TagDefinitions](https://tsdoc.org/pages/packages/tsdoc-config/)
+- Extensive configuration of HTML report ([See UIOptions](https://tsdoc-test-reporter.github.io/reporter/types/core_src.UIOptions.html))
+- Displays error details
+- Supports using custom Tag Definitions
+- Works with regular JavaScript files as well
+- Works as a regular HTML/JSON reporter if you don't have any JSDoc
+- [See limitations](#limitations) on a list of what are some known limitations
 
 ## Installing
 
@@ -203,4 +208,42 @@ export default class MyDefaultReporter extends Reporter {
 		this.reporter.onFinished(files);
 	}
 }
+```
+
+
+## Limitations
+
+- Does not parse more than regular text in block comments as of writing. This is being worked on. You can create multiple tags when using a block tag. See example below. If you want a custom tagseparator that is not `,` you can supply it as an option.
+```ts
+/**
+ * @remarks
+ * unit,acceptance,whatever
+ */
+test('get correct background color based on text color', () => {
+	expect(true).toBe(true);
+});
+```
+- Has limited support of inline tags. As of writing the supported case is using `@see {@link variableName}`. If the linked reference is a variable it will be resolved to a value if it is in scope of the source file (in the source file or imported by the source file). This is limited to string literals and object properties that are string literals (or enums). The example below works, and works if the enum is imported as a named import.
+
+```ts
+const enum MyEnum {
+  Key = "Value"
+}
+
+/**
+ * @see {@link MyEnum.Key}
+ */
+test('get correct background color based on text color', () => {
+	expect(true).toBe(true);
+});
+```
+- Can not parse test titles that has parameters. If you are using `test.each` or similar where you are using placeholders in the test title, this test will not be able to match the JSDoc to the test assertion. You will have to wrap that each block with a `describe` and add a JSDoc to the `describe` block. If you are not using parameters in the title, `test.each` will work.
+```ts
+/**
+ * @remarks
+ * unit,acceptance
+ */
+test.each([{ name: "value" }])('this will fail: $name', () => {
+	expect(true).toBe(true);
+});
 ```

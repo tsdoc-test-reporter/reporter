@@ -21,6 +21,7 @@ export const formatHead = ({ title, style }: Props) =>
 				--light-blue: hsl(208, 100%, 97%);
 				--dark-blue:  hsl(207, 46%, 32%);
 				--darker-blue: hsl(202, 32%, 15%);
+				--darkest-blue: hsl(202, 13%, 12%);
 
 				--dark-purple: hsl(300, 79%, 26%);
 				--light-purple: hsl(299, 100%, 92%);
@@ -28,6 +29,8 @@ export const formatHead = ({ title, style }: Props) =>
 				--dark-yellow: hsl(53, 79%, 26%);
 				--light-yellow: hsl(50, 100%, 92%);
 
+				--darkest-black: hsl(0, 0%, 10%);
+				--dark-black: hsl(0, 0%, 15%);
 				--black: hsl(0, 0%, 25%);
 				--light-black: hsl(0, 0%, 33%);
 				--lighter-black: hsl(0, 0%, 40%);
@@ -36,40 +39,65 @@ export const formatHead = ({ title, style }: Props) =>
 				--gray:	hsl(0, 0%, 93%);
 				--white: hsl(0, 100%, 100%);
 
-				--test-summary-border-color: var(--pale-gray);
-				--list-border-color: var(--pale-gray);
-				--list-text-color: var(--light-black);
-
-				--pass-color: var(--dark-green);
-				--pass-background: var(--light-green);
-				--fail-color: var(--dark-red);
-				--fail-background: var(--light-red);
-				--todo-color: var(--dark-purple);
-				--todo-background: var(--light-purple);
-				--skip-color: var(--dark-yellow);
-				--skip-background: var(--light-yellow);
-
-				--code-background-color: var(--darker-blue);
-
-				--tag-background-color: var(--light-blue);
-				--tag-text-color: var(--dark-blue);
-				--tag-border-color: var(--dark-blue);
-
 				--background-color: var(--white);
 				--text-color: var(--light-black);
 
 				--font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
 					'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-				--font-family-code: monospace;
+				--code-font-family: monospace;
 				--heading-margin: 0 0 1rem 0;
 				--box-shadow:  1px 1px 3px 1px rgba(0, 0, 0, 0.05);
+
+				--test-summary-background-color: var(--white);
+
+				--assertion-border-color: var(--pale-gray);
+				--assertion-text-color: var(--light-black);
+				--assertion-background-color: var(--light-gray);
+
+				--pass-color: var(--dark-green);
+				--pass-background: var(--light-green);
+
+				--fail-color: var(--dark-red);
+				--fail-background: var(--light-red);
+
+				--todo-color: var(--dark-purple);
+				--todo-background: var(--light-purple);
+
+				--skip-color: var(--dark-yellow);
+				--skip-background: var(--light-yellow);
+
+				--code-background-color: var(--darker-blue);
+				--code-text-color: var(--white);
+
+				--tag-background-color: var(--light-blue);
+				--tag-text-color: var(--dark-blue);
+				--tag-border-color: var(--dark-blue);
+
+				--info-background-color: var(--gray);
+				--info-text-color: var(--black);
 			}
+
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--background-color: var(--darkest-black);
+					--text-color: var(--gray);
+
+					--info-text-color: var(--black);
+
+					--test-summary-background-color: var(--darkest-blue);
+
+					--assertion-background-color: var(--dark-black);
+					--assertion-border-color: var(--black);
+					--assertion-text-color: var(--gray);
+				}
+			}
+
 			body,
 			html {
 				margin: 0;
 				padding: 1rem;
 				color: var(--text-color);
-				background-color: var(--white);
+				background-color: var(--background-color);
 				font-family: var(--font-family);
 			}
 
@@ -116,7 +144,8 @@ export const formatHead = ({ title, style }: Props) =>
 				align-items: center;
 				border-radius: 4px;
 				padding: 4px;
-				background-color: var(--gray);
+				color: var(--info-text-color);
+				background-color: var(--info-background-color);
 				margin-bottom: 4px;
 				text-decoration: underline;
 			}
@@ -136,7 +165,8 @@ export const formatHead = ({ title, style }: Props) =>
 
 			.open-file a {
 				text-decoration: none;
-				border-bottom: 1px solid var(--text-color);
+				border-bottom: 1px solid var(--info-text-color);
+				color: var(--info-text-color);
 				padding-bottom: 1px;
 			}
 
@@ -189,7 +219,8 @@ export const formatHead = ({ title, style }: Props) =>
 				position: relative;
 				cursor: pointer;
 				padding: 0.5rem;
-				border: 1px solid var(--test-summary-border-color);
+				background-color: var(--test-summary-background-color);
+				border: 1px solid var(--assertion-border-color);
 				border-bottom-width: 0;
 			}
 
@@ -228,6 +259,7 @@ export const formatHead = ({ title, style }: Props) =>
 				font-size: 1.1rem;
 				word-break: break-word;
 			}
+
 			.aggregated-tags {
 				margin-left: auto;
 				margin-right: 1rem;
@@ -236,23 +268,28 @@ export const formatHead = ({ title, style }: Props) =>
 				gap: 0.5rem;
 				margin-right: 0.5rem;
 			}
+
 			.test-summary-status {
 				display: flex;
 				border-radius: 4px;
 				box-shadow: var(--box-shadow);
 			}
+
 			.meta {
 				padding: 0.25rem 0.5rem;
 				border-style: solid;
 				border-width: 1px 1px 1px 0;
 			}
+
 			.test-summary .meta:first-of-type {
 				border-radius: 4px 0 0 4px;
 				border-left-width: 1px;
 			}
+
 			.test-summary .meta:last-of-type {
 				border-radius: 0 4px 4px 0;
 			}
+
 			.test-summary .meta:only-of-type {
 				border-radius: 4px;
 			}
@@ -285,20 +322,24 @@ export const formatHead = ({ title, style }: Props) =>
 				background-color:  var(--skip-background);
 				color: var(--skip-color);
 			}
+
 			.assertion {
 				padding: 0.5rem;
 				padding-left: 1.5rem;
-				color: var(--list-text-color);
-				border-left: 1px solid var(--list-border-color);
-				border-right: 1px solid var(--list-border-color);
+				color: var(--assertion-text-color);
+				border-left: 1px solid var(--assertion-border-color);
+				border-right: 1px solid var(--assertion-border-color);
 				margin-left: 0.25rem;
-				background-color: var(--light-gray)
+				background-color: var(--assertion-background-color)
 			}
+
 			.assertion-details {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
+				min-height: 1.75rem;
 			}
+
 			.assertion-primary {
 				display: flex;
 				justify-content: space-between;
@@ -306,16 +347,16 @@ export const formatHead = ({ title, style }: Props) =>
 				gap: 0.5rem;
 				align-items: center;
 			}
+
 			.assertion:not(:last-child) {
-				border-bottom: 1px solid var(--list-border-color);
+				border-bottom: 1px solid var(--assertion-border-color);
 			}
-			.assertion.status-failed {
-				background-color: var(--light-red);
-			}
+
 			.assertion-tags {
 				display: inline-flex;
 				gap: 0.5rem;
 			}
+
 			.tag {
 				display: inline-flex;
 				align-items: center;
@@ -325,14 +366,16 @@ export const formatHead = ({ title, style }: Props) =>
 				background-color: var(--tag-background-color);
 				color: var(--tag-text-color);
 			}
+
 			.assertion-error-content {
 				padding: 0.5rem;
 				margin: 0.5rem 0;
-				font-family: var(--font-family-code);
+				font-family: var(--code-font-family);
 				background-color: var(--code-background-color);
-				color: var(--white);
+				color: var(--code-text-color);
 				border-radius: 4px;
 			}
+
 			.assertion-error-details {
 				width: 100%;
 				position: relative;
@@ -352,12 +395,7 @@ export const formatHead = ({ title, style }: Props) =>
 				margin: 0;
 				margin-bottom: 1rem;
 			}
-			.expected {
-				color: var(--green);
-			}
-			.actual {
-				color: var(--red);
-			}
+
 			.sr-only {
 				clip: rect(1px, 1px, 1px, 1px) !important;
 				-webkit-clip-path: inset(50%) !important;

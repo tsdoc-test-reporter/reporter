@@ -28,7 +28,8 @@ export {
 	sourceFileFactory,
 	testFileFactory,
 	DeepPartial,
-} from './lib/test-utils/factory';
+	logger,
+} from './lib/test-utils';
 export {
 	getCompilerOptionsThatFollowExtends,
 	programFactory,

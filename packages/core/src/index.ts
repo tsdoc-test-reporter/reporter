@@ -18,6 +18,10 @@ export type {
 	TestBlockTagMap,
 	UITestError,
 	BuildInfo,
+	ToUITestResults,
+	ToUITestError,
+	ToUILog,
+	UILog,
 } from './lib/types';
 export { CommentTagParser } from './lib/comment-tag-parser';
 export { coreDefaults, allBlockTags, allJSDocTags, allModifierTags } from './lib/defaults';
@@ -48,4 +52,4 @@ export {
 	defaultOutputFileName,
 	getRenderOutput,
 } from './lib/renderer';
-export { rootDirReplacer } from './lib/utils/string.utils';
+export { rootDirReplacer, titleFormatter } from './lib/utils/string.utils';

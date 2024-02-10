@@ -1,6 +1,10 @@
 import { formatTag } from './tag';
 import { html } from './html';
 import { UIAssertion } from '../../types';
+import { formatAssertionExpandableDetails } from './assertion-expandable-details';
+import { formatErrors } from './errors';
+import { formatLogs } from './logs';
+import { spacing } from './spacing';
 
 type Props = {
 	assertion: UIAssertion;
@@ -34,18 +38,17 @@ export const formatAssertion = ({
 			</div>
 		</div>
 		${(assertion.errors?.length ?? 0) > 0
-			? html`<details ${expandErrorDetails ? 'open' : ''} class="assertion-error-details">
-					<summary><p>Error details</p></summary>
-					${assertion.errors
-						?.map(
-							(error) =>
-								html`<div class="assertion-error-content">
-									${toHTML
-										? toHTML(error?.diff ?? error?.message ?? error?.name ?? '')
-										: error?.name}
-								</div>`,
-						)
-						.join('')}
-			  </details>`
+			? formatAssertionExpandableDetails({
+					title: 'Errors',
+					content: formatErrors({ errors: assertion.errors, toHTML }),
+					open: expandErrorDetails,
+			  })
+			: ''}
+		${(assertion.logs?.length ?? 0) > 0
+			? html`${spacing()}${spacing()}<hr />${spacing()}${formatAssertionExpandableDetails({
+					title: 'Logs',
+					content: formatLogs({ logs: assertion.logs, toHTML }),
+					open: expandErrorDetails,
+			  })}`
 			: ''}
 	</li>`;

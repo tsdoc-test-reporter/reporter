@@ -469,8 +469,10 @@ test('should call onBeforeRender when supplied', () => {
 	const testData: TestData[] = [{ name: 'name' }];
 	const onBeforeRender = vi.fn(() => []);
 	const getRenderData = () => [];
-	getRenderOutput(testData, getRenderData, {
-		onBeforeRender,
+	getRenderOutput({
+		results: testData,
+		getRenderData,
+		options: { onBeforeRender },
 	});
 	expect(onBeforeRender).toHaveBeenCalled();
 });

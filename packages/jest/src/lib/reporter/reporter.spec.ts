@@ -134,6 +134,7 @@ test('create json report with output as ui results', () => {
 						],
 					},
 				],
+				logs: [],
 			},
 		],
 	};

@@ -417,6 +417,12 @@ export type UIOptions = {
 	 * Test results
 	 */
 	htmlTitle?: string;
+	/**
+	 * Render console.log output in the report 
+	 * @default
+	 * true
+	 */
+	includeLogs?: boolean;
 	/** Removes the `@` symbol on on the tag name in the generated output.
 	 * @default
 	 * false
@@ -510,12 +516,33 @@ export type UITestError = {
 	diff?: string;
 };
 
+export type UILogType =
+	| 'assert'
+	| 'count'
+	| 'debug'
+	| 'dir'
+	| 'dirxml'
+	| 'error'
+	| 'group'
+	| 'groupCollapsed'
+	| 'info'
+	| 'log'
+	| 'time'
+	| 'warn';
+
+export type UILog = {
+	content: string;
+	type: UILogType;
+	origin?: string;
+};
+
 export type UIAssertion = {
 	title: string;
 	ancestorTitles?: string[];
 	status: 'pass' | 'fail' | 'skip' | 'todo' | 'run' | 'only';
 	tags: UITag[];
 	errors?: UITestError[];
+	logs?: UILog[];
 };
 
 export type UITestResultMeta = {
@@ -523,6 +550,7 @@ export type UITestResultMeta = {
 	failed: number;
 	skipped: number;
 	todo: number;
+	hasLogs?: boolean;
 };
 
 export type UITestResult = {
@@ -531,4 +559,16 @@ export type UITestResult = {
 	meta: UITestResultMeta;
 	aggregatedTags?: UITag[];
 	assertions: UIAssertion[];
+	logs?: UILog[];
+};
+
+export type ToUITestResults<Type> = (results: Type[], options?: UIOptions) => UITestResult[];
+export type ToUITestError<Error> = (error: Error) => UITestError;
+export type ToUILog<Log> = (log: Log) => UILog;
+
+export type GetRenderOutputConfig<Type> = {
+	results: Type;
+	getRenderData: (results: Type) => UITestResult[];
+	options: TsDocTestReporterConfig<string>;
+	rootDirReplacer?: (filePath: string) => string;
 };

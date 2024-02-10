@@ -10,6 +10,7 @@ import {
 	programFactory,
 	AllTagsName,
 	rootDirReplacer,
+	titleFormatter,
 } from '@tsdoc-test-reporter/core';
 import type { Reporter, File, Vitest } from 'vitest';
 import { TSDocParser } from '@microsoft/tsdoc';
@@ -62,6 +63,24 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 		});
 	}
 
+	private getRenderData = (result: TaggedFile[]) => {
+		return toUITestResults(result, {
+			titleFormatter: titleFormatter(this.rootDir),
+			...this.options.uiOptions,
+		});
+	};
+
+	private getRenderOutput(files: File[]): string {
+		return getRenderOutput({
+			results: this.getTaggedResult(files),
+			getRenderData: this.getRenderData,
+			options: this.options,
+			rootDirReplacer: this.options.repoUrl
+				? rootDirReplacer(this.rootDir, this.options.repoUrl)
+				: undefined,
+		});
+	}
+
 	/**
 	 * Runs when all tests are finished and outputs result
 	 * to specified output file
@@ -70,17 +89,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName> implemen
 		writeToFile({
 			outputFileType: this.options.outputFileType ?? coreDefaults.outputFileType,
 			outputFileName: this.options.outputFileName ?? coreDefaults.outputFileName,
-			buffer: getRenderOutput<TaggedFile[]>(
-				this.getTaggedResult(files ?? []),
-				(result) =>
-					toUITestResults(result, {
-						titleFormatter: (title) =>
-							this.rootDir && this.rootDir !== '.' ? title.replace(this.rootDir, '') : title,
-						...this.options.uiOptions,
-					}),
-				this.options,
-				this.options.repoUrl ? rootDirReplacer(this.rootDir, this.options.repoUrl) : undefined,
-			),
+			buffer: this.getRenderOutput(files ?? []),
 		});
 	}
 }

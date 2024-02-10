@@ -9,6 +9,7 @@ type Props = {
 	showTextOnMeta?: boolean;
 	toHTML?: (content: string) => string;
 	expandErrorDetails?: boolean;
+	includeLogs?: boolean;
 	rootDirReplacer?: (fileName: string) => string;
 };
 
@@ -19,6 +20,7 @@ export const formatResults = ({
 	toHTML,
 	expandErrorDetails,
 	rootDirReplacer,
+	includeLogs
 }: Props): string =>
 	`${results
 		.map(
@@ -26,13 +28,22 @@ export const formatResults = ({
 				html` <details class="test-details">
 					${formatSummary({
 						title: result.title,
-						meta: result.meta,
+						meta: {
+							...result.meta,
+							hasLogs: includeLogs ? result.meta.hasLogs : false,
+						},
 						tags: result.aggregatedTags,
 						filePath: result.filePath ?? result.title,
 						showTextOnMeta,
 						rootDirReplacer,
 					})}
-					${formatContent({ assertions: result.assertions, statusMap, toHTML, expandErrorDetails })}
+					${formatContent({
+						assertions: result.assertions,
+						logs: includeLogs ? result.logs : undefined,
+						statusMap,
+						toHTML,
+						expandErrorDetails,
+					})}
 				</details>`,
 		)
 		.join('')}`;

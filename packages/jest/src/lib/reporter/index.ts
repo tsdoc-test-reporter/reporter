@@ -11,6 +11,7 @@ import {
 	parseTestFiles,
 	programFactory,
 	rootDirReplacer,
+	titleFormatter,
 	writeToFile,
 } from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
@@ -67,6 +68,24 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 		};
 	}
 
+	private getRenderData = (result: TaggedAggregatedResult) => {
+		return toUITestResults(result.testResults, {
+			titleFormatter: titleFormatter(this.rootDir),
+			...this.options.uiOptions,
+		});
+	};
+
+	private getRenderOutput(results: AggregatedResult): string {
+		return getRenderOutput({
+			results: this.getTaggedResult(results),
+			getRenderData: this.getRenderData,
+			options: this.options,
+			rootDirReplacer: this.options.repoUrl
+				? rootDirReplacer(this.rootDir, this.options.repoUrl)
+				: undefined,
+		});
+	}
+
 	/**
 	 * Runs when all tests are finished and outputs result
 	 * to specified output file
@@ -80,17 +99,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 		writeToFile({
 			outputFileType: this.options.outputFileType ?? coreDefaults.outputFileType,
 			outputFileName: this.options.outputFileName ?? coreDefaults.outputFileName,
-			buffer: getRenderOutput<TaggedAggregatedResult>(
-				this.getTaggedResult(results),
-				(result) =>
-					toUITestResults(result.testResults, {
-						titleFormatter: (title) =>
-							this.rootDir && this.rootDir !== '.' ? title.replace(this.rootDir, '') : title,
-						...this.options.uiOptions,
-					}),
-				this.options,
-				this.options.repoUrl ? rootDirReplacer(this.rootDir, this.options.repoUrl) : undefined,
-			),
+			buffer: this.getRenderOutput(results),
 		});
 	}
 }

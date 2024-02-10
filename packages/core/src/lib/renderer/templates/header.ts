@@ -9,7 +9,7 @@ type Props = {
 
 const formatBuildInfo = (buildInfo?: BuildInfo) =>
 	buildInfo
-		? html`<a class="build-info" href="${buildInfo.url}" rel="noreferrer" target="_blank"
+		? html`<a class="info build-info" href="${buildInfo.url}" rel="noreferrer" target="_blank"
 				>${buildInfo.text}${openInNewTabIcon}</a
 		  >`
 		: '';

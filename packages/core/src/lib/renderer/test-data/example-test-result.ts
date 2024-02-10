@@ -38,12 +38,26 @@ export const exampleTestResult: UITestResult[] = [
 	},
 	{
 		title: 'Custom title formatting supported',
-		meta: { failed: 0, passed: 1, skipped: 0, todo: 0 },
+		meta: { failed: 0, passed: 1, skipped: 0, todo: 0, hasLogs: true },
 		aggregatedTags: [
 			{
 				type: 'ancestor',
 				name: '@remarks',
 				text: 'aggregate tags for display in title summary',
+			},
+		],
+		logs: [
+			{
+				type: 'log',
+				content: 'Hello',
+			},
+			{
+				type: 'error',
+				content: 'Could not do the thing',
+			},
+			{
+				type: 'warn',
+				content: 'Could not do the thing',
 			},
 		],
 		assertions: [
@@ -59,6 +73,20 @@ export const exampleTestResult: UITestResult[] = [
 				],
 				status: 'pass',
 				errors: undefined,
+				logs: [
+					{
+						type: 'log',
+						content: 'Hello',
+					},
+					{
+						type: 'error',
+						content: 'Could not do the thing',
+					},
+					{
+						type: 'warn',
+						content: 'Could not do the thing',
+					},
+				],
 			},
 		],
 	},

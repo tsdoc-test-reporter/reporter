@@ -117,9 +117,6 @@ export const formatHead = ({ title, style }: Props) =>
 
 			a {
 				color: var(--text-color);
-				text-decoration: none;
-				padding-bottom: 1px;
-				border-bottom: 2px solid var(--text-color);
 			}
 
 			ul {
@@ -139,35 +136,27 @@ export const formatHead = ({ title, style }: Props) =>
 				margin-bottom: 1rem;
 			}
 
-			.build-info, .open-file {
+			hr {
+				display: block;
+				height: 1px;
+				border: 0;
+				border-top: 1px solid #ccc;
+				margin: 0;
+				padding: 0;
+			}
+
+			.info {
 				display: inline-flex;
 				align-items: center;
 				border-radius: 4px;
 				padding: 4px;
 				color: var(--info-text-color);
 				background-color: var(--info-background-color);
-				margin-bottom: 4px;
-				text-decoration: underline;
-			}
-
-			.open-file {
-				text-decoration: none;
-			}
-
-			.build-info {
-				border-bottom: none;
 			}
 
 			.build-info svg {
 				margin-left: 4px;
 				margin-bottom: 2px;
-			}
-
-			.open-file a {
-				text-decoration: none;
-				border-bottom: 1px solid var(--info-text-color);
-				color: var(--info-text-color);
-				padding-bottom: 1px;
 			}
 
 			.open-file svg {
@@ -367,33 +356,57 @@ export const formatHead = ({ title, style }: Props) =>
 				color: var(--tag-text-color);
 			}
 
-			.assertion-error-content {
-				padding: 0.5rem;
-				margin: 0.5rem 0;
-				font-family: var(--code-font-family);
-				background-color: var(--code-background-color);
-				color: var(--code-text-color);
-				border-radius: 4px;
-			}
-
-			.assertion-error-details {
+			.assertion-expandable-details {
 				width: 100%;
 				position: relative;
-				margin-top: 0.5rem;
+				margin: 0.5rem 0;
 			}
 
-			.assertion-error-details summary:before {
+			details[open].assertion-expandable-details > summary {
+				margin-bottom: 0.5rem;
+			}
+
+			.assertion-expandable-details summary:before {
 				margin-top: -2px;
 			}
 
-			.assertion-error-details summary p {
+			.assertion-expandable-details summary p {
 				padding-left: 1.25rem;
 				margin: 0;
 			}
 
-			.assertion-error-content p {
+			.assertion-code-content {
+				padding: 0.5rem;
+				font-family: var(--code-font-family);
+				background-color: var(--code-background-color);
+				color: var(--code-text-color);
+				border-radius: 0 4px 4px 4px;
+				margin-bottom: 0.5rem;
+			}
+
+			.assertion-code-content p {
 				margin: 0;
-				margin-bottom: 1rem;
+			}
+
+			.console-type {
+				display: inline;
+				border: 1px solid var(--code-background-color);
+				border-radius: 4px 4px 0 0;
+				background-color: var(--tag-background-color);
+				color: var(--tag-text-color);
+				font-family: var(--code-font-family);
+				margin: 0;
+				padding: 0 4px 0 4px;
+			}
+
+			.console-type-error {
+				background-color: var(--fail-background);
+				color: var(--fail-color)
+			}
+
+			.console-type-warn {
+				background-color: var(--skip-background);
+				color: var(--skip-color)
 			}
 
 			.sr-only {
@@ -407,6 +420,10 @@ export const formatHead = ({ title, style }: Props) =>
 				position: absolute !important;
 				width: 1px !important;
 				white-space: nowrap !important;
+			}
+
+			.spacing {
+				padding-bottom: 0.5rem;
 			}
 			${style}
 		</style>

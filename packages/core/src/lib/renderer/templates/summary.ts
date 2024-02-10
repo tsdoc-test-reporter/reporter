@@ -26,8 +26,9 @@ export const formatSummary = ({
 			<div class="test-summary-primary">
 				<div class="test-summary-title">
 					<h2>${title}</h2>
+					${meta.hasLogs ? html`<span class="info has-logs">Has logs</span>` : ''}
 					${rootDirReplacer
-						? html`<span class="open-file"
+						? html`<span class="info open-file"
 								><a href="${rootDirReplacer(filePath)}" rel="noreferrer" target="_blank"
 									>Open file</a
 								>

@@ -46,6 +46,7 @@ describe('ui result', () => {
 				{
 					title: 'test name',
 					ancestorTitles: [],
+					errors: undefined,
 					status: 'pass',
 					tags: [
 						{
@@ -57,7 +58,9 @@ describe('ui result', () => {
 					],
 				},
 			],
+			logs: [],
 			meta: {
+				hasLogs: undefined,
 				failed: 0,
 				passed: 1,
 				skipped: 0,
@@ -129,6 +132,7 @@ describe('ui result', () => {
 				{
 					title: 'test name',
 					ancestorTitles: ['describe name'],
+					errors: undefined,
 					status: 'pass',
 					tags: [
 						{
@@ -146,8 +150,10 @@ describe('ui result', () => {
 					],
 				},
 			],
+			logs: [],
 			meta: {
 				failed: 0,
+				hasLogs: undefined,
 				passed: 1,
 				skipped: 0,
 				todo: 0,
@@ -205,6 +211,7 @@ describe('ui result', () => {
 				{
 					title: 'test name',
 					ancestorTitles: undefined,
+					errors: undefined,
 					status: 'pass',
 					tags: [
 						{
@@ -216,8 +223,10 @@ describe('ui result', () => {
 					],
 				},
 			],
+			logs: [],
 			meta: {
 				failed: 0,
+				hasLogs: undefined,
 				passed: 1,
 				skipped: 0,
 				todo: 0,

@@ -19,7 +19,7 @@ test('format header with build info', () => {
 	);
 	expect(result).toEqual(
 		expect.stringContaining(
-			`<header class=""><h1>title</h1><a class="build-info" href="https://example.com" rel="noreferrer" target="_blank">`,
+			`<header class=""><h1>title</h1><a class="info build-info" href="https://example.com" rel="noreferrer" target="_blank">`,
 		),
 	);
 	expect(result).toEqual(expect.stringContaining(`text`));

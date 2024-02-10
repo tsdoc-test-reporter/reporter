@@ -7,5 +7,6 @@ module.exports = {
 	moduleNameMapper: {
 		'@tsdoc-test-reporter/core': '<rootDir>/../core/src/index.ts',
 	},
+	verbose: false,
 	reporters: ['default', '<rootDir>/src/test-output/reporter.cjs'],
 };

@@ -6,8 +6,10 @@ import {
 	type UIOptions,
 	type UITestResult,
 	type UITestError,
+	type ToUITestResults,
+	type ToUILog,
 } from '@tsdoc-test-reporter/core';
-import type { FailureDetails, TaggedAssertionResult, TaggedTestResult } from '../types';
+import type { FailureDetails, LogEntry, TaggedAssertionResult, TaggedTestResult } from '../types';
 import type { AssertionResult } from '@jest/test-result';
 
 const jestStatusToUiStatus: Record<AssertionResult['status'], UIAssertion['status']> = {
@@ -38,6 +40,12 @@ export const toUIErrors = (assertion: TaggedAssertionResult): UITestError[] => {
 		.filter(Boolean) as UITestError[];
 };
 
+const toUILog: ToUILog<LogEntry> = (log) => ({
+	content: log.message,
+	type: log.type,
+	origin: log.origin,
+});
+
 export const toUITestResult =
 	(options: UIOptions | undefined) =>
 	(result: TaggedTestResult): UITestResult => {
@@ -54,16 +62,18 @@ export const toUITestResult =
 		const aggregatedTags = options?.aggregateTagsToFileHeading
 			? aggregateTags(assertions, options.aggregateTagsToFileHeading)
 			: undefined;
+		const logs = result.console?.map(toUILog);
 		return {
 			title: options?.titleFormatter
 				? options.titleFormatter(result.testFilePath)
 				: result.testFilePath,
 			filePath: result.testFilePath,
-			meta: aggregateMeta(assertions),
+			meta: { ...aggregateMeta(assertions), hasLogs: logs && logs.length > 0 ? true : undefined },
 			aggregatedTags,
 			assertions,
+			logs,
 		};
 	};
 
-export const toUITestResults = (results: TaggedTestResult[], options?: UIOptions) =>
+export const toUITestResults: ToUITestResults<TaggedTestResult> = (results, options) =>
 	results.map(toUITestResult(options));

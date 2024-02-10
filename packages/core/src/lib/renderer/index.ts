@@ -1,8 +1,8 @@
 import type {
 	AllTagsName,
+	GetRenderOutputConfig,
 	TestBlockDocComment,
 	TestBlockTag,
-	TsDocTestReporterConfig,
 	UIAssertion,
 	UIOptions,
 	UITag,
@@ -11,16 +11,13 @@ import type {
 } from '../types';
 import { AnsiToHtmlConverter } from '../utils/ansi-to-html';
 import { escapeHtml } from '../utils/ansi-to-html/escapeHTML';
+import { removeAtSign } from '../utils/string.utils';
 import { customColorMap, statusToIconMap } from './defaultValues';
 import { formatHead, formatHeader } from './templates';
 import { html } from './templates/html';
 import { formatResults } from './templates/results';
 export * from './templates';
 export * from './defaultValues';
-
-const AT_SIGN = '@';
-
-const removeAtSign = (name: string) => name.replace(AT_SIGN, '');
 
 const formatText = (
 	tag: TestBlockTag,
@@ -91,6 +88,9 @@ export const aggregateMeta = (assertions: UIAssertion[]) => {
 		if (assertion.status === 'todo') {
 			meta.todo++;
 		}
+		if (assertion.logs && assertion.logs.length > 0) {
+			meta.hasLogs = true;
+		}
 	});
 	return meta;
 };
@@ -154,18 +154,19 @@ export const render = (
 						toHTML,
 						expandErrorDetails: options?.expandErrorDetails,
 						rootDirReplacer,
+						includeLogs: options?.includeLogs ?? true,
 					})}
 				</main>
 			</body>
 		</html>`;
 };
 
-export const getRenderOutput = <Type>(
-	results: Type,
-	getRenderData: (results: Type) => UITestResult[],
-	options: TsDocTestReporterConfig<string>,
-	rootDirReplacer?: (filePath: string) => string,
-): string => {
+export const getRenderOutput = <Type>({
+	options,
+	results,
+	getRenderData,
+	rootDirReplacer,
+}: GetRenderOutputConfig<Type>): string => {
 	const onBeforeRender = options.onBeforeRender
 		? options.onBeforeRender
 		: (results: UITestResult[]) => results;

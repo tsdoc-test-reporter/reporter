@@ -9,6 +9,24 @@ export type FailureDetails = {
 	};
 };
 
+export type LogEntry = {
+	message: string;
+	origin: string;
+	type:
+		| 'assert'
+		| 'count'
+		| 'debug'
+		| 'dir'
+		| 'dirxml'
+		| 'error'
+		| 'group'
+		| 'groupCollapsed'
+		| 'info'
+		| 'log'
+		| 'time'
+		| 'warn';
+};
+
 /**
  * @see {@link AssertionResult} from Jest with TestDockBlockComments
  * from the parser

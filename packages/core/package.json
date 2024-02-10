@@ -1,6 +1,6 @@
 {
 	"name": "@tsdoc-test-reporter/core",
-	"version": "0.0.29",
+	"version": "0.0.30",
 	"peerDependencies": {
 		"typescript": ">= 4.4.x <= 5.2.x"
 	},

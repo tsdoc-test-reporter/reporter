@@ -497,7 +497,12 @@ export type FileParserConfig<
 > & {
 	result: Result[];
 	sourceFilesMap: Record<string, SourceFile | undefined>;
-	resultMapper: (result: Result, testBlockDocComments: TestBlockDocComment<CustomTags>[]) => Output;
+	resultMapper: (
+		result: Result,
+		testBlockDocComments: TestBlockDocComment<CustomTags>[],
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		extraData?: Record<string, any>
+	) => Output;
 	filePath: keyof Result;
 };
 

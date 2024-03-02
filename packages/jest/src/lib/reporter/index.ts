@@ -1,4 +1,4 @@
-import { AggregatedResult, Config, Reporter, TestContext } from '@jest/reporters';
+import { AggregatedResult, Config, Reporter, Test, TestContext, TestResult } from '@jest/reporters';
 import { TSDocParser } from '@microsoft/tsdoc';
 import {
 	AllTagsName,
@@ -16,7 +16,7 @@ import {
 } from '@tsdoc-test-reporter/core';
 import type { CompilerOptions } from 'typescript';
 
-import type { TaggedAggregatedResult } from '../types';
+import type { LogEntry, TaggedAggregatedResult } from '../types';
 import { toUITestResults } from '../renderer';
 import { resultMapper } from './reporter.utils';
 
@@ -25,10 +25,11 @@ import { resultMapper } from './reporter.utils';
  * as a argument to 'reporters' config option.
  */
 export class TSDocTestReporter<CustomTags extends string = AllTagsName>
-	implements Pick<Reporter, 'onRunComplete'>
+	implements Pick<Reporter, 'onRunComplete' | "onTestResult">
 {
 	private readonly options: TsDocTestReporterConfig<CustomTags>;
 	private readonly compilerOptions: CompilerOptions;
+	private filePathToLogInfo: Record<string, LogEntry[]> = {};
 	private rootDir: string;
 
 	/**
@@ -58,7 +59,7 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 				getTypeChecker: program.getTypeChecker,
 				result: results.testResults,
 				filePath: 'testFilePath',
-				resultMapper,
+				resultMapper: (result, comments) => resultMapper(result, comments, this.filePathToLogInfo),
 				sourceFilesMap: getSourceFilesMap(results.testResults, 'testFilePath', program),
 				excludeTags: this.options.excludeTags as AllTagsName[],
 				tagSeparator: this.options.tagSeparator,
@@ -85,6 +86,17 @@ export class TSDocTestReporter<CustomTags extends string = AllTagsName>
 				: undefined,
 		});
 	}
+
+	async onTestResult(
+		_: Test,
+    testResult: TestResult,
+	) {
+    // Console buffer is sometimes not available when run is complete
+		// Extract if available for every test parsed
+    if ((this.options.uiOptions?.includeLogs ?? true) && testResult.console?.length) {
+      this.filePathToLogInfo[testResult.testFilePath] = testResult.console;
+    }
+  }
 
 	/**
 	 * Runs when all tests are finished and outputs result

@@ -250,3 +250,7 @@ test.each([{ name: 'value' }])('this will fail: $name', () => {
 	expect(true).toBe(true);
 });
 ```
+
+## How to contribute
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) on how to contribute and how to setup the project locally.

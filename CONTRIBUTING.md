@@ -41,8 +41,8 @@ In general, we follow the ["fork-and-pull" Git workflow](https://github.com/susa
 
 ## Local setup
 
-1. Install pnpm ([instructions here on pnpms website](https://pnpm.io/installation))
-2. Install dependencies with pnpm
+1. Install pnpm ([instructions here on pnpm website](https://pnpm.io/installation))
+2. Install dependencies with `pnpm`
 
 ```bash
 pnpm install
@@ -60,6 +60,53 @@ pnpm nx test vitest
 ```
 
 Note that the `vitest`-package is setup to call itself when tests have been run with the default config. A HTML-report will be generated in the root folder of the project where you can view the output of the tests. This is only setup for Vitest as it is not right now technically possible to do the same for Jest.
+
+### Testing built package locally
+
+If you want to test the built package locally we have set up [nx:verdaccio](https://nx.dev/nx-api/js/executors/verdaccio) inside this repository. It means that you can publish a package locally and test it in another project.
+
+1. Clone and setup the [Kitchen Sink Repository](https://github.com/tsdoc-test-reporter/kitchen-sink)
+2. Start the local registry in this project.
+```bash
+pnpm nx local-registry
+```
+3. Make changes and bump the version of the package you want to test
+4. Publish the package to the local registry. It will publish locally if Verdaccio is running. For example, the core package:
+```bash
+pnpm nx publish core
+```
+3. Visit the local registry in your browser at [`http://localhost:4873/`](http://localhost:4873/) to see that it is working. You should see the package you just published.
+6. Install the new version you just published in the Kitchen Sink repository
+7. Test the changes inside of the Kitchen Sink Repository.
+
+### Testing the core renderer output
+
+There is a test setup to output some example data for the renderer that can be viewed in a browser. Making it easier to test making changes to the HTML and CSS.
+
+1. Run the test _"render example data"_ inside of `renderer.spec.ts`
+```
+pnpm nx test core --testFile=renderer.spec.ts --watch
+```
+2. A file called `example.html` will be generated inside of the same folder as the test
+3. Open the file with your browser of choice to see the output
+
+### Testing the parser on actual files instead of test data
+
+There is a test setup to parse and test typescript files in the core package making it easier to test what the actual output is of an actual file.
+
+1. Modify the file `test-file.ts` to handle your test data
+2. Run the test _"test file"_ inside of `test-file.spec.ts`
+```
+pnpm nx test core --testFile=test-file.spec.ts --watch
+```
+
+### See output of Jest test result
+
+Sometimes you might want to check the actual output of running a jest test. A script is setup to log the output of a test run in the Jest package:
+
+1. Modify the file `test-output-spec.ts`
+2. Run the script `test:jest` inside of the Jest package.
+3. Check console output
 
 ## License
 

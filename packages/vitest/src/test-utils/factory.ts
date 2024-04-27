@@ -6,10 +6,19 @@ import {
 import type { ErrorWithDiff, File, Suite, Task, TaskResult, Test } from 'vitest';
 import { TaggedFile, TaggedSuite, TaggedTest } from '../types';
 
-export const errorFactory: TestDataFactory<ErrorWithDiff> = (props = {}) => ({
+export const locationFactory: TestDataFactory< {
+	line: number;
+	column: number;
+}> = (overrides = {}) => ({
+	line: 0,
+	column: 0,
+	...overrides,
+})
+
+export const errorFactory: TestDataFactory<ErrorWithDiff> = (overrides = {}) => ({
 	message: 'message',
 	name: 'name',
-	...props,
+	...overrides,
 	stacks: [],
 });
 
@@ -36,6 +45,7 @@ const internalTaskFactory: TestDataFactory<FactoryTask> = (overrides = {}) => ({
 	filepath: 'file-path.ts',
 	meta: {},
 	...overrides,
+	location: locationFactory(overrides.location),
 	tasks: overrides.tasks?.map(internalTaskFactory) ?? [],
 	result: taskResultFactory(overrides.result),
 });
@@ -75,7 +85,9 @@ export const internalFileFactory: TestDataFactory<FactoryFile> = (overrides = {}
 	name: 'name',
 	mode: 'run',
 	type: 'suite',
+	projectName: 'projectName',
 	...overrides,
+	location: locationFactory(overrides.location),
 	tasks: overrides.tasks?.map(internalTaskFactory) ?? [],
 });
 

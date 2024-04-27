@@ -3,10 +3,11 @@
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
 	"sourceRoot": "packages/vitest/src",
 	"projectType": "library",
+	"tags": [],
 	"targets": {
 		"publish": {
 			"command": "node tools/scripts/publish.mjs vitest {args.tag}",
-			"dependsOn": ["test", "lint", "build"]
+			"dependsOn": ["lint", "test", "build"]
 		},
 		"build": {
 			"executor": "@nx/js:tsc",
@@ -19,11 +20,8 @@
 			}
 		},
 		"lint": {
-			"executor": "@nx/linter:eslint",
-			"outputs": ["{options.outputFile}"],
-			"options": {
-				"lintFilePatterns": ["packages/vitest/**/*.ts", "packages/vitest/package.json"]
-			}
+			"executor": "@nx/eslint:lint",
+			"outputs": ["{options.outputFile}"]
 		},
 		"test": {
 			"executor": "@nx/vite:test",
@@ -33,6 +31,5 @@
 				"reportsDirectory": "../../coverage/packages/vitest"
 			}
 		}
-	},
-	"tags": []
+	}
 }

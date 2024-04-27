@@ -1,14 +1,11 @@
 {
 	"name": "@tsdoc-test-reporter/jest",
-	"version": "0.0.31",
-	"peerDependencies": {
-		"typescript": ">= 4.4.x <= 5.2.x"
-	},
+	"version": "0.0.32",
 	"dependencies": {
 		"@jest/reporters": "^29.7.0",
 		"@jest/test-result": "^29.7.0",
 		"@microsoft/tsdoc": "^0.14.2",
-		"@tsdoc-test-reporter/core": "workspace:^0.0.31"
+		"@tsdoc-test-reporter/core": "workspace:^0.0.32"
 	},
 	"scripts": {
 		"test:jest": "jest"

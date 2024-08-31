@@ -1,9 +1,9 @@
 {
 	"name": "@tsdoc-test-reporter/vitest",
-	"version": "0.0.32",
+	"version": "0.0.33",
 	"dependencies": {
 		"@microsoft/tsdoc": "^0.14.2",
-		"@tsdoc-test-reporter/core": "workspace:^0.0.32"
+		"@tsdoc-test-reporter/core": "workspace:^0.0.33"
 	},
 	"type": "commonjs",
 	"main": "./src/index.js",

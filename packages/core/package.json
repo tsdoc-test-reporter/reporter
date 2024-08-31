@@ -1,11 +1,12 @@
 {
 	"name": "@tsdoc-test-reporter/core",
-	"version": "0.0.32",
+	"version": "0.0.33",
 	"peerDependencies": {
 		"typescript": ">= 4.4.x <= 5.4.x"
 	},
 	"dependencies": {
-		"@microsoft/tsdoc": "^0.14.2"
+		"@microsoft/tsdoc": "^0.14.2",
+		"tslib": "^2.3.0"
 	},
 	"devDependencies": {
 		"@types/node": "20.12.7",

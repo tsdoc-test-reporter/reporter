@@ -116,6 +116,9 @@ importers:
       '@microsoft/tsdoc':
         specifier: ^0.14.2
         version: 0.14.2
+      tslib:
+        specifier: ^2.3.0
+        version: 2.6.2
       typescript:
         specifier: '>= 4.4.x <= 5.4.x'
         version: 5.4.5
@@ -139,7 +142,7 @@ importers:
         specifier: ^0.14.2
         version: 0.14.2
       '@tsdoc-test-reporter/core':
-        specifier: workspace:^0.0.32
+        specifier: workspace:^0.0.33
         version: link:../core
 
   packages/vitest:
@@ -148,7 +151,7 @@ importers:
         specifier: ^0.14.2
         version: 0.14.2
       '@tsdoc-test-reporter/core':
-        specifier: workspace:^0.0.32
+        specifier: workspace:^0.0.33
         version: link:../core
 
 packages:
